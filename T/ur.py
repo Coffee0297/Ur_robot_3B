@@ -1,7 +1,7 @@
 # UR_RobotState v1.1
 # Collects data from Universal Robot's RobotState packet
 # Written for educational purposes - University College Lillebælt, Erhvervsakademi og Professionshøjskole
-
+# FIXME: Lav vision
 import threading
 import struct
 import math

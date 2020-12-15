@@ -1,11 +1,8 @@
 #Made by TLM
 
-import time
-import math
-import sys
 import ur
 import socket
-import test
+import Gripper
 
 host = '192.168.1.10' # the remote host
 port = 30002 # the same port as used by the server
@@ -29,8 +26,8 @@ def testing(i):
         4: b'movej(p[-0.22460144592332532, -0.3770031948345641, 0.07789547669716138, -1.6911515816617357, 2.6460350729571416, -0.028088960829898577]'+ b'\n', # Blå klods aflevering approach
         5: b'movej(p[-0.2246173763400952, -0.33128152957734164, 0.07789547669716138, -1.691150322673192, 2.6460902677637756, -0.02811043675841801]'+ b'\n', # Grøn klods aflevering approach
         6: b'movej(p[-0.22460908434355267, -0.2850350547556572, 0.07789547669716138, -1.6911234475642323, 2.646071606701752, -0.028114622152454322]'+ b'\n', # Turkis klods aflevering approach
-        7: test.gopen, #open gripper
-        8: test.gclose, #close gripper
+        7: Gripper.gopen, #open gripper
+        8: Gripper.gclose, #close gripper
     }
     return switcher.get(i, "Invalid program nummer")
 
