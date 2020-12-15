@@ -15,8 +15,6 @@ ur_state = ur.UR_RobotState(s) # create ur_state thread object using socket
 ur_state.start() # start the ur_state thread
 
 
-
-
 def testing(i):
     switcher = {
         0: b'movej(p[-0.02703978368688221, -0.41162562152534876, 0.3339006287927195, 1.6443410877739137, -2.4824781895547496, 0.8022008840211984])'+ b'\n', # Home
