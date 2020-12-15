@@ -5,7 +5,7 @@ import math
 import sys
 import RG2gripper
 import ur
-
+#FIXME: jkjk
 HOST = '192.168.1.10' # The remote host
 PORT = 30002 # The same port as used by the server
 
@@ -25,8 +25,7 @@ print(ur_state.get_actual_joint_positions())
 # s.send(b'movej([-2.294936005269186, -1.773339410821432, -0.6804609298706055, -1.9333859882750453, 1.486222743988037, 5.052874565124512])'+ b'\n')
 # time.sleep(6)
 # s.send(b'movej([-1.2883132139789026, -1.794537206689352, -0.6047754287719727, -1.9723202190794886, 1.4289240837097168, 7.04636270204653])'+ b'\n')
-def blah['NONE']
-
+#
 def testing(i):
     switcher = {
         0: b'movej(p[-0.02703978368688221, -0.41162562152534876, 0.3339006287927195, 1.6443410877739137, -2.4824781895547496, 0.8022008840211984])'+ b'\n',     # Home
@@ -36,7 +35,7 @@ def testing(i):
         4: b'movej(p[-0.22460144592332532, -0.3770031948345641, 0.07789547669716138, -1.6911515816617357, 2.6460350729571416, -0.028088960829898577]'+ b'\n',   # Blå klods aflevering approach
         5: b'movej(p[-0.2246173763400952, -0.33128152957734164, 0.07789547669716138, -1.691150322673192, 2.6460902677637756, -0.02811043675841801]'+ b'\n',     # Grøn klods aflevering approach
         6: b'movej(p[-0.22460908434355267, -0.2850350547556572, 0.07789547669716138, -1.6911234475642323, 2.646071606701752, -0.028114622152454322]'+ b'\n',    # Turkis klods aflevering approach
-        7: blah = ur_state.get_tcp_pose()
+        7:
         8:
         9: RG2gripper.openRG2, #open gripper
         10: RG2gripper.closeRG2, #close gripper
