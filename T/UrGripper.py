@@ -1,18 +1,16 @@
-#Made by TLM
-
 import ur
 import socket
 import Gripper
-
-host = '192.168.1.10' # the remote host
+# Made by TLM
+host = '192.168.1.10'  # the remote host
 port = 30002 # the same port as used by the server
 
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM) # create socket for tcp/ip
-s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) # setup socket to be able to reconnect if program is crashed
-s.connect((host, port)) # connect socket to remote host
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # create socket for tcp/ip
+s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)  # setup socket to be able to reconnect if program is crashed
+s.connect((host, port))  # connect socket to remote host
 
-ur_state = ur.UR_RobotState(s) # create ur_state thread object using socket
-ur_state.start() # start the ur_state thread
+ur_state = ur.UR_RobotState(s)  # create ur_state thread object using socket
+ur_state.start()  # start the ur_state thread
 
 
 def testing(i):
