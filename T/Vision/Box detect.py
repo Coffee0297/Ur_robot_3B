@@ -20,6 +20,21 @@ cv.createTrackbar("green_high_H", "Tracking", 0, 180, nothing)
 cv.createTrackbar("green_high_S", "Tracking", 0, 255, nothing)
 cv.createTrackbar("green_high_V", "Tracking", 0, 255, nothing)
 
+cv.createTrackbar("blue_low_H", "Tracking", 0, 180, nothing)
+cv.createTrackbar("blue_low_S", "Tracking", 0, 255, nothing)
+cv.createTrackbar("blue_low_V", "Tracking", 0, 255, nothing)
+cv.createTrackbar("blue_high_H", "Tracking", 0, 180, nothing)
+cv.createTrackbar("blue_high_S", "Tracking", 0, 255, nothing)
+cv.createTrackbar("blue_high_V", "Tracking", 0, 255, nothing)
+
+cv.createTrackbar("red_low_H", "Tracking", 0, 180, nothing)
+cv.createTrackbar("red_low_S", "Tracking", 0, 255, nothing)
+cv.createTrackbar("red_low_V", "Tracking", 0, 255, nothing)
+cv.createTrackbar("red_high_H", "Tracking", 0, 180, nothing)
+cv.createTrackbar("red_high_S", "Tracking", 0, 255, nothing)
+cv.createTrackbar("red_high_V", "Tracking", 0, 255, nothing)
+
+
 max_value = 255
 max_value_H = 360//2
 
@@ -27,50 +42,6 @@ max_value_H = 360//2
 font = cv.FONT_HERSHEY_SIMPLEX
 fontScale = .5
 lineType = 1
-
-# Grønt filter trehshold
-#Her defineres tekst farve og størrelse for de grønne punkter
-green_font = cv.FONT_HERSHEY_SIMPLEX
-green_fontScale = .5
-green_fontColor = (0,255,0)
-green_lineType = 2
-#Her defineres farvefiltret for den grønne nuance
-green_low_H = cv.getTrackbarPos("green_low_H", "Tracking")
-green_low_S = cv.getTrackbarPos("green_low_S", "Tracking")
-green_low_V = cv.getTrackbarPos("green_low_V", "Tracking")
-green_high_H = cv.getTrackbarPos("green_high_H", "Tracking")
-green_high_S = cv.getTrackbarPos("green_high_S", "Tracking")
-green_high_V = cv.getTrackbarPos("green_high_V", "Tracking")
-
-#Blå filter trehshold
-#Her defineres tekst farve og størrelse for de blå punkter
-blue_font = cv.FONT_HERSHEY_SIMPLEX
-blue_fontColor = (255,0,0)
-blue_fontScale = .3
-blue_lineType= 2
-#Her defineres farvefiltret for den blå nuance
-blue_low_H = 100
-blue_low_S = 100
-blue_low_V = 61
-blue_high_H = 125
-blue_high_S = 199
-blue_high_V = 255
-
-#Rødt filter treshold
-#Her defineres tekst farve og størrelse for de røde punkter
-red_font = cv.FONT_HERSHEY_SIMPLEX
-red_fontColor = (0,0,255)
-red_fontScale = .3
-red_lineType= 2
-#Her defineres farvefiltret for den røde nuance
-red_low_H = 0
-red_low_S = 12
-red_low_V = 181
-red_high_H = 10
-red_high_S = 222
-red_high_V = 255
-
-
 
 window_capture_name = 'Video Capture'
 window_detection_name = 'Object Detection'
@@ -87,7 +58,50 @@ args = parser.parse_args()
 cap = cv.VideoCapture(args.camera)
 
 while True:
-    
+
+    # Grønt filter trehshold
+    # Her defineres tekst farve og størrelse for de grønne punkter
+    green_font = cv.FONT_HERSHEY_SIMPLEX
+    green_fontScale = .5
+    green_fontColor = (0, 255, 0)
+    green_lineType = 2
+    # Her defineres farvefiltret for den grønne nuance
+    green_low_H = cv.getTrackbarPos("green_low_H", "Tracking")
+    green_low_S = cv.getTrackbarPos("green_low_S", "Tracking")
+    green_low_V = cv.getTrackbarPos("green_low_V", "Tracking")
+    green_high_H = cv.getTrackbarPos("green_high_H", "Tracking")
+    green_high_S = cv.getTrackbarPos("green_high_S", "Tracking")
+    green_high_V = cv.getTrackbarPos("green_high_V", "Tracking")
+
+    # Blå filter trehshold
+    # Her defineres tekst farve og størrelse for de blå punkter
+    blue_font = cv.FONT_HERSHEY_SIMPLEX
+    blue_fontColor = (255, 0, 0)
+    blue_fontScale = .3
+    blue_lineType = 2
+    # Her defineres farvefiltret for den blå nuance
+    blue_low_H = cv.getTrackbarPos("blue_low_V", "Tracking")
+    blue_low_S = cv.getTrackbarPos("blue_low_V", "Tracking")
+    blue_low_V = cv.getTrackbarPos("blue_low_V", "Tracking")
+    blue_high_H = cv.getTrackbarPos("blue_high_H", "Tracking")
+    blue_high_S = cv.getTrackbarPos("blue_high_S", "Tracking")
+    blue_high_V = cv.getTrackbarPos("blue_high_V", "Tracking")
+
+    # Rødt filter treshold
+    # Her defineres tekst farve og størrelse for de røde punkter
+    red_font = cv.FONT_HERSHEY_SIMPLEX
+    red_fontColor = (0, 0, 255)
+    red_fontScale = .3
+    red_lineType = 2
+    # Her defineres farvefiltret for den røde nuance
+    red_low_H = cv.getTrackbarPos("red_low_V", "Tracking")
+    red_low_S = cv.getTrackbarPos("red_low_V", "Tracking")
+    red_low_V = cv.getTrackbarPos("red_low_V", "Tracking")
+    red_high_H = cv.getTrackbarPos("red_high_H", "Tracking")
+    red_high_S = cv.getTrackbarPos("red_high_S", "Tracking")
+    red_high_V = cv.getTrackbarPos("red_high_V", "Tracking")
+
+
     ret, frame = cap.read()
     if frame is None:
         break
