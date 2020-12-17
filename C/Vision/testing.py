@@ -1,13 +1,38 @@
-# C:\Users\Carin\Documents\UCL_2019\3.Sem\Python\UR\testing.py
+# CBL
 #
 import numpy as np
 import cv2 as cv
-
-
+import module as mod
+# ==================================================================================
+# Working with image - object messurement
+#webcam = False
+#path = 'cap01.jpg'
+# ==================================================================================
 cap = cv.VideoCapture(0) # eksternt kamera
+# ==================================================================================
+# Working with image - object messurement
+'''
+cap.set(10,160) # brightness
+cap.set(3,1920) # width
+cap.set(4,1080) # hight
+
+while True:
+    if webcam:succes, img = cap.read()
+    else: img = cv.imread(path)
+
+    mod.getContours(img, showCanny=True)
+
+    img = cv.resize(img,(0,0),None,0.5,0.5)
+    cv.imshow('Original', img)
+    if cv.waitKey(15) == ord('q'):
+        break
+'''
+# ==================================================================================
+# Working with video - Blue square
 
 while(True):
     ret, frame = cap.read()
+    frameTest = frame.copy()
     # HSV
     hsv = cv.cvtColor(frame, cv.COLOR_BGR2HSV)
     # Mask on blue square
@@ -31,7 +56,7 @@ while(True):
                                 (x + w, y + h),
                                 (255, 0, 0), 2)
 
-            cv.putText(frame, "Blue Colour", (x, y),
+            cv.putText(frame, "Blue Square", (x, y),
                         cv.FONT_HERSHEY_SIMPLEX, 1.0,
                         (255, 0, 0))
 
@@ -42,12 +67,23 @@ while(True):
     #resBlue = cv.bitwise_and(img, img, mask=maskBlue)
     cv.imshow('frame1', frame)
 
+
+    # *********** Masks *************************
+    mod.getContours(frame, show=True)
+
+    #mod.getContours(frameTest, cThr=[100, 100], show=True)
+
+    if cv.waitKey(15) == ord('q'):
+        break
+'''
     # Gray
     gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
     cv.imshow('Webcam', gray)
+
     # Canny
     canny = cv.Canny(gray, 150, 175)
     cv.imshow('Canny', canny)
+
     # Laplacian
     lap = cv.Laplacian(gray, cv.CV_64F)
     lap = np.uint8(np.absolute(lap))
@@ -55,8 +91,12 @@ while(True):
 
     if cv.waitKey(15) == ord('q'):
         break
-
-# cv.waitKey(0)
+        
+'''
 cap.release()
 cv.destroyAllWindows()
+
+# ==================================================================================
+
+
 
