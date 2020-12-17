@@ -49,13 +49,11 @@ cap = cv.VideoCapture(0)
 
 while True:
 
-    # Grønt filter trehshold
-    # Her defineres tekst farve og størrelse for de grønne punkter
     green_font = cv.FONT_HERSHEY_SIMPLEX
     green_fontScale = .5
     green_fontColor = (0, 255, 0)
     green_lineType = 2
-    # Her defineres farvefiltret for den grønne nuance
+
     green_low_H = cv.getTrackbarPos("green_low_H", "Tracking")
     green_low_S = cv.getTrackbarPos("green_low_S", "Tracking")
     green_low_V = cv.getTrackbarPos("green_low_V", "Tracking")
@@ -63,13 +61,11 @@ while True:
     green_high_S = cv.getTrackbarPos("green_high_S", "Tracking")
     green_high_V = cv.getTrackbarPos("green_high_V", "Tracking")
 
-    # Blå filter trehshold
-    # Her defineres tekst farve og størrelse for de blå punkter
     blue_font = cv.FONT_HERSHEY_SIMPLEX
     blue_fontColor = (255, 0, 0)
     blue_fontScale = .5
     blue_lineType = 2
-    # Her defineres farvefiltret for den blå nuance
+
     blue_low_H = cv.getTrackbarPos("blue_low_V", "Tracking")
     blue_low_S = cv.getTrackbarPos("blue_low_V", "Tracking")
     blue_low_V = cv.getTrackbarPos("blue_low_V", "Tracking")
@@ -77,13 +73,11 @@ while True:
     blue_high_S = cv.getTrackbarPos("blue_high_S", "Tracking")
     blue_high_V = cv.getTrackbarPos("blue_high_V", "Tracking")
 
-    # Rødt filter treshold
-    # Her defineres tekst farve og størrelse for de røde punkter
     red_font = cv.FONT_HERSHEY_SIMPLEX
     red_fontColor = (0, 0, 255)
     red_fontScale = .5
     red_lineType = 2
-    # Her defineres farvefiltret for den røde nuance
+
     red_low_H = cv.getTrackbarPos("red_low_V", "Tracking")
     red_low_S = cv.getTrackbarPos("red_low_V", "Tracking")
     red_low_V = cv.getTrackbarPos("red_low_V", "Tracking")
@@ -96,7 +90,6 @@ while True:
     if frame is None:
         break
 
-    # Her oprettes farvefiltre til grøn, blå og rød
     frame_HSV = cv.cvtColor(frame, cv.COLOR_BGR2HSV)
     blue_frame_threshold = cv.inRange(frame_HSV, (blue_low_H,blue_low_S,blue_low_V),(blue_high_H,blue_high_S,blue_high_V))
     red_frame_threshold = cv.inRange(frame_HSV, (red_low_H,red_low_S,red_low_V),(red_high_H,red_high_S,red_high_V))
@@ -109,39 +102,33 @@ while True:
     cv.imshow("red detection", red_frame_threshold)
     cv.imshow("green detection", green_frame_threshold)
     
-    # minAreaRect
+
 
     img = frame.copy()
-    
-    #Her bliver det grønne filter lagt over alle lagene
+
     ret,green_thresh = cv.threshold(green_frame_threshold,127,255,0)
-    #Her findes konjukturen i billedet med det grønne filter
     green_contours,green_hierarchy = cv.findContours(green_thresh, 1, 2)
-    
-    #Her bliver det blå filter lagt over alle lagene    
+
     ret,blue_thresh = cv.threshold(blue_frame_threshold,127,255,0)
-    #Her findes konjukturen i billedet med det blå filter
     blue_contours,blue_hierarchy = cv.findContours(blue_thresh, 1, 2)
-    
-    #Her bliver det røde filter lagt over alle lagene
+
     ret,red_thresh = cv.threshold(red_frame_threshold,127,255,0)
-    #Her findes konjukturen i billedet med det røde filter
     red_contours,red_hierarchy = cv.findContours(red_thresh, 1, 2)
 
     boxFound = False
    # Grøn klods
     for x in range(len(green_contours)):
-      if green_contours[x].size > 300: #for loop der tæller pixels indenfor farvefiltret
+      if green_contours[x].size > 400:
         green_cnt = green_contours[x]
         green_rect = cv.minAreaRect(green_cnt)
         cv.putText(img, str(green_rect[-1]), (10,20), font, fontScale,(0,255,0),lineType) # print rotation of box
 
-        greenBox = cv.boxPoints(green_rect)# Her findes klodsens hjørner
-        greenBox = np.int0(greenBox) # Her laves klodsens hjærner om til en liste
+        greenBox = cv.boxPoints(green_rect)
+        greenBox = np.int0(greenBox)
 
-        cv.drawContours(img,[greenBox],0,(0,255,0),1) # her tegnes konjukturen af firkanten
+        cv.drawContours(img,[greenBox],0,(0,255,0),1)
 
-        # her skrives koordinatet på alle 4 punkter
+
         cv.putText(img, str(greenBox[0]), (greenBox[0][0],greenBox[0][1]), green_font, green_fontScale,green_fontColor,green_lineType)
         cv.putText(img, str(greenBox[1]), (greenBox[1][0],greenBox[1][1]), green_font, green_fontScale,green_fontColor,green_lineType)
         cv.putText(img, str(greenBox[2]), (greenBox[2][0],greenBox[2][1]), green_font, green_fontScale,green_fontColor,green_lineType)
@@ -149,17 +136,16 @@ while True:
 
         #blå klods
     for j in range(len(blue_contours)):
-         if blue_contours[j].size > 300: #for loop der tæller pixels indenfor farvefiltret
+         if blue_contours[j].size > 400:
             blue_cnt = blue_contours[j]
             blue_rect = cv.minAreaRect(blue_cnt)
-            cv.putText(img, str(blue_rect[-1]), (10, 40), font, fontScale,(255,0,0),lineType) # print rotation of box
+            cv.putText(img, str(blue_rect[-1]), (10, 40), font, fontScale,(255,0,0),lineType)
                                 
-            blueBox = cv.boxPoints(blue_rect)# Her findes klodsens hjørner
-            blueBox = np.int0(blueBox) # Her laves klodsens hjærner om til en liste
+            blueBox = cv.boxPoints(blue_rect)
+            blueBox = np.int0(blueBox)
 
-            cv.drawContours(img,[blueBox],0,(255,0,0),1) # her tegnes konjukturen af firkanten
+            cv.drawContours(img,[blueBox],0,(255,0,0),1)
 
-            # her skrives koordinatet på alle 4 punkter
             cv.putText(img, str(blueBox[0]), (blueBox[0][0],blueBox[0][1]),blue_font, blue_fontScale,blue_fontColor,blue_lineType) 
             cv.putText(img, str(blueBox[1]), (blueBox[1][0],blueBox[1][1]), blue_font, blue_fontScale,blue_fontColor,blue_lineType) 
             cv.putText(img, str(blueBox[2]), (blueBox[2][0],blueBox[2][1]), blue_font, blue_fontScale,blue_fontColor,blue_lineType) 
@@ -167,17 +153,16 @@ while True:
 
     #Rød kasse
     for i in range(len(red_contours)):
-         if red_contours[i].size > 300: #for loop der tæller pixels indenfor farvefiltret
+         if red_contours[i].size > 400:
             red_cnt = red_contours[i]
             red_rect = cv.minAreaRect(red_cnt)
             cv.putText(img, str(red_rect[-1]), (10,60), font, fontScale,(0,0,255),lineType) # print rotation of box
             
-            redBox = cv.boxPoints(red_rect) # Her findes klodsens hjørner
-            redBox = np.int0(redBox) # Her laves klodsens hjærner om til en liste
+            redBox = cv.boxPoints(red_rect)
+            redBox = np.int0(redBox)
 
-            cv.drawContours(img,[redBox],0,(0,0,255),1) # her tegnes konjukturen af firkanten
+            cv.drawContours(img,[redBox],0,(0,0,255),1)
 
-            # her skrives koordinatet på alle 4 punkter
             cv.putText(img, str(redBox[0]), (redBox[0][0],redBox[0][1]), red_font, red_fontScale,red_fontColor,red_lineType)
             cv.putText(img, str(redBox[1]), (redBox[1][0],redBox[1][1]), red_font, red_fontScale,red_fontColor,red_lineType)
             cv.putText(img, str(redBox[2]), (redBox[2][0],redBox[2][1]), red_font, red_fontScale,red_fontColor,red_lineType)
