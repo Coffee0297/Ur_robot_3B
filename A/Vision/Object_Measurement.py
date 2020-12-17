@@ -1,6 +1,6 @@
 import cv2 as cv
 import numpy as np
-import
+import utlis
 
 webcam = False
 path = 'c:\\Users\\Pc\\Desktop\\3. Semester\\Vision\\Ressourcer\\Billeder\\a4.jpg'
