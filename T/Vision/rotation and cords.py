@@ -8,7 +8,7 @@ def nothing(x):
     pass
 
 # Vinduesnavn
-cv.namedWindow('Tracking')
+cv.namedWindow('Tracking', cv.WINDOW_NORMAL)
 
 # Opretter en trackbar og attaches
 # vedhæfter det til vindue
