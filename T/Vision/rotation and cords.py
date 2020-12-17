@@ -12,26 +12,26 @@ cv.namedWindow('Tracking')
 
 # Opretter en trackbar og attaches
 # vedhæfter det til vindue
-cv.createTrackbar("green_low_H", "Tracking", 0, 180, nothing)
-cv.createTrackbar("green_low_S", "Tracking", 0, 255, nothing)
-cv.createTrackbar("green_low_V", "Tracking", 0, 255, nothing)
-cv.createTrackbar("green_high_H", "Tracking", 0, 180, nothing)
-cv.createTrackbar("green_high_S", "Tracking", 0, 255, nothing)
-cv.createTrackbar("green_high_V", "Tracking", 0, 255, nothing)
+cv.createTrackbar("green_low_H", "Tracking", 53, 180, nothing)
+cv.createTrackbar("green_low_S", "Tracking", 74, 255, nothing)
+cv.createTrackbar("green_low_V", "Tracking", 66, 255, nothing)
+cv.createTrackbar("green_high_H", "Tracking", 96, 180, nothing)
+cv.createTrackbar("green_high_S", "Tracking", 225, 255, nothing)
+cv.createTrackbar("green_high_V", "Tracking", 185, 255, nothing)
 
-cv.createTrackbar("blue_low_H", "Tracking", 0, 180, nothing)
-cv.createTrackbar("blue_low_S", "Tracking", 0, 255, nothing)
+cv.createTrackbar("blue_low_H", "Tracking", 180, 180, nothing)
+cv.createTrackbar("blue_low_S", "Tracking", 255, 255, nothing)
 cv.createTrackbar("blue_low_V", "Tracking", 0, 255, nothing)
-cv.createTrackbar("blue_high_H", "Tracking", 0, 180, nothing)
-cv.createTrackbar("blue_high_S", "Tracking", 0, 255, nothing)
-cv.createTrackbar("blue_high_V", "Tracking", 0, 255, nothing)
+cv.createTrackbar("blue_high_H", "Tracking", 147, 180, nothing)
+cv.createTrackbar("blue_high_S", "Tracking", 62, 255, nothing)
+cv.createTrackbar("blue_high_V", "Tracking", 134, 255, nothing)
 
 cv.createTrackbar("red_low_H", "Tracking", 0, 180, nothing)
-cv.createTrackbar("red_low_S", "Tracking", 0, 255, nothing)
-cv.createTrackbar("red_low_V", "Tracking", 0, 255, nothing)
-cv.createTrackbar("red_high_H", "Tracking", 0, 180, nothing)
-cv.createTrackbar("red_high_S", "Tracking", 0, 255, nothing)
-cv.createTrackbar("red_high_V", "Tracking", 0, 255, nothing)
+cv.createTrackbar("red_low_S", "Tracking", 255, 255, nothing)
+cv.createTrackbar("red_low_V", "Tracking", 102, 255, nothing)
+cv.createTrackbar("red_high_H", "Tracking", 180, 180, nothing)
+cv.createTrackbar("red_high_S", "Tracking", 255, 255, nothing)
+cv.createTrackbar("red_high_V", "Tracking", 255, 255, nothing)
 
 
 max_value = 255
@@ -67,7 +67,7 @@ while True:
     # Her defineres tekst farve og størrelse for de blå punkter
     blue_font = cv.FONT_HERSHEY_SIMPLEX
     blue_fontColor = (255, 0, 0)
-    blue_fontScale = .3
+    blue_fontScale = .5
     blue_lineType = 2
     # Her defineres farvefiltret for den blå nuance
     blue_low_H = cv.getTrackbarPos("blue_low_V", "Tracking")
@@ -81,7 +81,7 @@ while True:
     # Her defineres tekst farve og størrelse for de røde punkter
     red_font = cv.FONT_HERSHEY_SIMPLEX
     red_fontColor = (0, 0, 255)
-    red_fontScale = .3
+    red_fontScale = .5
     red_lineType = 2
     # Her defineres farvefiltret for den røde nuance
     red_low_H = cv.getTrackbarPos("red_low_V", "Tracking")
@@ -152,7 +152,7 @@ while True:
          if blue_contours[j].size > 300: #for loop der tæller pixels indenfor farvefiltret
             blue_cnt = blue_contours[j]
             blue_rect = cv.minAreaRect(blue_cnt)
-            cv.putText(img, str(blue_rect[-1]), (10,20), font, fontScale,(255,0,0),lineType) # print rotation of box
+            cv.putText(img, str(blue_rect[-1]), (10, 40), font, fontScale,(255,0,0),lineType) # print rotation of box
                                 
             blueBox = cv.boxPoints(blue_rect)# Her findes klodsens hjørner
             blueBox = np.int0(blueBox) # Her laves klodsens hjærner om til en liste
@@ -170,7 +170,7 @@ while True:
          if red_contours[i].size > 300: #for loop der tæller pixels indenfor farvefiltret
             red_cnt = red_contours[i]
             red_rect = cv.minAreaRect(red_cnt)
-            cv.putText(img, str(red_rect[-1]), (10,20), font, fontScale,(0,0,255),lineType) # print rotation of box
+            cv.putText(img, str(red_rect[-1]), (10,60), font, fontScale,(0,0,255),lineType) # print rotation of box
             
             redBox = cv.boxPoints(red_rect) # Her findes klodsens hjørner
             redBox = np.int0(redBox) # Her laves klodsens hjærner om til en liste
@@ -182,8 +182,7 @@ while True:
             cv.putText(img, str(redBox[1]), (redBox[1][0],redBox[1][1]), red_font, red_fontScale,red_fontColor,red_lineType)
             cv.putText(img, str(redBox[2]), (redBox[2][0],redBox[2][1]), red_font, red_fontScale,red_fontColor,red_lineType)
             cv.putText(img, str(redBox[3]), (redBox[3][0],redBox[3][1]), red_font, red_fontScale,red_fontColor,red_lineType)
-            
-        
+
     cv.imshow("vis kasse", img)
 
 
