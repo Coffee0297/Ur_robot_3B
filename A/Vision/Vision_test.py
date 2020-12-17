@@ -1,42 +1,39 @@
 import cv2 as cv
 import numpy as np
 
-# Let's load a simple image with 3 black squares
 cap = cv.VideoCapture(1)
 
 while True:
     ret, img = cap.read()
     gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
+    blank = np.zeros(img.shape, dtype='uint8')
+    # cv.imshow("Blank", blank)
 
-    gaussianblur = cv.GaussianBlur(gray, (5, 5), 0)
-    cv.imshow('gblur', gaussianblur)
+    mask = cv.circle(blank, (img.shape[1]//2), img.shape[0]//2), 100, 255, -1)
+    cv.imshow("Mask", mask)
 
-# Find Canny edges
-    edged = cv.Canny(gaussianblur, 30, 200)
+    masked = cv.bitwise_and(img, img, mask= mask)
+    cv.imshow("Masked image", masked)
 
-# Finding Contours
-# Use a copy of the image e.g. edged.copy()
-# since findContours alters the image
-    contours, hierarchy = cv.findContours(edged,
-    cv.RETR_EXTERNAL, cv.CHAIN_APPROX_NONE)
+    # cv.imshow("Grå Video", gray)
 
-    circles = cv.HoughCircles(edged, cv.HOUGH_GRADIENT, 1, 10, np.array([]), 200, 100, 1, 200)
-    if circles == 1:
-        print('Circle true')
-    else:
-        print('No circle')
+    gaussianblur = cv.GaussianBlur(gray, (5, 5), cv.BORDER_DEFAULT)
+    # cv.imshow('gblur', gaussianblur)
 
 
-    cv.imshow('Canny Edges After Contouring', edged)
 
 
-    print("Number of Contours found = " + str(len(contours)))
+    canny = cv.Canny(gaussianblur,100,120)
+    cv.imshow("Canny", canny)
 
-# Draw all contours
-# -1 signifies drawing all contours
-    cv.drawContours(img, contours, -1, (0, 255, 0), 3)
 
-    cv.imshow('Contours', img)
+    contours, hierarchies = cv.findContours(canny, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_NONE)
+    print(f'{len(contours)} contour(s) found!')
+
+
+
+
+
     if cv.waitKey(15) == ord('q'):
         break
 
