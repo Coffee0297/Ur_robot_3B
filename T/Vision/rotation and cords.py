@@ -7,7 +7,6 @@ import numpy as np
 def nothing(x):
     pass
 
-
 # Vinduesnavn
 cv.namedWindow('Tracking')
 
@@ -43,19 +42,10 @@ font = cv.FONT_HERSHEY_SIMPLEX
 fontScale = .5
 lineType = 1
 
-window_capture_name = 'Video Capture'
+window_capture_name = 'Video Feed'
 window_detection_name = 'Object Detection'
-low_H_name = 'Low H'
-low_S_name = 'Low S'
-low_V_name = 'Low V'
-high_H_name = 'High H'
-high_S_name = 'High S'
-high_V_name = 'High V'
 
-parser = argparse.ArgumentParser(description='Code for Thresholding Operations using inRange tutorial.')
-parser.add_argument('--camera', help='Camera divide number.', default=0, type=int)
-args = parser.parse_args()
-cap = cv.VideoCapture(args.camera)
+cap = cv.VideoCapture(0)
 
 while True:
 
@@ -115,7 +105,9 @@ while True:
     cv.imshow(window_capture_name, frame)
 
     cv.imshow(window_detection_name, frame_threshold)
-
+    cv.imshow("blue detection", blue_frame_threshold)
+    cv.imshow("red detection", red_frame_threshold)
+    cv.imshow("green detection", green_frame_threshold)
     
     # minAreaRect
 
@@ -139,7 +131,7 @@ while True:
     boxFound = False
    # Grøn klods
     for x in range(len(green_contours)):
-      if green_contours[x].size > 100: #for loop der tæller pixels indenfor farvefiltret
+      if green_contours[x].size > 300: #for loop der tæller pixels indenfor farvefiltret
         green_cnt = green_contours[x]
         green_rect = cv.minAreaRect(green_cnt)
         cv.putText(img, str(green_rect[-1]), (10,20), font, fontScale,(0,255,0),lineType) # print rotation of box
@@ -157,7 +149,7 @@ while True:
 
         #blå klods
     for j in range(len(blue_contours)):
-         if blue_contours[j].size > 100: #for loop der tæller pixels indenfor farvefiltret 
+         if blue_contours[j].size > 300: #for loop der tæller pixels indenfor farvefiltret
             blue_cnt = blue_contours[j]
             blue_rect = cv.minAreaRect(blue_cnt)
             cv.putText(img, str(blue_rect[-1]), (10,20), font, fontScale,(255,0,0),lineType) # print rotation of box
@@ -175,7 +167,7 @@ while True:
 
     #Rød kasse
     for i in range(len(red_contours)):
-         if red_contours[i].size > 100: #for loop der tæller pixels indenfor farvefiltret
+         if red_contours[i].size > 300: #for loop der tæller pixels indenfor farvefiltret
             red_cnt = red_contours[i]
             red_rect = cv.minAreaRect(red_cnt)
             cv.putText(img, str(red_rect[-1]), (10,20), font, fontScale,(0,0,255),lineType) # print rotation of box
@@ -192,7 +184,7 @@ while True:
             cv.putText(img, str(redBox[3]), (redBox[3][0],redBox[3][1]), red_font, red_fontScale,red_fontColor,red_lineType)
             
         
-    cv.imshow("Box fit", img)
+    cv.imshow("vis kasse", img)
 
 
     key = cv.waitKey(30)
