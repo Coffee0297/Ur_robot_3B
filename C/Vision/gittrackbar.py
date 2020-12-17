@@ -4,7 +4,7 @@ import cv2 as cv
 def nothing(x):
     pass
 
-cv.namedWindow('Tracking',cv.WINDOW_NORMAL)
+cv.namedWindow('Tracking')
 
 cv.createTrackbar("blue_low_H", "Tracking", 0, 180, nothing)
 cv.createTrackbar("blue_low_S", "Tracking", 0, 255, nothing)
@@ -35,12 +35,12 @@ low_V_name = 'Low V'
 high_H_name = 'High H'
 high_S_name = 'High S'
 high_V_name = 'High V'
-'''
-parser = argparse.ArgumentParser(description='Code for Thresholding Operations using inRange tutorial.')
-parser.add_argument('--camera', help='Camera divide number.', default=0, type=int)
-args = parser.parse_args()
-cap = cv.VideoCapture(args.camera)
-'''
+
+#parser = argparse.ArgumentParser(description='Code for Thresholding Operations using inRange tutorial.')
+#parser.add_argument('--camera', help='Camera divide number.', default=0, type=int)
+#args = parser.parse_args()
+cap = cv.VideoCapture(0)
+
 while True:
 
     # Blå filter trehshold
@@ -57,11 +57,11 @@ while True:
     blue_high_S = cv.getTrackbarPos("blue_high_S", "Tracking")
     blue_high_V = cv.getTrackbarPos("blue_high_V", "Tracking")
 
-    #ret, frame = cap.read()
-   # if frame is None:
-     #   break
+    ret, frame = cap.read()
+    if frame is None:
+        break
 
-'''
+
     # Her oprettes farvefiltre til grøn, blå og rød
     frame_HSV = cv.cvtColor(frame, cv.COLOR_BGR2HSV)
     blue_frame_threshold = cv.inRange(frame_HSV, (blue_low_H,blue_low_S,blue_low_V),(blue_high_H,blue_high_S,blue_high_V))
@@ -71,4 +71,3 @@ while True:
     cv.imshow(window_capture_name, frame)
     cv.imshow(window_detection_name, frame_threshold)
 
-'''
