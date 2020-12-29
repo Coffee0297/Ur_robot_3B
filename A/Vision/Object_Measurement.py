@@ -1,6 +1,28 @@
+from typing import Any, Union
+
+
 import cv2 as cv
 import numpy as np
 
+import os
+import sys
+
+
+file_dir = os.path.dirname('customModule')
+sys.path.append('c:\\Users\\Pc\\PycharmProjects\\Ur_robot_3B\\A\\Vision\\')
+
+
+
+
+webcam = True
+path = 'c:\\Users\\Pc\\Desktop\\3. Semester\\Vision\\Ressourcer\\Billeder\\a4_2.jpg'
+cap = cv.VideoCapture(0)
+cap.set(10,160)
+cap.set(3,480)
+cap.set(4,640)
+scale = 3
+wP = 210 *scale
+hP = 279 *scale
 
 def getContours(img, cThr=[100, 100], showCanny=False, cannyResize=False, minArea = 1000, filter=0, draw = False):
     imgGray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
@@ -37,26 +59,69 @@ def getContours(img, cThr=[100, 100], showCanny=False, cannyResize=False, minAre
 
     return img, finalContours
 
-webcam = False
-path = 'c:\\Users\\Pc\\Desktop\\3. Semester\\Vision\\Ressourcer\\Billeder\\a4.jpg'
-cap = cv.VideoCapture(0)
-cap.set(10,160)
-cap.set(3,480)
-cap.set(4,640)
+def reorder(myPoints):
+    print(myPoints.shape)
+    myPointsNew = np.zeros_like(myPoints)
+    myPoints = myPoints.reshape((4,2))
+    add = myPoints.sum(1)
+    myPointsNew[0] = myPoints[np.argmin(add)]
+    myPointsNew[3] = myPoints[np.argmax(add)]
+    diff = np.diff(myPoints, axis=1)
+    myPointsNew[1] = myPoints[np.argmin(diff)]
+    myPointsNew[2] = myPoints[np.argmax(diff)]
+
+    return myPointsNew
+
+def warpImg(img, points, w, h, pad = 20):
+    # print("Points: ", points)
+    points = reorder(points)
+    pts1 = np.float32(points)
+    pts2 = np.float32([[0,0],[w,0],[0,h],[w,h]])
+    matrix = cv.getPerspectiveTransform(pts1,pts2)
+    imgWarp = cv.warpPerspective(img, matrix, (w,h))
+    imgWarp = imgWarp[pad:imgWarp.shape[0]-pad, pad:imgWarp.shape[1]-pad]
+
+    return imgWarp
+
+def findDis(pts1, pts2):
+    return ((pts2[0]-pts1[0])**2 + (pts2[1]-pts1[1])**2)**0.5
+
 
 while True:
-    if webcam:success,img = cap.read()
+
+    if webcam: success,img = cap.read()
     else: img = cv.imread(path)
 
-    img, conts = getContours(img,cannyResize=True,
-                                     minArea=50000,filter=4) #SPOL TILBAGE OG FIND UD AF HVORFOR DEN IKKE VISER EDGES CA. 26 MINUTTER INDE
-    # if len(conts) != 0:
-    #     biggest = conts[0][2]
-    #     print(biggest)
+    img, conts = getContours(img, minArea=50000, showCanny= True, filter=4)
+
+    if len(conts) != 0:
+        biggest = conts[0][2]
+        # print("Biggest: ", biggest)
+        imgWarp = warpImg(img, biggest, wP, hP)
+        img2, conts2 = getContours(imgWarp, minArea=2000, filter=4, cThr=[50,50], draw=False)
+        if len(conts2) != 0:
+            for obj in conts2:
+                cv.polylines(img2, [obj[2]], True,(0,255,0), 2)
+                nPoints = reorder(obj[2])
+                nW = round((findDis(nPoints[0][0]//scale,nPoints[1][0]//scale)/10),1)
+                nH = round((findDis(nPoints[0][0]//scale,nPoints[2][0]//scale)/10),1)
+                cv.arrowedLine(img2, (nPoints[0][0][0], nPoints[0][0][1]), (nPoints[1][0][0], nPoints[1][0][1]),
+                               (255, 0, 255), 3, 8, 0, 0.05)
+                cv.arrowedLine(img2, (nPoints[0][0][0], nPoints[0][0][1]), (nPoints[2][0][0], nPoints[2][0][1]),
+                               (255, 0, 255), 3, 8, 0, 0.05)
+                x, y, w, h = obj[3]
+                cv.putText(img2, '{}cm'.format(nW), (x + 30, y - 10), cv.FONT_HERSHEY_COMPLEX_SMALL, 2,
+                           (255, 0, 255), 2)
+                cv.putText(img2, '{}cm'.format(nH), (x - 70, y + h // 2), cv.FONT_HERSHEY_COMPLEX_SMALL, 2,
+                           (255, 0, 255), 2)
+        cv.imshow("A4", img2)
+
 
     img = cv.resize(img,(0,0),None, 0.4, 0.4)
 
+
     cv.imshow("Original", img)
+
     if cv.waitKey(0) == ord('q'):
         break
 cap.release()
