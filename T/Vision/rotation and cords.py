@@ -1,11 +1,12 @@
 from __future__ import print_function
+
 import cv2 as cv
-import argparse
 import numpy as np
 
 
 def nothing(x):
     pass
+
 
 # Vinduesnavn
 cv.namedWindow('Tracking', cv.WINDOW_NORMAL)
@@ -33,9 +34,8 @@ cv.createTrackbar("red_high_H", "Tracking", 180, 180, nothing)
 cv.createTrackbar("red_high_S", "Tracking", 255, 255, nothing)
 cv.createTrackbar("red_high_V", "Tracking", 255, 255, nothing)
 
-
 max_value = 255
-max_value_H = 360//2
+max_value_H = 360 // 2
 
 # Her defineres tekst størrelse til den skrevet rotation i hjørnet
 font = cv.FONT_HERSHEY_SIMPLEX
@@ -85,91 +85,102 @@ while True:
     red_high_S = cv.getTrackbarPos("red_high_S", "Tracking")
     red_high_V = cv.getTrackbarPos("red_high_V", "Tracking")
 
-
     ret, frame = cap.read()
     if frame is None:
         break
 
     frame_HSV = cv.cvtColor(frame, cv.COLOR_BGR2HSV)
-    blue_frame_threshold = cv.inRange(frame_HSV, (blue_low_H,blue_low_S,blue_low_V),(blue_high_H,blue_high_S,blue_high_V))
-    red_frame_threshold = cv.inRange(frame_HSV, (red_low_H,red_low_S,red_low_V),(red_high_H,red_high_S,red_high_V))
-    green_frame_threshold = cv.inRange(frame_HSV, (green_low_H,green_low_S,green_low_V),(green_high_H,green_high_S,green_high_V))
-    frame_threshold=(blue_frame_threshold+red_frame_threshold+green_frame_threshold)
+    blue_frame_threshold = cv.inRange(frame_HSV, (blue_low_H, blue_low_S, blue_low_V),
+                                      (blue_high_H, blue_high_S, blue_high_V))
+    red_frame_threshold = cv.inRange(frame_HSV, (red_low_H, red_low_S, red_low_V), (red_high_H, red_high_S, red_high_V))
+    green_frame_threshold = cv.inRange(frame_HSV, (green_low_H, green_low_S, green_low_V),
+                                       (green_high_H, green_high_S, green_high_V))
+    frame_threshold = (blue_frame_threshold + red_frame_threshold + green_frame_threshold)
     cv.imshow(window_capture_name, frame)
 
     cv.imshow(window_detection_name, frame_threshold)
     cv.imshow("blue detection", blue_frame_threshold)
     cv.imshow("red detection", red_frame_threshold)
     cv.imshow("green detection", green_frame_threshold)
-    
-
 
     img = frame.copy()
 
-    ret,green_thresh = cv.threshold(green_frame_threshold,127,255,0)
-    green_contours,green_hierarchy = cv.findContours(green_thresh, 1, 2)
+    ret, green_thresh = cv.threshold(green_frame_threshold, 127, 255, 0)
+    green_contours, green_hierarchy = cv.findContours(green_thresh, 1, 2)
 
-    ret,blue_thresh = cv.threshold(blue_frame_threshold,127,255,0)
-    blue_contours,blue_hierarchy = cv.findContours(blue_thresh, 1, 2)
+    ret, blue_thresh = cv.threshold(blue_frame_threshold, 127, 255, 0)
+    blue_contours, blue_hierarchy = cv.findContours(blue_thresh, 1, 2)
 
-    ret,red_thresh = cv.threshold(red_frame_threshold,127,255,0)
-    red_contours,red_hierarchy = cv.findContours(red_thresh, 1, 2)
+    ret, red_thresh = cv.threshold(red_frame_threshold, 127, 255, 0)
+    red_contours, red_hierarchy = cv.findContours(red_thresh, 1, 2)
 
     boxFound = False
-   # Grøn klods
+    # Grøn klods
     for x in range(len(green_contours)):
-      if green_contours[x].size > 400:
-        green_cnt = green_contours[x]
-        green_rect = cv.minAreaRect(green_cnt)
-        cv.putText(img, str(green_rect[-1]), (10,20), font, fontScale,(0,255,0),lineType) # print rotation of box
+        if green_contours[x].size > 400:
+            green_cnt = green_contours[x]
+            green_rect = cv.minAreaRect(green_cnt)
+            cv.putText(img, str(green_rect[-1]), (10, 20), font, fontScale, (0, 255, 0),
+                       lineType)  # print rotation of box
 
-        greenBox = cv.boxPoints(green_rect)
-        greenBox = np.int0(greenBox)
+            greenBox = cv.boxPoints(green_rect)
+            greenBox = np.int0(greenBox)
 
-        cv.drawContours(img,[greenBox],0,(0,255,0),1)
+            cv.drawContours(img, [greenBox], 0, (0, 255, 0), 1)
 
+            cv.putText(img, str(greenBox[0]), (greenBox[0][0], greenBox[0][1]), green_font, green_fontScale,
+                       green_fontColor, green_lineType)
+            cv.putText(img, str(greenBox[1]), (greenBox[1][0], greenBox[1][1]), green_font, green_fontScale,
+                       green_fontColor, green_lineType)
+            cv.putText(img, str(greenBox[2]), (greenBox[2][0], greenBox[2][1]), green_font, green_fontScale,
+                       green_fontColor, green_lineType)
+            cv.putText(img, str(greenBox[3]), (greenBox[3][0], greenBox[3][1]), green_font, green_fontScale,
+                       green_fontColor, green_lineType)
 
-        cv.putText(img, str(greenBox[0]), (greenBox[0][0],greenBox[0][1]), green_font, green_fontScale,green_fontColor,green_lineType)
-        cv.putText(img, str(greenBox[1]), (greenBox[1][0],greenBox[1][1]), green_font, green_fontScale,green_fontColor,green_lineType)
-        cv.putText(img, str(greenBox[2]), (greenBox[2][0],greenBox[2][1]), green_font, green_fontScale,green_fontColor,green_lineType)
-        cv.putText(img, str(greenBox[3]), (greenBox[3][0],greenBox[3][1]), green_font, green_fontScale,green_fontColor,green_lineType)
-
-        #blå klods
+            # blå klods
     for j in range(len(blue_contours)):
-         if blue_contours[j].size > 400:
+        if blue_contours[j].size > 400:
             blue_cnt = blue_contours[j]
             blue_rect = cv.minAreaRect(blue_cnt)
-            cv.putText(img, str(blue_rect[-1]), (10, 40), font, fontScale,(255,0,0),lineType)
-                                
+            cv.putText(img, str(blue_rect[-1]), (10, 40), font, fontScale, (255, 0, 0), lineType)
+
             blueBox = cv.boxPoints(blue_rect)
             blueBox = np.int0(blueBox)
 
-            cv.drawContours(img,[blueBox],0,(255,0,0),1)
+            cv.drawContours(img, [blueBox], 0, (255, 0, 0), 1)
 
-            cv.putText(img, str(blueBox[0]), (blueBox[0][0],blueBox[0][1]),blue_font, blue_fontScale,blue_fontColor,blue_lineType) 
-            cv.putText(img, str(blueBox[1]), (blueBox[1][0],blueBox[1][1]), blue_font, blue_fontScale,blue_fontColor,blue_lineType) 
-            cv.putText(img, str(blueBox[2]), (blueBox[2][0],blueBox[2][1]), blue_font, blue_fontScale,blue_fontColor,blue_lineType) 
-            cv.putText(img, str(blueBox[3]), (blueBox[3][0],blueBox[3][1]), blue_font, blue_fontScale,blue_fontColor,blue_lineType) 
+            cv.putText(img, str(blueBox[0]), (blueBox[0][0], blueBox[0][1]), blue_font, blue_fontScale, blue_fontColor,
+                       blue_lineType)
+            cv.putText(img, str(blueBox[1]), (blueBox[1][0], blueBox[1][1]), blue_font, blue_fontScale, blue_fontColor,
+                       blue_lineType)
+            cv.putText(img, str(blueBox[2]), (blueBox[2][0], blueBox[2][1]), blue_font, blue_fontScale, blue_fontColor,
+                       blue_lineType)
+            cv.putText(img, str(blueBox[3]), (blueBox[3][0], blueBox[3][1]), blue_font, blue_fontScale, blue_fontColor,
+                       blue_lineType)
 
-    #Rød kasse
+            # Rød kasse
     for i in range(len(red_contours)):
-         if red_contours[i].size > 400:
+        if red_contours[i].size > 400:
             red_cnt = red_contours[i]
             red_rect = cv.minAreaRect(red_cnt)
-            cv.putText(img, str(red_rect[-1]), (10,60), font, fontScale,(0,0,255),lineType) # print rotation of box
-            
+            cv.putText(img, str(red_rect[-1]), (10, 60), font, fontScale, (0, 0, 255),
+                       lineType)  # print rotation of box
+
             redBox = cv.boxPoints(red_rect)
             redBox = np.int0(redBox)
 
-            cv.drawContours(img,[redBox],0,(0,0,255),1)
+            cv.drawContours(img, [redBox], 0, (0, 0, 255), 1)
 
-            cv.putText(img, str(redBox[0]), (redBox[0][0],redBox[0][1]), red_font, red_fontScale,red_fontColor,red_lineType)
-            cv.putText(img, str(redBox[1]), (redBox[1][0],redBox[1][1]), red_font, red_fontScale,red_fontColor,red_lineType)
-            cv.putText(img, str(redBox[2]), (redBox[2][0],redBox[2][1]), red_font, red_fontScale,red_fontColor,red_lineType)
-            cv.putText(img, str(redBox[3]), (redBox[3][0],redBox[3][1]), red_font, red_fontScale,red_fontColor,red_lineType)
+            cv.putText(img, str(redBox[0]), (redBox[0][0], redBox[0][1]), red_font, red_fontScale, red_fontColor,
+                       red_lineType)
+            cv.putText(img, str(redBox[1]), (redBox[1][0], redBox[1][1]), red_font, red_fontScale, red_fontColor,
+                       red_lineType)
+            cv.putText(img, str(redBox[2]), (redBox[2][0], redBox[2][1]), red_font, red_fontScale, red_fontColor,
+                       red_lineType)
+            cv.putText(img, str(redBox[3]), (redBox[3][0], redBox[3][1]), red_font, red_fontScale, red_fontColor,
+                       red_lineType)
 
     cv.imshow("vis kasse", img)
-
 
     key = cv.waitKey(30)
     if key == ord('q') or key == 27:
