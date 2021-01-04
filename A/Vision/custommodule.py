@@ -2,7 +2,6 @@ import cv2 as cv
 import numpy as np
 
 
-
 def getContours(img, cThr=[100, 100], showCanny=False, cannyResize=False, minArea = 1000, filter=0, draw = False):
     imgGray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
     imgBlur = cv.GaussianBlur(imgGray, (5, 5), 1)
@@ -16,6 +15,8 @@ def getContours(img, cThr=[100, 100], showCanny=False, cannyResize=False, minAre
 
     if showCanny: cv.imshow('Canny', imgCanny_Original)
     if cannyResize: cv.imshow('Resized Canny', imgThres)
+
+
 
     contours, hierarchy = cv.findContours(imgThres,cv.RETR_EXTERNAL,cv.CHAIN_APPROX_SIMPLE)
     finalContours = []
@@ -36,6 +37,7 @@ def getContours(img, cThr=[100, 100], showCanny=False, cannyResize=False, minAre
     if draw:
         for con in finalContours:
             cv.drawContours(img,con[4],-1,(0,0,255),3) # Standard thickness = 3
+
 
 
 
@@ -67,6 +69,7 @@ def warpImg(img, points, w, h, pad = 20):
 
 def findDis(pts1, pts2):
     return ((pts2[0]-pts1[0])**2 + (pts2[1]-pts1[1])**2)**0.5
+
 
 
 

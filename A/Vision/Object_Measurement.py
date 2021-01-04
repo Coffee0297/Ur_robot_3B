@@ -4,33 +4,21 @@ import numpy as np
 import custommodule as cm
 import fsm
 
+webcam = True # Tænd og sluk for kameraet - Er kameraet slukket, vil processeringen foregå med billedet i path
+cap = cv.VideoCapture(0, cv.CAP_DSHOW) # Forbind til webcamet - cv.CAP_DSHOW starter kameraet hurtigere
+fsm.Shape.takePicture(cap) # Funktionen tager cap som input og når der trykkes "space", tages der et stillbillede som gemmes i Visionmappen. Trykkes der escape starter processeringen af stillbilledet.
+path = 'c:\\Users\\Pc\\PycharmProjects\\Ur_robot_3B\\A\\Vision\\image_0.png' # Stillbilledet fra webcamet gemmes i path
 
-
-webcam = True
-cap = cv.VideoCapture(1)
-fsm.Shape.takePicture(cap)
-path = 'c:\\Users\\Pc\\PycharmProjects\\Ur_robot_3B\\A\\Vision\\image_0.png'
-cap.set(10,160)
-cap.set(3,1920)
-cap.set(4,1080)
+# cap.set's første position refererer til et ID på en parameter der kan ændres
+cap.set(10,160) # Position 10 er Lysstyrke (brightness) - TÆNKER IKKE DET ER RELEVANT!!!!??
+cap.set(3,1920) # Position 3 er Bredde
+cap.set(4,1080) # Position 4 er Højde
 scale = 3
 wP = 200 *scale
 hP = 200 *scale
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+#### While loop ####
 while True:
 
     webcam = False
@@ -61,30 +49,6 @@ while True:
                 cv.putText(img2, '{}cm'.format(nH), (x - 70, y + h // 2), cv.FONT_HERSHEY_COMPLEX_SMALL, 2,
                            (255, 0, 255), 2)
         cv.imshow("A4", img2)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     img = cv.resize(img,(0,0),None, 0.4, 0.4)
