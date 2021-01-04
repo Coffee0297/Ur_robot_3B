@@ -5,7 +5,7 @@ def getContours(img, cThr=[100, 100], showCanny=False, cannyResize=False, minAre
     imgGray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
     imgBlur = cv.GaussianBlur(imgGray, (5, 5), 1)
     imgCanny_Original = cv.Canny(imgBlur, cThr[0], cThr[1])
-    # imgCanny_Resized = cv.resize(imgCanny_Original.copy(),(0, 0), None, 0.4, 0.4)
+    imgCanny_Resized = cv.resize(imgCanny_Original.copy(),(0, 0), None, 0.4, 0.4)
     kernel = np.ones((5,5))
     imgDial = cv.dilate(imgCanny_Original, kernel, iterations=3)
     imgThres = cv.erode(imgDial, kernel, iterations=2)
@@ -32,7 +32,7 @@ def getContours(img, cThr=[100, 100], showCanny=False, cannyResize=False, minAre
 
     if draw:
         for con in finalContours:
-            cv.drawContours(img,con[4],-1,(0,0,255),3)
+            cv.drawContours(img,con[4],-1,(0,0,255),3) # Standard thickness = 3
 
     return img, finalContours
 

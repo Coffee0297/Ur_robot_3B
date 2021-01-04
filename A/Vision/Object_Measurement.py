@@ -4,6 +4,9 @@
 import cv2 as cv
 import numpy as np
 import custommodule as cm
+import fsm
+from __future__ import print_function
+
 
 import os
 import sys
@@ -15,14 +18,15 @@ sys.path.append('/A/Vision/custommodule.py')
 
 
 webcam = True
-path = 'c:\\Users\\Pc\\Desktop\\3. Semester\\Vision\\Ressourcer\\Billeder\\a4_klods_1.jpg'
+
 cap = cv.VideoCapture(1)
+path = fsm.Shape.takePicture(cap)
 cap.set(10,160)
 cap.set(3,1920)
 cap.set(4,1080)
 scale = 3
-wP = 210 *scale
-hP = 148.5 *scale
+wP = 200 *scale
+hP = 200 *scale
 
 
 
@@ -32,7 +36,7 @@ while True:
     if webcam: success,img = cap.read()
     else: img = cv.imread(path)
 
-    img, conts = cm.getContours(img, minArea=5000, showCanny= True, filter=4)
+    img, conts = cm.getContours(img, minArea=5000, cannyResize= True, filter=4, draw=True)
 
     if len(conts) != 0:
         biggest = conts[0][2]
@@ -60,8 +64,12 @@ while True:
     img = cv.resize(img,(0,0),None, 0.4, 0.4)
 
 
+
+
     cv.imshow("Original", img)
 
-    cv.waitKey(1)
+    key = cv.waitKey(30)
+    if key == ord('q') or key == 27:
+        break
 cap.release()
 cv.destroyAllWindows()
