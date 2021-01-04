@@ -1,3 +1,5 @@
+# Prøv hjørnedetekteringen fra corner detection PDF
+
 from __future__ import print_function
 import cv2 as cv
 import numpy as np
@@ -21,16 +23,15 @@ hP = 200 *scale
 #### While loop ####
 while True:
 
-    webcam = False
+    img = cv.imread(path) # Billedet i path gemmes i "img"
 
-    if webcam: success,img = cap.read()
-    else: img = cv.imread(path)
+    # img = cv.resize(img, (0,0),None,0.5,0.5) # Skalerer img til halv størrelse
 
-    img, conts = cm.getContours(img, minArea=5000, cannyResize= True, filter=4, draw=True)
+    img, conts = cm.getContours(img, minArea=5000, cannyResize= True, filter=4, draw=True) # Funktionens færdigprocesserede billede returneres til "img". - finalContours returneres til "conts". - minArea sættes til 5000 for kun at detektere store objekter på billedet - filter sættes til 4 for kun at få objekter med over 4 hjørner.
 
     if len(conts) != 0:
-        biggest = conts[0][2]
-        print("Biggest: ", biggest)
+        biggest = conts[0][2] # Plads [0] peger på den største kontur i listen "approx". - Plads[2] peger på listen "approx" i finalContours
+        # print("Biggest: ", biggest)
         imgWarp = cm.warpImg(img, biggest, wP, hP)
         img2, conts2 = cm.getContours(imgWarp, minArea=200, filter=4, cThr=[50,50], draw=True) # minArea er standard 2000
         if len(conts2) != 0:
