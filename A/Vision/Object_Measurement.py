@@ -1,30 +1,30 @@
-from typing import Any, Union
+# Jeg kan ikke importere customModules. hjææææælp
 
 
 import cv2 as cv
 import numpy as np
+
 
 import os
 import sys
 
 
 file_dir = os.path.dirname('customModule')
-sys.path.append('c:\\Users\\Pc\\PycharmProjects\\Ur_robot_3B\\A\\Vision\\')
+sys.path.append('c:\\Users\\Pc\\PycharmProjects\\Ur_robot_3B\\A\\Vision\\customModule.py')
 
 
 
-
-webcam = True
-path = 'c:\\Users\\Pc\\Desktop\\3. Semester\\Vision\\Ressourcer\\Billeder\\a4_2.jpg'
-cap = cv.VideoCapture(0)
+webcam = False
+path = 'c:\\Users\\Pc\\Desktop\\3. Semester\\Vision\\Ressourcer\\Billeder\\a4_klods_1.jpg'
+cap = cv.VideoCapture(1)
 cap.set(10,160)
-cap.set(3,480)
-cap.set(4,640)
+cap.set(3,1920)
+cap.set(4,1080)
 scale = 3
 wP = 210 *scale
 hP = 279 *scale
 
-def getContours(img, cThr=[100, 100], showCanny=False, cannyResize=False, minArea = 1000, filter=0, draw = False):
+def getContours(img, cThr=[100, 100], showCanny=False, cannyResize=False, minArea = 500, filter=0, draw = False): # minArea er standard = 100
     imgGray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
     imgBlur = cv.GaussianBlur(imgGray, (5, 5), 1)
     imgCanny_Original = cv.Canny(imgBlur, cThr[0], cThr[1])
@@ -96,7 +96,7 @@ while True:
 
     if len(conts) != 0:
         biggest = conts[0][2]
-        # print("Biggest: ", biggest)
+        print("Biggest: ", biggest)
         imgWarp = warpImg(img, biggest, wP, hP)
         img2, conts2 = getContours(imgWarp, minArea=2000, filter=4, cThr=[50,50], draw=False)
         if len(conts2) != 0:
@@ -122,7 +122,6 @@ while True:
 
     cv.imshow("Original", img)
 
-    if cv.waitKey(0) == ord('q'):
-        break
+    cv.waitKey(1)
 cap.release()
 cv.destroyAllWindows()
