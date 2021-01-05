@@ -142,7 +142,8 @@ while True:
         if blue_contours[j].size > 400:
             blue_cnt = blue_contours[j]
             blue_rect = cv.minAreaRect(blue_cnt)
-            cv.putText(img, str(blue_rect[-1]), (10, 40), font, fontScale, (255, 0, 0), lineType)
+            cv.putText(img, str(blue_rect[-1]), (10, 40), font, fontScale, (255, 0, 0),
+                       lineType)
 
             blueBox = cv.boxPoints(blue_rect)
             blueBox = np.int0(blueBox)
