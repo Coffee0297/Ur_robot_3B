@@ -1,110 +1,45 @@
-# Jeg kan ikke importere customModules. hjææææælp
+# Prøv hjørnedetekteringen fra corner detection PDF
 
-
+from __future__ import print_function
 import cv2 as cv
 import numpy as np
+import custommodule as cm
+import fsm
 
+webcam = True # Tænd og sluk for kameraet - Er kameraet slukket, vil processeringen foregå med billedet i path
+cap = cv.VideoCapture(0, cv.CAP_DSHOW) # Forbind til webcamet - cv.CAP_DSHOW starter kameraet hurtigere
+fsm.Shape.takePicture(cap) # Funktionen tager cap som input og når der trykkes "space", tages der et stillbillede som gemmes i Visionmappen. Trykkes der escape starter processeringen af stillbilledet.
+path = 'c:\\Users\\Pc\\PycharmProjects\\Ur_robot_3B\\A\\Vision\\image_0.png' # Stillbilledet fra webcamet gemmes i path
 
-import os
-import sys
-
-
-file_dir = os.path.dirname('customModule')
-sys.path.append('c:\\Users\\Pc\\PycharmProjects\\Ur_robot_3B\\A\\Vision\\customModule.py')
-
-
-
-webcam = False
-path = 'c:\\Users\\Pc\\Desktop\\3. Semester\\Vision\\Ressourcer\\Billeder\\a4_klods_1.jpg'
-cap = cv.VideoCapture(1)
-cap.set(10,160)
-cap.set(3,1920)
-cap.set(4,1080)
+# cap.set's første position refererer til et ID på en parameter der kan ændres
+cap.set(10,160) # Position 10 er Lysstyrke (brightness) - TÆNKER IKKE DET ER RELEVANT!!!!??
+cap.set(3,1920) # Position 3 er Bredde
+cap.set(4,1080) # Position 4 er Højde
 scale = 3
-wP = 210 *scale
-hP = 279 *scale
-
-def getContours(img, cThr=[100, 100], showCanny=False, cannyResize=False, minArea = 500, filter=0, draw = False): # minArea er standard = 100
-    imgGray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
-    imgBlur = cv.GaussianBlur(imgGray, (5, 5), 1)
-    imgCanny_Original = cv.Canny(imgBlur, cThr[0], cThr[1])
-    # imgCanny_Resized = cv.resize(imgCanny_Original.copy(),(0, 0), None, 0.4, 0.4)
-    kernel = np.ones((5,5))
-    imgDial = cv.dilate(imgCanny_Original, kernel, iterations=3)
-    imgThres = cv.erode(imgDial, kernel, iterations=2)
+wP = 200 *scale
+hP = 200 *scale
 
 
-
-    if showCanny: cv.imshow('Canny', imgCanny_Original)
-    if cannyResize: cv.imshow('Resized Canny', imgThres)
-
-    contours, hierarchy = cv.findContours(imgThres,cv.RETR_EXTERNAL,cv.CHAIN_APPROX_SIMPLE)
-    finalContours = []
-    for i in contours:
-        area = cv.contourArea(i)
-        if area > minArea:
-            peri = cv.arcLength(i,True)
-            approx = cv.approxPolyDP(i,0.02*peri,True)
-            bbox = cv.boundingRect(approx)
-            if filter > 0:
-                if len(approx) == filter:
-                    finalContours.append([len(approx),area,approx,bbox,i])
-            else:
-                finalContours.append([len(approx),area,approx,bbox,i])
-    finalContours = sorted(finalContours,key= lambda x:x[1], reverse=True)
-
-    if draw:
-        for con in finalContours:
-            cv.drawContours(img,con[4],-1,(0,0,255),3)
-
-    return img, finalContours
-
-def reorder(myPoints):
-    print(myPoints.shape)
-    myPointsNew = np.zeros_like(myPoints)
-    myPoints = myPoints.reshape((4,2))
-    add = myPoints.sum(1)
-    myPointsNew[0] = myPoints[np.argmin(add)]
-    myPointsNew[3] = myPoints[np.argmax(add)]
-    diff = np.diff(myPoints, axis=1)
-    myPointsNew[1] = myPoints[np.argmin(diff)]
-    myPointsNew[2] = myPoints[np.argmax(diff)]
-
-    return myPointsNew
-
-def warpImg(img, points, w, h, pad = 20):
-    # print("Points: ", points)
-    points = reorder(points)
-    pts1 = np.float32(points)
-    pts2 = np.float32([[0,0],[w,0],[0,h],[w,h]])
-    matrix = cv.getPerspectiveTransform(pts1,pts2)
-    imgWarp = cv.warpPerspective(img, matrix, (w,h))
-    imgWarp = imgWarp[pad:imgWarp.shape[0]-pad, pad:imgWarp.shape[1]-pad]
-
-    return imgWarp
-
-def findDis(pts1, pts2):
-    return ((pts2[0]-pts1[0])**2 + (pts2[1]-pts1[1])**2)**0.5
-
-
+#### While loop ####
 while True:
 
-    if webcam: success,img = cap.read()
-    else: img = cv.imread(path)
+    img = cv.imread(path) # Billedet i path gemmes i "img"
 
-    img, conts = getContours(img, minArea=50000, showCanny= True, filter=4)
+    # img = cv.resize(img, (0,0),None,0.5,0.5) # Skalerer img til halv størrelse
+
+    img, conts = cm.getContours(img, minArea=5000, cannyResize= True, filter=4, draw=True) # Funktionens færdigprocesserede billede returneres til "img". - finalContours returneres til "conts". - minArea sættes til 5000 for kun at detektere store objekter på billedet - filter sættes til 4 for kun at få objekter med over 4 hjørner.
 
     if len(conts) != 0:
-        biggest = conts[0][2]
-        print("Biggest: ", biggest)
-        imgWarp = warpImg(img, biggest, wP, hP)
-        img2, conts2 = getContours(imgWarp, minArea=2000, filter=4, cThr=[50,50], draw=False)
+        biggest = conts[0][2] # Plads [0] peger på den største kontur i listen "approx". - Plads[2] peger på listen "approx" i finalContours
+        # print("Biggest: ", biggest)
+        imgWarp = cm.warpImg(img, biggest, wP, hP)
+        img2, conts2 = cm.getContours(imgWarp, minArea=200, filter=4, cThr=[50,50], draw=True) # minArea er standard 2000
         if len(conts2) != 0:
             for obj in conts2:
                 cv.polylines(img2, [obj[2]], True,(0,255,0), 2)
-                nPoints = reorder(obj[2])
-                nW = round((findDis(nPoints[0][0]//scale,nPoints[1][0]//scale)/10),1)
-                nH = round((findDis(nPoints[0][0]//scale,nPoints[2][0]//scale)/10),1)
+                nPoints = cm.reorder(obj[2])
+                nW = round((cm.findDis(nPoints[0][0]//scale,nPoints[1][0]//scale)/10),1)
+                nH = round((cm.findDis(nPoints[0][0]//scale,nPoints[2][0]//scale)/10),1)
                 cv.arrowedLine(img2, (nPoints[0][0][0], nPoints[0][0][1]), (nPoints[1][0][0], nPoints[1][0][1]),
                                (255, 0, 255), 3, 8, 0, 0.05)
                 cv.arrowedLine(img2, (nPoints[0][0][0], nPoints[0][0][1]), (nPoints[2][0][0], nPoints[2][0][1]),
@@ -120,8 +55,12 @@ while True:
     img = cv.resize(img,(0,0),None, 0.4, 0.4)
 
 
+
+
     cv.imshow("Original", img)
 
-    cv.waitKey(1)
+    key = cv.waitKey(30)
+    if key == ord('q') or key == 27:
+        break
 cap.release()
 cv.destroyAllWindows()
