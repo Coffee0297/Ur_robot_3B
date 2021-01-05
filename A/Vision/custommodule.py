@@ -2,7 +2,7 @@ import cv2 as cv
 import numpy as np
 
 # getContours funktionen
-def getContours(img, cThr=[100, 175], showCanny=False, cannyResize=False, minArea = 1000, filter=0, draw = False):
+def getContours(img, cThr=[100, 175], showCanny=False, cannyResize=False, minArea = 1000, filter=0, draw = False, findCenter = False):
     imgGray = cv.cvtColor(img, cv.COLOR_BGR2GRAY) # Inputbilledet laves til grayscale
     imgBlur = cv.GaussianBlur(imgGray, (5, 5), 1) # Billedet blurres for at fjerne støj - Det grå billede bruges # kernelstørrelsen er 5*5 # sigmaX er en afvigelse på x-aksen så matrixen starter én pixel inde på x-aksen, ellers er det måske talrækken i matrixen som bliver 1?? # sigmaY er standard samme som sigmaX
     imgCanny_Original = cv.Canny(imgBlur, cThr[0], cThr[1]) # Kanterne detekteres - Tager blurred billede som input - Threshold er standard [100,100], men kan ændres af brugeren # Threshold er hvor stor en forskel der skal være på to pixels før den skal reagere på det som en kant.
@@ -35,7 +35,15 @@ def getContours(img, cThr=[100, 175], showCanny=False, cannyResize=False, minAre
         for con in finalContours:
             cv.drawContours(img,con[4],-1,(0,0,255),7) # Konturerne tegnes på billedet - (billedet, plads nr. 4 i finalContours, farve på konturlinjen, tykkelse på linjen)
 
-    return img, finalContours, approx
+    if findCenter:
+
+        M = cv.moments(approx)
+        cx = int((M['m10'] / M['m00']) / 3)
+        cy = int((M['m01'] / M['m00']) / 3)
+        cv.circle(img, (cx, cy), 2, (36, 255, 12), -1)
+        print("Midte", cx, cy)
+
+    return img, finalContours
 
 
 
@@ -67,16 +75,6 @@ def warpImg(img, points, w, h, pad = 30): # Ændre pad for at fjerne overflødig
     imgWarp = imgWarp[pad:imgWarp.shape[0]-pad, pad:imgWarp.shape[1]-pad] # Fjerner kanterne på billedet som ikke er en del af arbejdsområdet
 
     return imgWarp
-
-def findCenter(img, approx):
-
-    M = cv.moments(approx)
-    cx = int((M['m10'] / M['m00'])/3)
-    cy = int((M['m01'] / M['m00'])/3)
-    cv.circle(img, (cx, cy), 2, (36, 255, 12), -1)
-    print("Midte", cx, cy)
-
-    return img
 
 def findDis(pts1, pts2): # pts1 er x1,y1 og pts2 er x2,y2
     return ((pts2[0]-pts1[0])**2 + (pts2[1]-pts1[1])**2)**0.5 # Pythagoras bruges til at beregne hypotenusen(den ønskede længde) # x2-x1^2 + y2-y2^2 / 0.5 finder hypotenusen

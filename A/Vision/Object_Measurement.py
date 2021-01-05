@@ -28,17 +28,15 @@ while True:
 
     # img = cv.resize(img, (0,0),None,0.5,0.5) # Skalerer img til halv størrelse
 
-    img, conts, approx = cm.getContours(img, minArea=5000, cannyResize= True, filter=4, draw=True) # Funktionens færdigprocesserede billede returneres til "img". - finalContours returneres til "conts". - minArea sættes til 5000 for kun at detektere store objekter på billedet - filter sættes til 4 for kun at få objekter med over 4 hjørner.
+    img, conts = cm.getContours(img, minArea=5000, cannyResize= True, filter=4, draw=True) # Funktionens færdigprocesserede billede returneres til "img". - finalContours returneres til "conts". - minArea sættes til 5000 for kun at detektere store objekter på billedet - filter sættes til 4 for kun at få objekter med over 4 hjørner.
 
     if len(conts) != 0:
         biggest = conts[0][2] # Plads [0] peger på den største kontur i listen "approx". - Plads[2] peger på listen "approx" i finalContours
         # print("Biggest: ", biggest)
         imgWarp = cm.warpImg(img, biggest, wP, hP) # imgWarp
 
-        img2, conts2, approx2 = cm.getContours(imgWarp, minArea=1000, filter=4, cThr=[100,100], draw=False) # minArea er standard 2000
+        img2, conts2 = cm.getContours(imgWarp, minArea=500, filter=4, cThr=[50,50], draw=False, findCenter=True) # minArea er standard 2000
         # Hjørnerne af de fundne objekter i arbejdsområdet, bruges til at måle højden og bredden på objektet
-
-        img3 = cm.findCenter(img2,approx2) # findCenter finder midtpunktet af objekterne
 
         if len(conts2) != 0: # tjekker at der er fundet konturer
             for obj in conts2: # Der arbejdes med hvert objekt der detekteres
