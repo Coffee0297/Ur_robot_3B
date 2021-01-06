@@ -16,7 +16,8 @@ wWorkspace = 200 *scale
 hWorkspace = 200 *scale
 
 defs.Capture.takePicture(cam)
-img = cv.imread(r'C:\Users\Carin\Documents\UCL_2019\3.Sem\Python\UR\Vision\image_0.png')
+img = cv.imread('image_0.png')
+#img = cv.imread(r'C:\Users\Carin\Documents\UCL_2019\3.Sem\Python\UR\Vision\image_0.png')
 defs.Square.getContours(img, show=True)
 
 imgContours, fContours = defs.Square.getContours(img, show= True, minArea=50000, filter=4)
@@ -25,6 +26,7 @@ if len(fContours) != 0:
     biggest = fContours[0][2]   # takes 1. and 3. parameter in finalContours-->([len(approx), area, approx, bbox, i])
     # print (biggest)
     imgWarp = defs.Square.warpImg(img, biggest, wWorkspace, hWorkspace)
+    print(imgWarp.size/3)
     imgContours2, fContours2 = defs.Square.getContours(imgWarp, show=True, showCenterWS=True, minArea=2000, filter=4, cThr=[60, 60], draw=False)
 
     if len(fContours) !=0:

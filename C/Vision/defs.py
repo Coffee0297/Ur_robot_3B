@@ -85,13 +85,21 @@ class Square(Capture):
                 else:
                     finalContours.append([len(approx), area, approx, bbox, i])
 
-            if showCenterWS:
-                # calculate x,y coordinate of center
+
+                # calculate x,y coordinates of objects centerpoint
                 M = cv.moments(approx)
-                cX = int(M["m10"] / M["m00"])
-                cY = int(M["m01"] / M["m00"])
-                cv.circle(img, (cX, cY), 5, (0, 0, 0), -1)
-                cv.putText(img, str([cX, cY]), (cX - 25, cY - 25), cv.FONT_HERSHEY_COMPLEX_SMALL, 1, (0, 0, 0), 1)
+                x = int(M["m10"] / M["m00"])    # center in pixels on x-axis
+                cX = round(x // 3 ,0)           # center in millimeter on x-axis - måske?
+                print('cX: ', cX)
+
+                y = int(M["m01"] / M["m00"])    # center in pixels on y-axis
+                cY = round(y // 3 ,0)           # center in millimeter on y-axis - måske?
+                print('cY: ', cY)
+
+            # define placement of circle and text on image
+            if showCenterWS:
+                cv.circle(img, (x, y), 5, (0, 0, 0), -1)    # output centerpoint as a dot
+                cv.putText(img, str([cX, cY]), (x - 50, y - 35), cv.FONT_HERSHEY_COMPLEX_SMALL, 1, (0, 0, 0), 1) # outputs koordinates i mm
 
 
         finalContours = sorted(finalContours, key=lambda x: x[1], reverse=True)     # src, len(approx):area, descenting order
