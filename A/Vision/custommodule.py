@@ -35,10 +35,12 @@ def getContours(img, cThr=[100, 175], showCanny=False, cannyResize=False, minAre
 
     finalContours = sorted(finalContours,key= lambda x:x[1], reverse=True) # Den største kontur i finalContours findes - (listen, key = Hvad der skal sorteres efter - Lambda bruges til at pege på "area" i listen, Reversed = Sorterer fra størst til mindst)
 
+    print("FinalContours", finalContours)
+
     if draw:
         for con in finalContours:
             cv.drawContours(img,con[4],-1,(0,0,255),7) # Konturerne tegnes på billedet - (billedet, plads nr. 4 i finalContours, farve på konturlinjen, tykkelse på linjen)
-
+            print("Con4",con[4])
     return img, finalContours
 
 def reorder(myPoints):
