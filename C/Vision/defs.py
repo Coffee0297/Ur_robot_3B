@@ -76,6 +76,15 @@ class Square(Capture):
                 perimeter = cv.arcLength(i, True) #The function computes a curve length or a closed contour perimeter.
                 approx = cv.approxPolyDP(i, 0.02 * perimeter, True) #find corner points
                 bbox = cv.boundingRect(approx)
+
+                # # calculate x,y coordinate of center
+                # M = cv.moments(area)
+                # cX = int(M["m10"] / M["m00"])
+                # cY = int(M["m01"] / M["m00"])
+                # cv.circle(imgContours2, (cX, cY), 5, red_fontColor, -1)
+                # cv.putText(imgContours2, str([cX, cY]), (cX - 25, cY - 25), red_font, red_fontScale, red_fontColor,
+                #            red_lineType)
+
                 # filter is made if only a certain type of object is wanted, fx a square has 4 cornerpoints
                 if filter > 0:
                     if len(approx) == filter:

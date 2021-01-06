@@ -32,13 +32,6 @@ if len(fContours) != 0:
             cv.polylines(imgContours2,[obj[2]], True, (0,255,0),2)  # green full lines
             nPoints = defs.Square.reorder(obj[2])    # reorder points
 
-            # calculate x,y coordinate of center
-            M = cv.moments(fContours2)
-            cX = int(M["m10"] / M["m00"])
-            cY = int(M["m01"] / M["m00"])
-            cv.circle(img, (cX, cY), 5, red_fontColor, -1)
-            cv.putText(img, str([cX, cY]), (cX - 25, cY - 25), red_font, red_fontScale, red_fontColor, red_lineType)
-
             print('nPoints reordered: \n ', nPoints)
             nW = round(defs.Square.findDis(nPoints[0][0] // scale, nPoints[1][0] // scale), 1)    # find width of obj, (number of pixels divided by scale-value)
             nH = round(defs.Square.findDis(nPoints[0][0] // scale, nPoints[2][0] // scale), 1)    # find height of obj in millimeters, round to 1 decimal
