@@ -84,7 +84,10 @@ class Square(Capture):
                         finalContours.append([len(approx), area, approx, bbox, i])
                 else:
                     finalContours.append([len(approx), area, approx, bbox, i])
+##########
 
+
+#######
 
                 # calculate x,y coordinates of objects centerpoint
                 M = cv.moments(approx)
@@ -149,7 +152,10 @@ class Square(Capture):
         print('pts1, pts2: ', pts1, pts2)
         return ((pts2[0] - pts1[0]) ** 2 + (pts2[1] - pts1[1]) ** 2) ** 0.5 # finder kvadratrod af ((x2-x1)^2 + (y2-y1)^2)
 
-
+    def findAngle(myPoints):
+        print('\n------ class Square -> Function finDis ------\n')
+        rect = cv.minAreaRect(myPoints)
+        return (rect)
 
 class Circle(Capture):
     def __init__(self, name, radius):

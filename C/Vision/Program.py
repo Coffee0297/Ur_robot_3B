@@ -35,6 +35,10 @@ if len(fContours) != 0:
             nPoints = defs.Square.reorder(obj[2])    # reorder points
 
             print('nPoints reordered: \n ', nPoints)
+
+            rect = cv.minAreaRect(nPoints)
+            print('rect: ',(rect[-1]))
+
             nW = round(defs.Square.findDis(nPoints[0][0] // scale, nPoints[1][0] // scale), 1)    # find width of obj, (number of pixels divided by scale-value)
             nH = round(defs.Square.findDis(nPoints[0][0] // scale, nPoints[2][0] // scale), 1)    # find height of obj in millimeters, round to 1 decimal
             cv.arrowedLine(imgContours2, (nPoints[0][0][0], nPoints[0][0][1]), (nPoints[1][0][0], nPoints[1][0][1]),
