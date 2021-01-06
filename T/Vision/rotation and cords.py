@@ -47,7 +47,6 @@ window_detection_name = 'Object Detection'
 cap = cv.VideoCapture(0, )
 # cap = cv.imread("image_0.png")
 cap.set(3,1920)
-
 cap.set(4,1080)
 
 while True:
