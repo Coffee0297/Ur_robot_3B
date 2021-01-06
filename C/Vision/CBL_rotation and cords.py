@@ -143,7 +143,8 @@ while True:
             cX = int(M["m10"] / M["m00"])
             cY = int(M["m01"] / M["m00"])
             cv.circle(img, (cX, cY), 5, green_fontColor, -1)
-            cv.putText(img, "center", (cX - 25, cY - 25), green_font, green_fontScale,
+            cv.putText(img, str([cX, cY]), (cX - 25, cY - 25), green_font, green_fontScale,
+
                        green_fontColor, green_lineType)
 
             # blå klods
@@ -160,21 +161,21 @@ while True:
 
             cv.drawContours(img, [blueBox], 0, (255, 0, 0), 1)
 
-            cv.putText(img, str(blueBox[0]), (blueBox[0][0], blueBox[0][1]), blue_font, blue_fontScale, blue_fontColor,
-                       blue_lineType)
-            cv.putText(img, str(blueBox[1]), (blueBox[1][0], blueBox[1][1]), blue_font, blue_fontScale, blue_fontColor,
-                       blue_lineType)
-            cv.putText(img, str(blueBox[2]), (blueBox[2][0], blueBox[2][1]), blue_font, blue_fontScale, blue_fontColor,
-                       blue_lineType)
-            cv.putText(img, str(blueBox[3]), (blueBox[3][0], blueBox[3][1]), blue_font, blue_fontScale, blue_fontColor,
-                       blue_lineType)
+            # cv.putText(img, str(blueBox[0]), (blueBox[0][0], blueBox[0][1]), blue_font, blue_fontScale, blue_fontColor,
+            #            blue_lineType)
+            # cv.putText(img, str(blueBox[1]), (blueBox[1][0], blueBox[1][1]), blue_font, blue_fontScale, blue_fontColor,
+            #            blue_lineType)
+            # cv.putText(img, str(blueBox[2]), (blueBox[2][0], blueBox[2][1]), blue_font, blue_fontScale, blue_fontColor,
+            #            blue_lineType)
+            # cv.putText(img, str(blueBox[3]), (blueBox[3][0], blueBox[3][1]), blue_font, blue_fontScale, blue_fontColor,
+            #            blue_lineType)
 
             M = cv.moments(blue_cnt)
             # calculate x,y coordinate of center
             cX = int(M["m10"] / M["m00"])
             cY = int(M["m01"] / M["m00"])
             cv.circle(img, (cX, cY), 5, blue_fontColor, -1)
-            cv.putText(img, "center", (cX - 25, cY - 25), blue_font, blue_fontScale, blue_fontColor,
+            cv.putText(img, str([cX, cY]), (cX - 25, cY - 25), blue_font, blue_fontScale, blue_fontColor,
                        blue_lineType)
 
             # Rød kasse
@@ -198,14 +199,19 @@ while True:
                        red_lineType)
             cv.putText(img, str(redBox[3]), (redBox[3][0], redBox[3][1]), red_font, red_fontScale, red_fontColor,
                        red_lineType)
-            M = cv.moments(red_cnt)
+
 
             # calculate x,y coordinate of center
+            M = cv.moments(red_cnt)
             cX = int(M["m10"] / M["m00"])
             cY = int(M["m01"] / M["m00"])
             cv.circle(img, (cX, cY), 5, red_fontColor, -1)
-            cv.putText(img, "center", (cX - 25, cY - 25), red_font, red_fontScale, red_fontColor,
+            cv.putText(img, str([cX, cY]), (cX - 25, cY - 25), red_font, red_fontScale, red_fontColor,
                        red_lineType)
+
+
+
+
     cv.imshow("vis kasse", img)
 
     key = cv.waitKey(30)
