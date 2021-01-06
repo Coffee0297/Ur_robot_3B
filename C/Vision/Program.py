@@ -25,7 +25,7 @@ if len(fContours) != 0:
     biggest = fContours[0][2]   # takes 1. and 3. parameter in finalContours-->([len(approx), area, approx, bbox, i])
     # print (biggest)
     imgWarp = defs.Square.warpImg(img, biggest, wWorkspace, hWorkspace)
-    imgContours2, fContours2 = defs.Square.getContours(imgWarp, show=True, minArea=2000, filter=4, cThr=[60, 60], draw=False)
+    imgContours2, fContours2 = defs.Square.getContours(imgWarp, show=True, showCenterWS=True, minArea=2000, filter=4, cThr=[60, 60], draw=False)
 
     if len(fContours) !=0:
         for obj in fContours2:
@@ -44,6 +44,8 @@ if len(fContours) != 0:
                              (255,0,255), 1)
             cv.putText(imgContours2, '{}mm'.format(nH), (x - 70, y + h // 2), cv.FONT_HERSHEY_COMPLEX_SMALL, 1,
                              (255, 0, 255), 1)
+
+
             print('\nWidth: ', nW, '\nHight: ', nH)
     cv.imshow("Workspace", imgContours2)
 # cv.imshow("Last saved image", img)

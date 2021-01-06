@@ -46,7 +46,7 @@ class Square(Capture):
     #     self.name = "square"
 
 
-    def getContours(img, cThr=[150, 175], show=False, minArea=1000, filter=0, draw=False):  # default parameters
+    def getContours(img, cThr=[150, 175], show=False, showCenterWS=False, minArea=1000, filter=0, draw=False):  # default parameters
         print('\n------ class Square -> Function getContours ------\n')
         # Do some processing
         gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)      # convert image to grayscale
@@ -77,13 +77,6 @@ class Square(Capture):
                 approx = cv.approxPolyDP(i, 0.02 * perimeter, True) #find corner points
                 bbox = cv.boundingRect(approx)
 
-                # # calculate x,y coordinate of center
-                # M = cv.moments(area)
-                # cX = int(M["m10"] / M["m00"])
-                # cY = int(M["m01"] / M["m00"])
-                # cv.circle(imgContours2, (cX, cY), 5, red_fontColor, -1)
-                # cv.putText(imgContours2, str([cX, cY]), (cX - 25, cY - 25), red_font, red_fontScale, red_fontColor,
-                #            red_lineType)
 
                 # filter is made if only a certain type of object is wanted, fx a square has 4 cornerpoints
                 if filter > 0:
@@ -91,6 +84,15 @@ class Square(Capture):
                         finalContours.append([len(approx), area, approx, bbox, i])
                 else:
                     finalContours.append([len(approx), area, approx, bbox, i])
+
+            if showCenterWS:
+                # calculate x,y coordinate of center
+                M = cv.moments(approx)
+                cX = int(M["m10"] / M["m00"])
+                cY = int(M["m01"] / M["m00"])
+                cv.circle(img, (cX, cY), 5, (0, 0, 0), -1)
+                cv.putText(img, str([cX, cY]), (cX - 25, cY - 25), cv.FONT_HERSHEY_COMPLEX_SMALL, 1, (0, 0, 0), 1)
+
 
         finalContours = sorted(finalContours, key=lambda x: x[1], reverse=True)     # src, len(approx):area, descenting order
         # 'draw' contour-points that we get from findCountour-function
