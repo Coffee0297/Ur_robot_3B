@@ -20,19 +20,19 @@ cv.createTrackbar("green_high_H", "Tracking", 96, 180, nothing)
 cv.createTrackbar("green_high_S", "Tracking", 225, 255, nothing)
 cv.createTrackbar("green_high_V", "Tracking", 185, 255, nothing)
 
-cv.createTrackbar("blue_low_H", "Tracking", 180, 180, nothing)
-cv.createTrackbar("blue_low_S", "Tracking", 255, 255, nothing)
-cv.createTrackbar("blue_low_V", "Tracking", 0, 255, nothing)
-cv.createTrackbar("blue_high_H", "Tracking", 147, 180, nothing)
-cv.createTrackbar("blue_high_S", "Tracking", 62, 255, nothing)
-cv.createTrackbar("blue_high_V", "Tracking", 134, 255, nothing)
+cv.createTrackbar("blue_low_H", "Tracking", 0, 180, nothing)
+cv.createTrackbar("blue_low_S", "Tracking", 0, 255, nothing)
+cv.createTrackbar("blue_low_V", "Tracking", 71, 255, nothing)
+cv.createTrackbar("blue_high_H", "Tracking", 171, 180, nothing)
+cv.createTrackbar("blue_high_S", "Tracking", 237, 255, nothing)
+cv.createTrackbar("blue_high_V", "Tracking", 92, 255, nothing)
 
 cv.createTrackbar("red_low_H", "Tracking", 0, 180, nothing)
-cv.createTrackbar("red_low_S", "Tracking", 255, 255, nothing)
-cv.createTrackbar("red_low_V", "Tracking", 102, 255, nothing)
-cv.createTrackbar("red_high_H", "Tracking", 180, 180, nothing)
+cv.createTrackbar("red_low_S", "Tracking", 0, 255, nothing)
+cv.createTrackbar("red_low_V", "Tracking", 3, 255, nothing)
+cv.createTrackbar("red_high_H", "Tracking", 27, 180, nothing)
 cv.createTrackbar("red_high_S", "Tracking", 255, 255, nothing)
-cv.createTrackbar("red_high_V", "Tracking", 255, 255, nothing)
+cv.createTrackbar("red_high_V", "Tracking", 85, 255, nothing)
 
 max_value = 255
 max_value_H = 360 // 2
@@ -45,8 +45,8 @@ lineType = 1
 window_capture_name = 'Video Feed'
 window_detection_name = 'Object Detection'
 
-cap = cv.VideoCapture(0)
-
+#cap = cv.VideoCapture(0)
+cap = cv.imread("image_0.png")
 while True:
 
     green_font = cv.FONT_HERSHEY_SIMPLEX
@@ -85,7 +85,8 @@ while True:
     red_high_S = cv.getTrackbarPos("red_high_S", "Tracking")
     red_high_V = cv.getTrackbarPos("red_high_V", "Tracking")
 
-    ret, frame = cap.read()
+    # ret, frame = cap.read()
+    frame = cap
     if frame is None:
         break
 
