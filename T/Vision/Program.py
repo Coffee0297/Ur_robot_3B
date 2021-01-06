@@ -8,23 +8,23 @@ import defs
 # define a video capture object
 cam = cv.VideoCapture(0)
 # cam.set(10,160)     # 10 for brightness - value 160
-# cam.set(3,1920)     # 3 for hight - value 1920
-# cam.set(4,1080)     # 4 for width - value 1080
+cam.set(3,1920)     # 3 for hight - value 1920
+cam.set(4,1080)     # 4 for width - value 1080
 pixToMil = 0.2645833333
 scale = 3   # scale to make image bigger
 wWorkspace = 200 *scale
 hWorkspace = 200 *scale
 
 defs.Capture.takePicture(cam)
-img = cv.imread(r'C:\Users\Carin\Documents\UCL_2019\3.Sem\Python\UR\Vision\image_0.png')
+img = cv.imread('image_0.png')
 defs.Square.getContours(img, show=True)
-
 imgContours, fContours = defs.Square.getContours(img, show= True, minArea=50000, filter=4)
 # find the biggest objects 4 corners - unsorted
 if len(fContours) != 0:
     biggest = fContours[0][2]   # takes 1. and 3. parameter in finalContours-->([len(approx), area, approx, bbox, i])
     # print (biggest)
-    imgWarp = defs.Square.warpImg(img, biggest, wWorkspace, hWorkspace)
+    imgWarp = defs.Square.warpImg(img, biggest, hWorkspace, wWorkspace)
+    print(imgWarp.shape)
     imgContours2, fContours2 = defs.Square.getContours(imgWarp, show=True, showCenterWS=True, minArea=2000, filter=4, cThr=[60, 60], draw=False)
 
     if len(fContours) !=0:
