@@ -27,18 +27,15 @@ if len(fContours) != 0:
     # print (biggest)
     imgWarp = defs.Square.warpImg(img, biggest, wWorkspace, hWorkspace)
     print(imgWarp.size/3)
-    imgContours2, fContours2 = defs.Square.getContours(imgWarp, show=True, showCenterWS=True, minArea=2000, filter=4, cThr=[60, 60], draw=False)
+    imgContours2, fContours2 = defs.Square.getContours(imgWarp, show=True, showCenterWS=True, findAngle=True, minArea=2000, filter=4, cThr=[60, 60], draw=False)
 
     if len(fContours) !=0:
         for obj in fContours2:
             cv.polylines(imgContours2,[obj[2]], True, (0,255,0),2)  # green full lines
             nPoints = defs.Square.reorder(obj[2])    # reorder points
-
             print('nPoints reordered: \n ', nPoints)
 
-            rect = cv.minAreaRect(nPoints)
-            print('rect: ',(rect[-1]))
-
+            # function call to find distance (hight and width of object)
             nW = round(defs.Square.findDis(nPoints[0][0] // scale, nPoints[1][0] // scale), 1)    # find width of obj, (number of pixels divided by scale-value)
             nH = round(defs.Square.findDis(nPoints[0][0] // scale, nPoints[2][0] // scale), 1)    # find height of obj in millimeters, round to 1 decimal
             cv.arrowedLine(imgContours2, (nPoints[0][0][0], nPoints[0][0][1]), (nPoints[1][0][0], nPoints[1][0][1]),
@@ -51,8 +48,9 @@ if len(fContours) != 0:
             cv.putText(imgContours2, '{}mm'.format(nH), (x - 70, y + h // 2), cv.FONT_HERSHEY_COMPLEX_SMALL, 1,
                              (255, 0, 255), 1)
 
-
             print('\nWidth: ', nW, '\nHight: ', nH)
+
+
     cv.imshow("Workspace", imgContours2)
 # cv.imshow("Last saved image", img)
 
