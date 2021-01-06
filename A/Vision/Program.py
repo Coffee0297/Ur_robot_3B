@@ -4,6 +4,7 @@ import cv2 as cv
 import argparse
 import numpy as np
 import defs
+from matplotlib import pyplot as plt
 
 # define a video capture object
 cam = cv.VideoCapture(0)
@@ -50,7 +51,13 @@ if len(fContours) != 0:
             print('\nWidth: ', nW, '\nHeight: ', nH)
 
     cv.imshow("Workspace", imgContours2)
-# cv.imshow("Last saved image", img)
+
+#     imgshaped = cv.resize(imgContours2,(2000,2000))
+# # cv.imshow("Last saved image", img)
+#
+#     # plt.subplot(1,1,1)
+#     plt.imshow(imgshaped)
+#     plt.show()
 
 cv.waitKey(0)
 cam.release()
