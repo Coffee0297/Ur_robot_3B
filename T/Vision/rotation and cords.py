@@ -3,7 +3,6 @@ from __future__ import print_function
 import cv2 as cv
 import numpy as np
 
-
 def nothing(x):
     pass
 
@@ -22,17 +21,17 @@ cv.createTrackbar("green_high_V", "Tracking", 185, 255, nothing)
 
 cv.createTrackbar("blue_low_H", "Tracking", 0, 180, nothing)
 cv.createTrackbar("blue_low_S", "Tracking", 0, 255, nothing)
-cv.createTrackbar("blue_low_V", "Tracking", 71, 255, nothing)
+cv.createTrackbar("blue_low_V", "Tracking", 65, 255, nothing)
 cv.createTrackbar("blue_high_H", "Tracking", 171, 180, nothing)
-cv.createTrackbar("blue_high_S", "Tracking", 237, 255, nothing)
-cv.createTrackbar("blue_high_V", "Tracking", 92, 255, nothing)
+cv.createTrackbar("blue_high_S", "Tracking", 234, 255, nothing)
+cv.createTrackbar("blue_high_V", "Tracking", 110, 255, nothing)
 
 cv.createTrackbar("red_low_H", "Tracking", 0, 180, nothing)
 cv.createTrackbar("red_low_S", "Tracking", 0, 255, nothing)
-cv.createTrackbar("red_low_V", "Tracking", 3, 255, nothing)
-cv.createTrackbar("red_high_H", "Tracking", 27, 180, nothing)
+cv.createTrackbar("red_low_V", "Tracking", 0, 255, nothing)
+cv.createTrackbar("red_high_H", "Tracking", 24, 180, nothing)
 cv.createTrackbar("red_high_S", "Tracking", 255, 255, nothing)
-cv.createTrackbar("red_high_V", "Tracking", 85, 255, nothing)
+cv.createTrackbar("red_high_V", "Tracking", 88, 255, nothing)
 
 max_value = 255
 max_value_H = 360 // 2
@@ -45,7 +44,7 @@ lineType = 1
 window_capture_name = 'Video Feed'
 window_detection_name = 'Object Detection'
 
-#cap = cv.VideoCapture(0)
+# cap = cv.VideoCapture(0)
 cap = cv.imread("image_0.png")
 while True:
 
@@ -118,7 +117,7 @@ while True:
     boxFound = False
     # Grøn klods
     for x in range(len(green_contours)):
-        if green_contours[x].size > 400:
+        if green_contours[x].size > 300:
             green_cnt = green_contours[x]
             green_rect = cv.minAreaRect(green_cnt)
             cv.putText(img, str(green_rect[-1]), (10, 20), font, fontScale, (0, 255, 0),
@@ -138,10 +137,20 @@ while True:
             cv.putText(img, str(greenBox[3]), (greenBox[3][0], greenBox[3][1]), green_font, green_fontScale,
                        green_fontColor, green_lineType)
 
+            M = cv.moments(green_cnt)
+
+            # calculate x,y coordinate of center
+            cX = int(M["m10"] / M["m00"])
+            cY = int(M["m01"] / M["m00"])
+            cv.circle(img, (cX, cY), 5, green_fontColor, -1)
+            cv.putText(img, "center", (cX - 25, cY - 25), green_font, green_fontScale,
+                       green_fontColor, green_lineType)
+
             # blå klods
     for j in range(len(blue_contours)):
-        if blue_contours[j].size > 400:
+        if blue_contours[j].size > 300:
             blue_cnt = blue_contours[j]
+
             blue_rect = cv.minAreaRect(blue_cnt)
             cv.putText(img, str(blue_rect[-1]), (10, 40), font, fontScale, (255, 0, 0),
                        lineType)
@@ -160,9 +169,17 @@ while True:
             cv.putText(img, str(blueBox[3]), (blueBox[3][0], blueBox[3][1]), blue_font, blue_fontScale, blue_fontColor,
                        blue_lineType)
 
+            M = cv.moments(blue_cnt)
+            # calculate x,y coordinate of center
+            cX = int(M["m10"] / M["m00"])
+            cY = int(M["m01"] / M["m00"])
+            cv.circle(img, (cX, cY), 5, blue_fontColor, -1)
+            cv.putText(img, "center", (cX - 25, cY - 25), blue_font, blue_fontScale, blue_fontColor,
+                       blue_lineType)
+
             # Rød kasse
     for i in range(len(red_contours)):
-        if red_contours[i].size > 400:
+        if red_contours[i].size > 300:
             red_cnt = red_contours[i]
             red_rect = cv.minAreaRect(red_cnt)
             cv.putText(img, str(red_rect[-1]), (10, 60), font, fontScale, (0, 0, 255),
@@ -181,7 +198,14 @@ while True:
                        red_lineType)
             cv.putText(img, str(redBox[3]), (redBox[3][0], redBox[3][1]), red_font, red_fontScale, red_fontColor,
                        red_lineType)
+            M = cv.moments(red_cnt)
 
+            # calculate x,y coordinate of center
+            cX = int(M["m10"] / M["m00"])
+            cY = int(M["m01"] / M["m00"])
+            cv.circle(img, (cX, cY), 5, red_fontColor, -1)
+            cv.putText(img, "center", (cX - 25, cY - 25), red_font, red_fontScale, red_fontColor,
+                       red_lineType)
     cv.imshow("vis kasse", img)
 
     key = cv.waitKey(30)
