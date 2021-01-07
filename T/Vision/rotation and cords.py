@@ -4,11 +4,13 @@ import cv2 as cv
 import numpy as np
 
 def nothing(x):
-    pass
+
 
 
 # Vinduesnavn
-cv.namedWindow('Tracking', cv.WINDOW_NORMAL)
+cv.namedWindow('Tracking_green', cv.WINDOW_NORMAL)
+cv.namedWindow('Tracking_blue', cv.WINDOW_NORMAL)
+cv.namedWindow('Tracking_red', cv.WINDOW_NORMAL)
 
 # Opretter en trackbar og attaches
 # vedhæfter det til vindue

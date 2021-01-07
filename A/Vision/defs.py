@@ -9,7 +9,15 @@ class Capture:
         self.name = name
 
     def nothing(x):  # definere nothing for at den kan blive ignoreret i cv.createTrackbar
-        pass
+        green_low_H = cv.getTrackbarPos("green_low_H", "Tracking")
+        green_low_S = cv.getTrackbarPos("green_low_S", "Tracking")
+        green_low_V = cv.getTrackbarPos("green_low_V", "Tracking")
+        green_high_H = cv.getTrackbarPos("green_high_H", "Tracking")
+        green_high_S = cv.getTrackbarPos("green_high_S", "Tracking")
+        green_high_V = cv.getTrackbarPos("green_high_V", "Tracking")
+
+
+        return green_low_H, green_low_S, green_low_V, green_high_H, green_high_S, green_high_V
 
     # funktionen tager et screenshot fra webcam og gemmer det ---- skal processere det nu
 

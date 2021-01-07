@@ -6,6 +6,7 @@ import numpy as np
 import defs
 from matplotlib import pyplot as plt
 
+
 # define a video capture object
 cam = cv.VideoCapture(0)
 # cam.set(10,160)     # 10 for brightness - value 160
