@@ -1,4 +1,7 @@
 # tester klasser og objekter
+# Class names staret med stort
+# methods_like_this
+# objectsLikeThis (starter med småt)
 #-------------------------------------------------------
 class Color:
     def __init__(self, hl, sl, vl, hh, sh, hv):     # HSV værdier - low/high
