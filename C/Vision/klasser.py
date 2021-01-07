@@ -23,6 +23,9 @@ class Position:
     def getOffset(self):
         return self.z
 
+    #-------------------------
+
+    # skal nok ligge et andet sted
     def intToStr(self):
         pass
 
@@ -71,7 +74,7 @@ square.add_cornerpoints(k3)
 square.add_cornerpoints(k4)
 print(square.corners)
 print(square.corners[3].x)  # prints out the x-value in the 4th index (in this case 7)
-
+square.corners[0].x
 # #------------------------------------------------
 # # create Position objects
 # homePos = Position(2,4,6,8,10,12)
