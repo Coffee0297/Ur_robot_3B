@@ -39,14 +39,8 @@ class Capture:
 
 # ===================================================================================
 class Square(Capture):
-    # def __init__(self, name, a, b):
-    #     super().__init__(name)
-    #     self.a = a
-    #     self.b = b
-    #     self.name = "square"
 
-
-    def getContours(img, cThr=[150, 175], show=False, showCenterWS=False, minArea=1000, filter=0, draw=False):  # default parameters
+    def getContours(img, cThr=[150, 175], show=False, showCenterWS=False, findAngle=False, minArea=1000, filter=0, draw=False):  # default parameters
         print('\n------ class Square -> Function getContours ------\n')
         # Do some processing
         gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)      # convert image to grayscale
@@ -64,19 +58,36 @@ class Square(Capture):
             # cv.imshow("Dialate 4th processing", dial)
             cv.imshow("Erode 5th processing", erod)
 
-
         # save all contours in the variabel 'contours'
         contours, hiearchy = cv.findContours(erod, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
         finalContours = []      # creating list
+
         # loop through contours
         for i in contours:
             # information about current detected object
+
+            if findAngle:       # get rotational angle of objects in workspace
+                for l in range(len(contours)):
+                    if contours[l].size > 50:
+                        cnt = contours[l]
+                        rect = cv.minAreaRect(cnt)
+
+                        print('contours[l].size: ', contours[l].size)
+                        print('rect: ', rect[-1])
+
+                        cv.putText(img, str(rect[-1]), (10, 60 + (l * 20)), cv.FONT_HERSHEY_COMPLEX_SMALL, 1, (0, 0, 255),1)
+
+                        Box = cv.boxPoints(rect)
+                        Box = np.int0(Box)
+
+                        cv.drawContours(img, [Box], 0, (255, 255, 0), 1)
+
             area = cv.contourArea(i)
+            print('area: ', area)
             if area > minArea:
                 perimeter = cv.arcLength(i, True) #The function computes a curve length or a closed contour perimeter.
                 approx = cv.approxPolyDP(i, 0.02 * perimeter, True) #find corner points
                 bbox = cv.boundingRect(approx)
-
 
                 # filter is made if only a certain type of object is wanted, fx a square has 4 cornerpoints
                 if filter > 0:
@@ -96,18 +107,18 @@ class Square(Capture):
                 cY = round(y // 3 ,0)           # center in millimeter on y-axis - måske?
                 print('cY: ', cY)
 
+
             # define placement of circle and text on image
             if showCenterWS:
                 cv.circle(img, (x, y), 5, (0, 0, 0), -1)    # output centerpoint as a dot
                 cv.putText(img, str([cX, cY]), (x - 50, y - 35), cv.FONT_HERSHEY_COMPLEX_SMALL, 1, (0, 0, 0), 1) # outputs koordinates i mm
 
-
         finalContours = sorted(finalContours, key=lambda x: x[1], reverse=True)     # src, len(approx):area, descenting order
+
         # 'draw' contour-points that we get from findCountour-function
         if draw:
             for con in finalContours:
                 cv.drawContours(img,con[4],-1,(0,0,255),3) # dottet red lines, thickness = 3
-
         return img, finalContours
 
     # reorder the objects 4 corners - sorted
@@ -123,6 +134,7 @@ class Square(Capture):
         diff = np.diff(myPoints, axis=1)
         myPointsNew[1] = myPoints[np.argmin(diff)]
         myPointsNew[2] = myPoints[np.argmax(diff)]
+
         print('myPointsNew[0]: ', myPointsNew[0])
         print('myPointsNew[1]: ', myPointsNew[1])
         print('myPointsNew[2]: ', myPointsNew[2])
@@ -134,6 +146,7 @@ class Square(Capture):
         print('\n------ class Square -> Function warpImg ------\n')
         print('Workspace points: \n', points)
         points = Square.reorder(points)
+
         print('Workspace points reordered: \n', points)
         pts1 = np.float32(points)
         pts2 = np.float32([[0, 0], [w, 0], [0, h], [w, h]])   # define pattern
@@ -150,6 +163,8 @@ class Square(Capture):
         return ((pts2[0] - pts1[0]) ** 2 + (pts2[1] - pts1[1]) ** 2) ** 0.5 # finder kvadratrod af ((x2-x1)^2 + (y2-y1)^2)
 
 
+
+# ===================================================================================
 
 class Circle(Capture):
     def __init__(self, name, radius):
