@@ -1,6 +1,6 @@
 # tester klasser og objekter
 # Class names staret med stort
-# methods_like_this
+# methods_like_this (alt er småt)
 # objectsLikeThis (starter med småt)
 #-------------------------------------------------------
 class Color:

@@ -1,6 +1,6 @@
 # tester klasser og objekter
 # Class names staret med stort
-# methods_like_this
+# methods_like_this (alt er småt)
 # objectsLikeThis (starter med småt)
 #-------------------------------------------------------
 class Position:
@@ -64,6 +64,14 @@ class Shape:
         pass
 
     def get_minimum_x_value(self):
+        pass
+
+class Square(Shape):
+    def example(self):
+        pass
+
+class Circle(Shape):
+    def another_example(self):
         pass
 
 #------------------------------------------------
