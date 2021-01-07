@@ -10,16 +10,21 @@ class Color:
         self.hv = hv
 
     def printPosition(self):    # til debugging
-        print(self.x)
-        print(self.y)
-        print(self.z)
-        print(self.rx)
-        print(self.ry)
-        print(self.rz)
+        print('HSV values')
+        print(self.hl)
+        print(self.sl)
+        print(self.vl)
+        print(self.hh)
+        print(self.sh)
+        print(self.hv)
 
-cv.createTrackbar("green_low_H", "Tracking", 53, 180, nothing)
-cv.createTrackbar("green_low_S", "Tracking", 74, 255, nothing)
-cv.createTrackbar("green_low_V", "Tracking", 66, 255, nothing)
-cv.createTrackbar("green_high_H", "Tracking", 96, 180, nothing)
-cv.createTrackbar("green_high_S", "Tracking", 225, 255, nothing)
-cv.createTrackbar("green_high_V", "Tracking", 185, 255, nothing)
+
+green = Color(53,74,66,96,225,185)
+blue = Color(0,0,65,171,234,110)
+red = Color(0,0,0,24,255,88)
+# debugging
+green.printPosition()
+blue.printPosition()
+red.printPosition()
+
+

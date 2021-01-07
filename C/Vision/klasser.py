@@ -75,28 +75,29 @@ square.add_cornerpoints(k4)
 print(square.corners)
 print(square.corners[3].x)  # prints out the x-value in the 4th index (in this case 7)
 square.corners[0].x
-# #------------------------------------------------
-# # create Position objects
-# homePos = Position(2,4,6,8,10,12)
-# p2 = Position(2,2,2,2,2,2)
-# p3 = Position(3,3,3,3,3,3)
-# p4 = Position(4,4,4,4,4,4)
-# #------------------------------------------------
-# # debugging
-# print(homePos.printPosition())
-# print('P2 Position:',p2.printPosition())
-# print('P3 Position:',p3.printPosition())
-# print('P4 Position:',p4.printPosition())
-# #------------------------------------------------
-# # using methods
-# homePos.addOffset(20)
-# print('Home Pos Get Offset:',homePos.getOffset())
-# print('Home Position:',homePos.printPosition())
-# # - - - - - - - - - - - - - - - - - - - - - - - -
-# p4.addOffset(50)
-# # de to print herunder gør det samme
-# print('P4 Get Offset:',p4.getOffset())
-# print('P4 Get Offset:',p4.z)
-# # - - - - - - - - - - - - - - - - - - - - - - - -
+#------------------------------------------------
+værdi = 20
+# create Position objects
+homePos = Position(2,4,6,8,10,12)
+p2 = Position(2,2,2,2,2,2)
+p3 = Position(3,3,3,3,3,3)
+p4 = Position(4,4,4,4,4,4)
+#------------------------------------------------
+# debugging
+print(homePos.printPosition())
+print('P2 Position:',p2.printPosition())
+print('P3 Position:',p3.printPosition())
+print('P4 Position:',p4.printPosition())
+#------------------------------------------------
+# using methods
+homePos.addOffset(værdi)
+print('Home Pos Get Offset:',homePos.getOffset())
+print('Home Position:',homePos.printPosition())
+# - - - - - - - - - - - - - - - - - - - - - - - -
+p4.addOffset(50)
+# de to print herunder gør det samme
+print('P4 Get Offset:',p4.getOffset())
+print('P4 Get Offset:',p4.z)
+# - - - - - - - - - - - - - - - - - - - - - - - -
 
 # b'movej(p[-0.02703978368688221, -0.41162562152534876, 0.3339006287927195, 1.6443410877739137, -2.4824781895547496, 0.8022008840211984])'+ b'
