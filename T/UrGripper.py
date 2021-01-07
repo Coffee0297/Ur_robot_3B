@@ -2,7 +2,7 @@ import ur
 import socket
 import Gripper
 # Made by TLM
-host = '192.168.1.10'  # the remote host
+host = '10.0.0.134'  # the remote host
 port = 30002 # the same port as used by the server
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # create socket for tcp/ip
@@ -27,8 +27,8 @@ def testing(i):
     }
     return switcher.get(i, "Invalid program nummer")
 
-s.send(testing(1))
-print(testing(1))
+s.send(testing(2))
+print(testing(2))
 
 ur_state.stop() # stop the ur_state thread
 s.close() # close the socket

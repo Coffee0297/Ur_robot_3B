@@ -3,15 +3,15 @@ from __future__ import print_function
 import cv2 as cv
 import numpy as np
 
+
 def nothing(x):
     pass
 
 
 
 # Vinduesnavn
-cv.namedWindow('Tracking_green', cv.WINDOW_NORMAL)
-cv.namedWindow('Tracking_blue', cv.WINDOW_NORMAL)
-cv.namedWindow('Tracking_red', cv.WINDOW_NORMAL)
+cv.namedWindow('Tracking', cv.WINDOW_NORMAL)
+
 
 # Opretter en trackbar og attaches
 # vedhæfter det til vindue
@@ -52,6 +52,7 @@ cap = cv.VideoCapture(0, )
 cap.set(3,1920)
 cap.set(4,1080)
 
+
 while True:
 
     green_font = cv.FONT_HERSHEY_SIMPLEX
@@ -59,12 +60,14 @@ while True:
     green_fontColor = (0, 255, 0)
     green_lineType = 2
 
-    green_low_H = cv.getTrackbarPos("green_low_H", "Tracking")
-    green_low_S = cv.getTrackbarPos("green_low_S", "Tracking")
+    green_low_H = cv.getTrackbarPos("green_low_V", "Tracking")
+    green_low_S = cv.getTrackbarPos("green_low_V", "Tracking")
     green_low_V = cv.getTrackbarPos("green_low_V", "Tracking")
     green_high_H = cv.getTrackbarPos("green_high_H", "Tracking")
     green_high_S = cv.getTrackbarPos("green_high_S", "Tracking")
     green_high_V = cv.getTrackbarPos("green_high_V", "Tracking")
+
+    print(green_high_V)
 
     blue_font = cv.FONT_HERSHEY_SIMPLEX
     blue_fontColor = (255, 0, 0)
@@ -159,14 +162,14 @@ while True:
                     cv.circle(img, (x, y), int(r), (0, 255, 0), 4)
                     # cv.rectangle(img, (x - 5, y - 5), (x + 5, y + 5), (0, 128, 255), -1)
 
-    M = cv.moments(green_cnt)
+        M = cv.moments(green_cnt)
 
-    # calculate x,y coordinate of center
-    cX = int(M["m10"] / M["m00"])
-    cY = int(M["m01"] / M["m00"])
-    cv.circle(img, (cX, cY), 5, green_fontColor, -1)
-    cv.putText(img, "center", (cX - 25, cY - 25), green_font, green_fontScale,
-               green_fontColor, green_lineType)
+        # calculate x,y coordinate of center
+        cX = int(M["m10"] / M["m00"])
+        cY = int(M["m01"] / M["m00"])
+        cv.circle(img, (cX, cY), 5, green_fontColor, -1)
+        cv.putText(img, "center", (cX - 25, cY - 25), green_font, green_fontScale,
+                        green_fontColor, green_lineType)
 
             # blå klods
     for j in range(len(blue_contours)):
