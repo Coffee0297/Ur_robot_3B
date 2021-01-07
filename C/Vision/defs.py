@@ -163,7 +163,6 @@ class Square(Capture):
         return ((pts2[0] - pts1[0]) ** 2 + (pts2[1] - pts1[1]) ** 2) ** 0.5 # finder kvadratrod af ((x2-x1)^2 + (y2-y1)^2)
 
 
-
 # ===================================================================================
 
 class Circle(Capture):

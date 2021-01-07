@@ -52,11 +52,11 @@ class Shape:
         self.width = width
         self.height = height
         self.max_points = max_points
-        self.corners = []                           # define a list
+        self.points = []                           # define a list
 
-    def add_cornerpoints(self, corners):
-        if len(self.corners) < self.max_points:     # number of corners
-            self.corners.append(corners)            # append to the list
+    def add_points(self, point):
+        if len(self.points) < self.max_points:     # number of points
+            self.points.append(point)            # append to the list
             return True
         return False
 
@@ -83,17 +83,17 @@ k4 = Coordinates(5,5)
 k5 = Coordinates(0,0)
 centerPoint = Coordinates(3,3)
 
-square = Shape(2, 2, 4)     # creates an object with 4 corner points (square)
+square1 = Square(2, 2, 4)     # creates an object with 4 corner points (square)
 
 # Use method to add 4 point (x,y) to a list
-print(square.add_cornerpoints(k1))  # prints True (objectno. < maxvalue)
-square.add_cornerpoints(k2)
-square.add_cornerpoints(k3)
-square.add_cornerpoints(k4)
-print(square.add_cornerpoints(k5)) # prints False because (objectno. > maxvalue)
-print(square.corners)
-print(square.corners[3].x)  # prints out the x-value in the 4th index (in this case 7)
-square.corners[0].x
+print(square1.add_points(k1))  # prints True (objectno. < maxvalue)
+square1.add_points(k2)
+square1.add_points(k3)
+square1.add_points(k4)
+print(square1.add_points(k5)) # prints False because (objectno. > maxvalue)
+# print(square.points)
+print(square1.points[3].x)  # prints out the x-value in the 4th index (in this case 7)
+# square.corners[0].x
 #------------------------------------------------
 # værdi = 20
 # # create Position objects
