@@ -25,6 +25,11 @@ frame_HSV = cv.cvtColor(img, cv.COLOR_BGR2HSV)
 defs.Square.getContours(img, show=True)
 
 imgContours, fContours = defs.Square.getContours(img, show= True, minArea=50000, filter=4)
+#centerx = x
+#centery = y
+# print('X: ', centerx)
+# print('Y: ', centery)
+#print('Exit getContours',imgContours)
 # find the biggest objects 4 corners - unsorted
 if len(fContours) != 0:
     biggest = fContours[0][2]   # takes 1. and 3. parameter in finalContours-->([len(approx), area, approx, bbox, i])

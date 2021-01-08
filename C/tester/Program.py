@@ -22,27 +22,28 @@ img = cv.imread('image_0.png')
 #img = cv.imread(r'C:\Users\Carin\Documents\UCL_2019\3.Sem\Python\UR\Vision\image_0.png')
 
 #frame_HSV = cv.cvtColor(img, cv.COLOR_BGR2HSV)
+print ('getContours')
+defs.Processing.get_filter(img, show=True)
 
-defs.Square.getContours(img, show=True)
-
-imgContours, fContours = defs.Square.getContours(img, show= True, minArea=50000, filter=4)
+print ('getContours2')
+imgContours, fContours = defs.Processing.get_filter(img, show= True, minArea=50000, filter=4)
 # find the biggest objects 4 corners - unsorted
 if len(fContours) != 0:
     biggest = fContours[0][2]   # takes 1. and 3. parameter in finalContours-->([len(approx), area, approx, bbox, i])
-    # print (biggest)
-    imgWarp = defs.Square.warpImg(img, biggest, wWorkspace, hWorkspace)
-    print(imgWarp.size/3)
-    imgContours2, fContours2 = defs.Square.getContours(imgWarp, show=True, showCenterWS=True, findAngle=True, minArea=2000, filter=4, cThr=[60, 60], draw=False)
+    print ('Biggest',biggest)
+    imgWarp = defs.Processing.warpImg(img, biggest, wWorkspace, hWorkspace)
+    print('imgWarp',imgWarp.size/3)
+    imgContours2, fContours2 = defs.Processing.get_filter(imgWarp, show=True, showCenterWS=True, findAngle=True, minArea=2000, filter=4, cThr=[60, 60], draw=False)
 
     if len(fContours) !=0:
         for obj in fContours2:
             cv.polylines(imgContours2,[obj[2]], True, (0,255,0),2)  # green full lines
-            nPoints = defs.Square.reorder(obj[2])    # reorder points
+            nPoints = defs.Processing.reorder(obj[2])    # reorder points
             print('nPoints reordered: \n ', nPoints)
 
             # function call to find distance (hight and width of object)
-            nW = round(defs.Square.findDis(nPoints[0][0] // scale, nPoints[1][0] // scale), 1)    # find width of obj, (number of pixels divided by scale-value)
-            nH = round(defs.Square.findDis(nPoints[0][0] // scale, nPoints[2][0] // scale), 1)    # find height of obj in millimeters, round to 1 decimal
+            nW = round(defs.Processing.findDis(nPoints[0][0] // scale, nPoints[1][0] // scale), 1)    # find width of obj, (number of pixels divided by scale-value)
+            nH = round(defs.Processing.findDis(nPoints[0][0] // scale, nPoints[2][0] // scale), 1)    # find height of obj in millimeters, round to 1 decimal
             cv.arrowedLine(imgContours2, (nPoints[0][0][0], nPoints[0][0][1]), (nPoints[1][0][0], nPoints[1][0][1]),
                                  (255, 0, 255), 2, 10, 0, 0.08)
             cv.arrowedLine(imgContours2, (nPoints[0][0][0], nPoints[0][0][1]), (nPoints[2][0][0], nPoints[2][0][1]),

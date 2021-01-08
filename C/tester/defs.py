@@ -2,12 +2,6 @@ import cv2 as cv
 import numpy as np
 
 class Capture:
-    # def __init__(self, name):
-    #     self.name = name
-    #
-    # def nothing(x):  # definere nothing for at den kan blive ignoreret i cv.createTrackbar
-    #     pass
-    # funktionen tager et screenshot fra webcam og gemmer det ---- skal processerer det nu
 
     def takePicture(cam):
         print('\n------ class Capture -> Function takePicture ------\n')
@@ -38,9 +32,9 @@ class Capture:
         # cv.destroyAllWindows()
 
 # ===================================================================================
-class Square:
+class Processing:
 
-    def getContours(img, cThr=[150, 175], show=False, showCenterWS=False, findAngle=False, minArea=1000, filter=0, draw=False):  # default parameters
+    def get_filter(img, cThr=[150, 175], show=False, showCenterWS=False, findAngle=False, minArea=1000, filter=0, draw=False):  # default parameters
         print('\n------ class Square -> Function getContours ------\n')
         # Do some processing
         gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)      # convert image to grayscale
@@ -50,6 +44,10 @@ class Square:
         dial = cv.dilate(edges, kernel, iterations=3)   # making thick lines
         erod = cv.erode(dial, kernel, iterations=2)     # making thin lines
 
+        # save all contours in the variabel 'contours'
+        contours, hiearchy = cv.findContours(erod, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
+        #finalContours = []      # creating list
+
         if show:
             # Do some debugging
             # cv.imshow('Gray 1st processing', gray)
@@ -57,15 +55,14 @@ class Square:
             # cv.imshow('Edges Canny 3rd processing', edges)
             # cv.imshow("Dialate 4th processing", dial)
             cv.imshow("Erode 5th processing", erod)
+        #Processing.get_contours(erod)
 
-        # save all contours in the variabel 'contours'
-        contours, hiearchy = cv.findContours(erod, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
-        finalContours = []      # creating list
+    def get_contours(img,contours,finalContours):
 
         # loop through contours
         for i in contours:
             # information about current detected object
-
+            findAngle = True
             if findAngle:       # get rotational angle of objects in workspace
                 for l in range(len(contours)):
                     if contours[l].size > 50:
@@ -93,6 +90,7 @@ class Square:
                 if filter > 0:
                     if len(approx) == filter:
                         finalContours.append([len(approx), area, approx, bbox, i])
+                        print('FinalContours')
                 else:
                     finalContours.append([len(approx), area, approx, bbox, i])
 
@@ -145,7 +143,7 @@ class Square:
     def warpImg(img, points, w, h, pad=20):
         print('\n------ class Square -> Function warpImg ------\n')
         print('Workspace points: \n', points)
-        points = Square.reorder(points)
+        points = Processing.reorder(points)
 
         print('Workspace points reordered: \n', points)
         pts1 = np.float32(points)
@@ -161,7 +159,6 @@ class Square:
         print('\n------ class Square -> Function finDis ------\n')
         print('pts1, pts2: ', pts1, pts2)
         return ((pts2[0] - pts1[0]) ** 2 + (pts2[1] - pts1[1]) ** 2) ** 0.5 # finder kvadratrod af ((x2-x1)^2 + (y2-y1)^2)
-
 
 # ===================================================================================
 

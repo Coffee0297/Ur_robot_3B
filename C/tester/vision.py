@@ -22,6 +22,7 @@ red_fontScale = .5
 red_lineType = 2
 
 class Hsv:
+    print('Object Created...')
     def __init__(self, lh, ls, lv, hh, hs, hv):     # HSV værdier - low/high
         self.lh = lh     # creates atribute called hl and takes in parameter hl
         self.ls = ls
@@ -34,16 +35,17 @@ class Hsv:
 class Color(Hsv):
 
     def create(self):
+        print('Creating Trackbar...')
+        print('Move trackbar to adjust HSV values...')
         cv.createTrackbar('Low_H', 'Tracking', self.lh,180, Color.on_trackbar)
         cv.createTrackbar("Low_S", "Tracking", self.ls, 255, Color.on_trackbar)
         cv.createTrackbar("Low_V", "Tracking", self.lv, 255, Color.on_trackbar)
         cv.createTrackbar("High_H", "Tracking", self.hh, 180, Color.on_trackbar)
         cv.createTrackbar("High_S", "Tracking", self.hs, 255, Color.on_trackbar)
         cv.createTrackbar("High_V", "Tracking", self.hv, 255, Color.on_trackbar)
-
+        return self
 
     def on_trackbar(self):
-
         print(self)
         lh = cv.getTrackbarPos("Low_H", "Tracking")
         ls = cv.getTrackbarPos("Low_S", "Tracking")
@@ -57,55 +59,59 @@ class Color(Hsv):
         frame_HSV = cv.cvtColor(frame, cv.COLOR_BGR2HSV)
 
         red_frame_threshold = cv.inRange(frame_HSV, (lh, ls, lv), (hh, hs, hv))
-
         green_frame_threshold = cv.inRange(frame_HSV, (lh, ls, lv),(hh, hs, hv))
-
         blue_frame_threshold = cv.inRange(frame_HSV, (lh, ls, lv),(hh, hs, hv))
 
-
-        cv.imshow('Captured Image', frame)
-        frame_threshold = (red_frame_threshold + green_frame_threshold + blue_frame_threshold)
-        cv.imshow('Frame Threshhold', frame_threshold)
-#----------------
+        # # detect color
         # ret, red_thresh = cv.threshold(red_frame_threshold, 127, 255, 0)
         # red_contours, red_hierarchy = cv.findContours(red_thresh, 1, 2)
-        # red_circles = cv.HoughCircles(red_frame_threshold, cv.HOUGH_GRADIENT, 1.2, 100)
         #
         # for i in range(len(red_contours)):
         #     if red_contours[i].size > 300:
-        #         red_cnt = red_contours[i]
-        #         red_rect = cv.minAreaRect(red_cnt)
-        #         cv.putText(frame, str(red_rect[-1]), (10, 60), font, fontScale, (0, 0, 255),
-        #                    lineType)  # print rotation of box
-        #
-        #         redBox = cv.boxPoints(red_rect)
-        #         redBox = np.int0(redBox)
-        #
-        #         cv.drawContours(frame, [redBox], 0, (0, 0, 255), 1)
-        #
-        #         cv.putText(frame, str(redBox[0]), (redBox[0][0], redBox[0][1]), red_font, red_fontScale, red_fontColor,
-        #                    red_lineType)
-        #         cv.putText(frame, str(redBox[1]), (redBox[1][0], redBox[1][1]), red_font, red_fontScale, red_fontColor,
-        #                    red_lineType)
-        #         cv.putText(frame, str(redBox[2]), (redBox[2][0], redBox[2][1]), red_font, red_fontScale, red_fontColor,
-        #                    red_lineType)
-        #         cv.putText(frame, str(redBox[3]), (redBox[3][0], redBox[3][1]), red_font, red_fontScale, red_fontColor,
-        #                    red_lineType)
-        #         M = cv.moments(red_cnt)
-        #
-        #         # calculate x,y coordinate of center
-        #         cX = int(M["m10"] / M["m00"])
-        #         cY = int(M["m01"] / M["m00"])
-        #         cv.circle(img, (cX, cY), 5, red_fontColor, -1)
-        #         cv.putText(img, "center", (cX - 25, cY - 25), red_font, red_fontScale, red_fontColor,
-        #                    red_lineType)
-        # cv.imshow("vis kasse", frame)
-
-        #print(Color.print_value(blueDefault))  # debugging
+        #         Color.print_color(self)
+        # #-----
+        cv.imshow('Captured Image', frame)
+        frame_threshold = (red_frame_threshold + green_frame_threshold + blue_frame_threshold)
+        cv.imshow('Frame Threshhold', frame_threshold)
         return self, lh, ls, lv, hh, hs, hv
 
-    def print_color(self):
+    def detect_color(self):
+        print('Detecting color...')
+        # detect color
+        frame = cap
+        frame_HSV = cv.cvtColor(frame, cv.COLOR_BGR2HSV)
+
+        red_frame_threshold = cv.inRange(frame_HSV, (self.lh, self.ls, self.lv), (self.hh, self.hs, self.hv))
+        green_frame_threshold = cv.inRange(frame_HSV, (lh, ls, lv), (hh, hs, hv))
+
+        ret, red_thresh = cv.threshold(red_frame_threshold, 127, 255, 0)
+        red_contours, red_hierarchy = cv.findContours(red_thresh, 1, 2)
+
+        ret, green_thresh = cv.threshold(green_frame_threshold, 127, 255, 0)
+        green_contours, green_hierarchy = cv.findContours(green_thresh, 1, 2)
+
+        for i in range(len(red_contours)):
+            if red_contours[i].size > 300:
+                Color.red_color(self)
+
+        for j in range(len(blue_contours)):
+            if blue_contours[j].size > 300:
+                pass
+
+
+    def red_color(self):
         print('Color is red')
+
+
+    def green_color(self):
+        print('Color is green')
+
+
+    def blue_color(self):
+        print('Color is blue')
+
+    def yellow_color(self):
+        print('Color is yellow')
 
     def print_value(self):    # til debugging
         print('HSV values')
@@ -124,7 +130,8 @@ redDefault = Hsv(0,18,30,16,255,87)
 # greenDefault = Hsv(53,74,66,96,225,185)
 # blueDefault = Hsv(89,148,64,166,214,143)
 # yellowDefault = Hsv(0,158,109,31,255,255)
-#
+#q
+red1 = Color.red_color(redDefault)
 red1 = Color.create(redDefault)
 # green1 = Color.create(greenDefault)
 # blue1 = Color.create(blueDefault)
