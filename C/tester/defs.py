@@ -2,11 +2,11 @@ import cv2 as cv
 import numpy as np
 
 class Capture:
-    def __init__(self, name):
-        self.name = name
-
-    def nothing(x):  # definere nothing for at den kan blive ignoreret i cv.createTrackbar
-        pass
+    # def __init__(self, name):
+    #     self.name = name
+    #
+    # def nothing(x):  # definere nothing for at den kan blive ignoreret i cv.createTrackbar
+    #     pass
     # funktionen tager et screenshot fra webcam og gemmer det ---- skal processerer det nu
 
     def takePicture(cam):

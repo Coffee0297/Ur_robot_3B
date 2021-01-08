@@ -47,10 +47,11 @@ class Coordinates:
     def get_y(self, y):
         return self.y
 #-------------------------------------------------------
-class Shape:
-    def __init__(self, width, height, max_points):
-        self.width = width
-        self.height = height
+class Square():
+    def __init__(self, nW, nH, max_points):
+        # super().__init__(x,y)
+        self.width = nW
+        self.height = nW
         self.max_points = max_points
         self.points = []                           # define a list
 
@@ -66,13 +67,12 @@ class Shape:
     def get_minimum_x_value(self):
         pass
 
-class Square(Shape):
-    def example(self):
-        pass
 
-class Circle(Shape):
-    def another_example(self):
-        pass
+class Circle(Coordinates):
+    def __init__(self, rad, max_points):
+        super().__init__(x,y)
+        self.rad = rad
+        self.height = height
 
 #------------------------------------------------
 # create Coordinate objects
@@ -83,8 +83,8 @@ k4 = Coordinates(5,5)
 k5 = Coordinates(0,0)
 centerPoint = Coordinates(3,3)
 
-square1 = Square(2, 2, 4)     # creates an object with 4 corner points (square)
-
+square1 = Square(2,2,4)     # creates an object (square)
+#print('\nWidth: ', {self.width}, '\nHight: ', {self.height})
 # Use method to add 4 point (x,y) to a list
 print(square1.add_points(k1))  # prints True (objectno. < maxvalue)
 square1.add_points(k2)

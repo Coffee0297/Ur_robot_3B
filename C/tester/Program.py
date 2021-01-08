@@ -1,10 +1,11 @@
 # CBL
-from __future__ import print_function
+#from __future__ import print_function
 import cv2 as cv
-import argparse
+#import argparse
 import numpy as np
 import defs
 import vision
+#import klasser
 
 # define a video capture object
 cam = cv.VideoCapture(0)
@@ -20,7 +21,7 @@ defs.Capture.takePicture(cam)
 img = cv.imread('image_0.png')
 #img = cv.imread(r'C:\Users\Carin\Documents\UCL_2019\3.Sem\Python\UR\Vision\image_0.png')
 
-frame_HSV = cv.cvtColor(img, cv.COLOR_BGR2HSV)
+#frame_HSV = cv.cvtColor(img, cv.COLOR_BGR2HSV)
 
 defs.Square.getContours(img, show=True)
 
@@ -51,9 +52,9 @@ if len(fContours) != 0:
                              (255,0,255), 1)
             cv.putText(imgContours2, '{}mm'.format(nH), (x - 70, y + h // 2), cv.FONT_HERSHEY_COMPLEX_SMALL, 1,
                              (255, 0, 255), 1)
+            print('lllllllllllllllllllllllllllllllllllllllllllllllllllll')
 
-            print('\nWidth: ', nW, '\nHight: ', nH)
-
+            print('\nWidth: ', nW, '\nHight: ', nH )#, '\nHight: ', {self.height})
 
     cv.imshow("Workspace", imgContours2)
 # cv.imshow("Last saved image", img)

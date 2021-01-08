@@ -47,10 +47,10 @@ lineType = 1
 window_capture_name = 'Video Feed'
 window_detection_name = 'Object Detection'
 
-cap = cv.VideoCapture(0, )
-# cap = cv.imread("image_0.png")
-cap.set(3,1920)
-cap.set(4,1080)
+#cap = cv.VideoCapture(0, )
+cap = cv.imread("image_0.png")
+#cap.set(3,1920)
+#cap.set(4,1080)
 
 
 while True:
@@ -93,8 +93,8 @@ while True:
     red_high_S = cv.getTrackbarPos("red_high_S", "Tracking")
     red_high_V = cv.getTrackbarPos("red_high_V", "Tracking")
 
-    ret, frame = cap.read()
-    # frame = cap
+    #ret, frame = cap.read()
+    frame = cap
     if frame is None:
         break
 
@@ -151,25 +151,25 @@ while True:
             cv.putText(img, str(greenBox[3]), (greenBox[3][0], greenBox[3][1]), green_font, green_fontScale,
                        green_fontColor, green_lineType)
 
-        if green_circles is not None:
-                # convert the (x, y) coordinates and radius of the circles to integers
-                circles = np.round(green_circles[0, :]).astype("int")
-                print("Circle found")
-                # loop over the (x, y) coordinates and radius of the circles
-                for (x, y, r) in green_circles[0]:
-                    # draw the circle in the output image, then draw a rectangle
-                    # corresponding to the center of the circle
-                    cv.circle(img, (x, y), int(r), (0, 255, 0), 4)
-                    # cv.rectangle(img, (x - 5, y - 5), (x + 5, y + 5), (0, 128, 255), -1)
-
-        M = cv.moments(green_cnt)
-
-        # calculate x,y coordinate of center
-        cX = int(M["m10"] / M["m00"])
-        cY = int(M["m01"] / M["m00"])
-        cv.circle(img, (cX, cY), 5, green_fontColor, -1)
-        cv.putText(img, "center", (cX - 25, cY - 25), green_font, green_fontScale,
-                        green_fontColor, green_lineType)
+        # if green_circles is not None:
+        #         # convert the (x, y) coordinates and radius of the circles to integers
+        #         circles = np.round(green_circles[0, :]).astype("int")
+        #         print("Circle found")
+        #         # loop over the (x, y) coordinates and radius of the circles
+        #         for (x, y, r) in green_circles[0]:
+        #             # draw the circle in the output image, then draw a rectangle
+        #             # corresponding to the center of the circle
+        #             cv.circle(img, (x, y), int(r), (0, 255, 0), 4)
+        #             # cv.rectangle(img, (x - 5, y - 5), (x + 5, y + 5), (0, 128, 255), -1)
+        #
+        # M = cv.moments(green_cnt)
+        #
+        # # calculate x,y coordinate of center
+        # cX = int(M["m10"] / M["m00"])
+        # cY = int(M["m01"] / M["m00"])
+        # cv.circle(img, (cX, cY), 5, green_fontColor, -1)
+        # cv.putText(img, "center", (cX - 25, cY - 25), green_font, green_fontScale,
+        #                 green_fontColor, green_lineType)
 
             # blå klods
     for j in range(len(blue_contours)):
