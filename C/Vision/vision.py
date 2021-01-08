@@ -3,14 +3,14 @@
 # methods_like_this (alt er småt)
 # objectsLikeThis (starter med småt)
 from __future__ import print_function
-from __future__ import division         # virker sammen med 'Alpha x %d' for at
-import defs
+#import defs
+import numpy as np
 import cv2 as cv
 #-------------------------------------------------------
 # Vinduesnavn
 cv.namedWindow('Tracking', cv.WINDOW_NORMAL)
 #cap = cv.VideoCapture(0)
-img = cv.imread("image_0.png")
+cap = cv.imread("image_0.png")
 
 class Hsv:
     def __init__(self, lh, ls, lv, hh, hs, hv):     # HSV værdier - low/high
@@ -25,24 +25,40 @@ class Hsv:
 class Color(Hsv):
 
     def create(self):
-        self.lh = cv.createTrackbar('Low_H', 'Tracking', self.lh,180, Color.on_trackbar)
+        cv.createTrackbar('Low_H', 'Tracking', self.lh,180, Color.on_trackbar)
         cv.createTrackbar("Low_S", "Tracking", self.ls, 255, Color.on_trackbar)
         cv.createTrackbar("Low_V", "Tracking", self.lv, 255, Color.on_trackbar)
-        # cv.createTrackbar("High_H", "Tracking", self.hh, 180, Color.on_trackbar)
-        # cv.createTrackbar("High_S", "Tracking", self.hs, 255, Color.on_trackbar)
-        # cv.createTrackbar("High_V", "Tracking", self.hv, 255, Color.on_trackbar)
-        print(Color.print_value(redDefault))  # debugging
+        cv.createTrackbar("High_H", "Tracking", self.hh, 180, Color.on_trackbar)
+        cv.createTrackbar("High_S", "Tracking", self.hs, 255, Color.on_trackbar)
+        cv.createTrackbar("High_V", "Tracking", self.hv, 255, Color.on_trackbar)
+
 
     def on_trackbar(self):
 
         print(self)
         lh = cv.getTrackbarPos("Low_H", "Tracking")
-        # self.ls = cv.getTrackbarPos("Low_S", "Tracking")
-        # lv = cv.getTrackbarPos("Low_V", "Tracking")
-        # hh = cv.getTrackbarPos("High_H", "Tracking")
-        # hs = cv.getTrackbarPos("High_S", "Tracking")
-        # hv = cv.getTrackbarPos("High_V", "Tracking")
+        ls = cv.getTrackbarPos("Low_S", "Tracking")
+        lv = cv.getTrackbarPos("Low_V", "Tracking")
+        hh = cv.getTrackbarPos("High_H", "Tracking")
+        hs = cv.getTrackbarPos("High_S", "Tracking")
+        hv = cv.getTrackbarPos("High_V", "Tracking")
+
+        #ret, frame = cap.read()
+        frame = cap
+
+        frame_HSV = cv.cvtColor(frame, cv.COLOR_BGR2HSV)
+
+        red_frame_threshold = cv.inRange(frame_HSV, (lh, ls, lv), (hh, hs, hv))
+
+        cv.imshow('video feed', frame)
+        frame_threshold = red_frame_threshold
+        cv.imshow('Frame Threshhold', frame_threshold)
+
+        #print(Color.print_value(blueDefault))  # debugging
         return self
+
+    def print_color(self):
+        print('Color is red')
 
     def print_value(self):    # til debugging
         print('HSV values')
@@ -54,34 +70,24 @@ class Color(Hsv):
         print(self.hv)
 
 class Red:
-    print('Color is red')
+    pass
 
-# frame_HSV = cv.cvtColor(img, cv.COLOR_BGR2HSV)
-#
-# red_frame_threshold = cv.inRange(frame_HSV, (lh, lS, lv), (hh, hs, hv))
-#
-# green_frame_threshold = cv.inRange(frame_HSV, (green_low_H, green_low_S, green_low_V),(green_high_H, green_high_S, green_high_V))
-#
-# blue_frame_threshold = cv.inRange(frame_HSV, (blue_low_H, blue_low_S, blue_low_V),(blue_high_H, blue_high_S, blue_high_V))
-#
-# frame_threshold = (blue_frame_threshold + red_frame_threshold + green_frame_threshold)
-# cv.imshow('video feed', frame)
-#
-# cv.imshow('Frame Threshhold', frame_threshold)
-#
-# cv.imshow("red detection", red_frame_threshold)
-# cv.imshow("green detection", green_frame_threshold)
-# cv.imshow("blue detection", blue_frame_threshold)
+
 
 
 default = Hsv(0,0,0,0,0,0)
-redDefault = Hsv(0,0,0,24,255,88)
-greenDefault = Hsv(53,74,66,96,225,185)
-blueDefault = Hsv(0,0,65,171,234,110)
+redDefault = Hsv(0,18,30,16,255,87)
+#greenDefault = Hsv(53,74,66,96,225,185)
+#blueDefault = Hsv(0,0,65,171,234,110)
 
-green1 = Color.create(greenDefault)
+red1 = Color.create(redDefault)
+#green1 = Color.create(greenDefault)
+#blue1 = Color.create(blueDefault)
+#print(Color.print_value(blueDefault))  # debugging
 print(Color.print_value(redDefault))  # debugging
-Color.on_trackbar(0)
+
+#Color.on_trackbar(0)
+
 
 print('Press q to exit Trackbar')
 while True:
