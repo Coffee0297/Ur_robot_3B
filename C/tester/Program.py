@@ -71,6 +71,8 @@ if len(fContours) != 0:
 
             print('\nWidth: ', nW, '\nHight: ', nH )#, '\nHight: ', {self.height})
 
+    defs.Contours.find_angle(imgContours2,contours2)
+
 cv.imshow("imgContours2/Warped", imgContours2)
 cv.waitKey(0)
 cam.release()
