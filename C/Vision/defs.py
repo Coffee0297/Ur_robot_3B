@@ -52,10 +52,10 @@ class Square:
 
         if show:
             # Do some debugging
-            # cv.imshow('Gray 1st processing', gray)
-            # cv.imshow('Blur 2nd processing', blur)
-            # cv.imshow('Edges Canny 3rd processing', edges)
-            # cv.imshow("Dialate 4th processing", dial)
+            cv.imshow('Gray 1st processing', gray)
+            cv.imshow('Blur 2nd processing', blur)
+            cv.imshow('Edges Canny 3rd processing', edges)
+            cv.imshow("Dialate 4th processing", dial)
             cv.imshow("Erode 5th processing", erod)
 
         # save all contours in the variabel 'contours'
