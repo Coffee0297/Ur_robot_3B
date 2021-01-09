@@ -1,10 +1,9 @@
 import cv2 as cv
 import numpy as np
 #import vision
-#img = cv.imread(r'C:\Users\Carin\Documents\UCL_2019\3.Sem\Python\UR\Vision\image_0.png')
 
+# ===================================================================================
 class Capture:
-
     def takePicture(cam):
         print('\n------ class Capture -> Function takePicture ------\n')
         cv.namedWindow("Camera test")
@@ -29,8 +28,6 @@ class Capture:
                 cv.imwrite(img_name, frame)
                 print("{} written!".format(img_name))
                 # img_counter += 1   # hvis der skal tages flere billeder
-
-
 
         # cam.release()
         # cv.destroyAllWindows()
@@ -64,8 +61,8 @@ class Processing:
 
     def canny(self, show=False):    # canny edges
         print('...Canny')
-        cThr1 = 150
-        cThr2 = 175
+        cThr1 = 175               # treshhold 1
+        cThr2 = 75                # treshhold 2
         canny = cv.Canny(self, cThr1, cThr2)  # plads 0 og 1 - can be defined by user, otherwise default is 150,175
         if show:
             cv.imshow("Canny", canny)
@@ -81,120 +78,92 @@ class Processing:
     def dilate(self, kernel, show=False):
         print('...Dilate')
         #kernel = np.ones((5, 5))
-        dilated = cv.dilate(self, kernel, iterations=3)  # making thick lines
+        dilated = cv.dilate(self, kernel, iterations=2)  # making thick lines
         if show:
             cv.imshow("dilate", dilated)
         return dilated
 
     def erode(self, kernel, show=False):
         print('...Erode')
-        erod = cv.erode(self, kernel, iterations=2)  # making thin lines
+        erod = cv.erode(self, kernel, iterations=1)  # making thin lines
         if show:
             cv.imshow("erod", erod)
         return erod
 
-# picture = Processing()
-# gray = Processing.grayscale(img, show=True)
-# blur = Processing.blur(gray, show=True)
-# canny = Processing.canny(blur, show=True)
-# kernel = Processing.kernel(show=False)
-# dilated = Processing.dilate(canny, kernel, show=True)
-# erod = Processing.erode(dilated, kernel, show=True)
-# print('Done processing')
-#
-#
-# cv.waitKey(0)
-# cv.destroyAllWindows()
-
-
-
-    # def get_filter(img, cThr=[150, 175], show=False, showCenterWS=False, findAngle=False, minArea=1000, filter=0, draw=False):  # default parameters
-    #     print('\n------ class Square -> Function getContours ------\n')
-    #     # Do some processing
-    #     gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)      # convert image to grayscale
-    #     blur = cv.GaussianBlur(gray, (5, 5), 1)         # apply some blur, define kernelsize 5 by 5, sigma 1
-    #     edges = cv.Canny(blur, cThr[0], cThr[1])        # plads 0 og 1 - can be defined by user, otherwise default is 150,175
-    #     kernel = np.ones((5, 5))        # define kernel - returns new 5 by 5 array of ones
-    #     dial = cv.dilate(edges, kernel, iterations=3)   # making thick lines
-    #     erod = cv.erode(dial, kernel, iterations=2)     # making thin lines
-    #
-    #     # save all contours in the variabel 'contours'
-    #     contours, hiearchy = cv.findContours(erod, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
-    #     #finalContours = []      # creating list
-    #
-    #     if show:
-    #         # Do some debugging
-    #         # cv.imshow('Gray 1st processing', gray)
-    #         # cv.imshow('Blur 2nd processing', blur)
-    #         # cv.imshow('Edges Canny 3rd processing', edges)
-    #         # cv.imshow("Dialate 4th processing", dial)
-    #         cv.imshow("Erode 5th processing", erod)
-    #     #Processing.get_contours(erod)
 
 #---------
-    # def get_contours(img,contours,finalContours):
-    #
-    #     # loop through contours
-    #     for i in contours:
-    #         # information about current detected object
-    #         findAngle = True
-    #         if findAngle:       # get rotational angle of objects in workspace
-    #             for l in range(len(contours)):
-    #                 if contours[l].size > 50:
-    #                     cnt = contours[l]
-    #                     rect = cv.minAreaRect(cnt)
-    #
-    #                     print('contours[l].size: ', contours[l].size)
-    #                     print('rect: ', rect[-1])
-    #
-    #                     cv.putText(img, str(rect[-1]), (10, 60 + (l * 20)), cv.FONT_HERSHEY_COMPLEX_SMALL, 1, (0, 0, 255),1)
-    #
-    #                     Box = cv.boxPoints(rect)
-    #                     Box = np.int0(Box)
-    #
-    #                     cv.drawContours(img, [Box], 0, (255, 255, 0), 1)
-    #
-    #         area = cv.contourArea(i)
-    #         print('area: ', area)
-    #         if area > minArea:
-    #             perimeter = cv.arcLength(i, True) #The function computes a curve length or a closed contour perimeter.
-    #             approx = cv.approxPolyDP(i, 0.02 * perimeter, True) #find corner points
-    #             bbox = cv.boundingRect(approx)
-    #
-    #             # filter is made if only a certain type of object is wanted, fx a square has 4 cornerpoints
-    #             if filter > 0:
-    #                 if len(approx) == filter:
-    #                     finalContours.append([len(approx), area, approx, bbox, i])
-    #                     print('FinalContours')
-    #             else:
-    #                 finalContours.append([len(approx), area, approx, bbox, i])
-    #
-    #
-    #             # calculate x,y coordinates of objects centerpoint
-    #             M = cv.moments(approx)
-    #             x = int(M["m10"] / M["m00"])    # center in pixels on x-axis
-    #             cX = round(x // 3 ,0)           # center in millimeter on x-axis - måske?
-    #             print('cX: ', cX)
-    #
-    #             y = int(M["m01"] / M["m00"])    # center in pixels on y-axis
-    #             cY = round(y // 3 ,0)           # center in millimeter on y-axis - måske?
-    #             print('cY: ', cY)
-    #
-    #
-    #         # define placement of circle and text on image
-    #         if showCenterWS:
-    #             cv.circle(img, (x, y), 5, (0, 0, 0), -1)    # output centerpoint as a dot
-    #             cv.putText(img, str([cX, cY]), (x - 50, y - 35), cv.FONT_HERSHEY_COMPLEX_SMALL, 1, (0, 0, 0), 1) # outputs koordinates i mm
-    #
-    #     finalContours = sorted(finalContours, key=lambda x: x[1], reverse=True)     # src, len(approx):area, descenting order
-    #
-    #     # 'draw' contour-points that we get from findCountour-function
-    #     if draw:
-    #         for con in finalContours:
-    #             cv.drawContours(img,con[4],-1,(0,0,255),3) # dottet red lines, thickness = 3
-    #     return img, finalContours
+class Contours:
+    def get_contours(self, show=False):
+        print('Finding Contours.....')
+        contours, hiearchy = cv.findContours(self, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
+        if True:
+            print('Contours: ', contours)
+        return contours
 
-    # reorder the objects 4 corners - sorted
+
+#print('Final Contours is put in descenting order')
+    def something(self):
+        # loop through contours
+        for i in contours:
+            # information about current detected object
+            findAngle = True
+            if findAngle:       # get rotational angle of objects in workspace
+                for l in range(len(contours)):
+                    if contours[l].size > 50:
+                        cnt = contours[l]
+                        rect = cv.minAreaRect(cnt)
+
+                        print('contours[l].size: ', contours[l].size)
+                        print('rect: ', rect[-1])
+
+                        cv.putText(img, str(rect[-1]), (10, 60 + (l * 20)), cv.FONT_HERSHEY_COMPLEX_SMALL, 1, (0, 0, 255),1)
+
+                        Box = cv.boxPoints(rect)
+                        Box = np.int0(Box)
+
+                        cv.drawContours(img, [Box], 0, (255, 255, 0), 1)
+
+            area = cv.contourArea(i)
+            print('area: ', area)
+            if area > minArea:
+                perimeter = cv.arcLength(i, True) #The function computes a curve length or a closed contour perimeter.
+                approx = cv.approxPolyDP(i, 0.02 * perimeter, True) #find corner points
+                bbox = cv.boundingRect(approx)
+
+                # filter is made if only a certain type of object is wanted, fx a square has 4 cornerpoints
+                if filter > 0:
+                    if len(approx) == filter:
+                        finalContours.append([len(approx), area, approx, bbox, i])
+                        print('FinalContours')
+                else:
+                    finalContours.append([len(approx), area, approx, bbox, i])
+
+
+                # calculate x,y coordinates of objects centerpoint
+                M = cv.moments(approx)
+                x = int(M["m10"] / M["m00"])    # center in pixels on x-axis
+                cX = round(x // 3 ,0)           # center in millimeter on x-axis - måske?
+                print('cX: ', cX)
+
+                y = int(M["m01"] / M["m00"])    # center in pixels on y-axis
+                cY = round(y // 3 ,0)           # center in millimeter on y-axis - måske?
+                print('cY: ', cY)
+
+
+            # define placement of circle and text on image
+            if showCenterWS:
+                cv.circle(img, (x, y), 5, (0, 0, 0), -1)    # output centerpoint as a dot
+                cv.putText(img, str([cX, cY]), (x - 50, y - 35), cv.FONT_HERSHEY_COMPLEX_SMALL, 1, (0, 0, 0), 1) # outputs koordinates i mm
+
+        finalContours = sorted(finalContours, key=lambda x: x[1], reverse=True)     # src, len(approx):area, descenting order
+
+        # 'draw' contour-points that we get from findCountour-function
+        if draw:
+            for con in finalContours:
+                cv.drawContours(img,con[4],-1,(0,0,255),3) # dottet red lines, thickness = 3
+        return img, finalContours
+
+    #reorder the objects 4 corners - sorted
 
 #---------
     # def reorder(myPoints):
