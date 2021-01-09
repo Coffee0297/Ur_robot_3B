@@ -20,16 +20,12 @@ defs.Capture.takePicture(cam)
 img = cv.imread('image_0.png')
 #img = cv.imread(r'C:\Users\Carin\Documents\UCL_2019\3.Sem\Python\UR\Vision\image_0.png')
 
-frame_HSV = cv.cvtColor(img, cv.COLOR_BGR2HSV)
+#frame_HSV = cv.cvtColor(img, cv.COLOR_BGR2HSV)
 
 defs.Square.getContours(img, show=True)
 
 imgContours, fContours = defs.Square.getContours(img, show= True, minArea=50000, filter=4)
-#centerx = x
-#centery = y
-# print('X: ', centerx)
-# print('Y: ', centery)
-#print('Exit getContours',imgContours)
+
 # find the biggest objects 4 corners - unsorted
 if len(fContours) != 0:
     biggestContour = fContours[0][2]   # takes 1. and 3. parameter in finalContours-->([len(approx), area, approx, bbox, i])
@@ -39,19 +35,7 @@ if len(fContours) != 0:
     #print(imgWarp.size/3)
     imgContours2, fContours2 = defs.Square.getContours(imgWarp, show=True, showCenterWS=True, findAngle=True, minArea=2000, filter=4, cThr=[60, 60], draw=False)
 
-    #-----
-
-    # Img01 = imgWarp.copy()
-    # NextContour = fContours[0][2]  # takes 1. and 3. parameter in finalContours-->([len(approx), area, approx, bbox, i])
-    # #NextContour = defs.Square.warpImg(img01, NextContour, 41, 41)
-    # pts1 = np.float32(points)
-    # pts2 = np.float32([[0, 0], [41, 0], [0, 41], [41, 1]])  # define pattern w / h
-    # matrix = cv.getPerspectiveTransform(pts1, pts2)
-    # NextContour = cv.warpPerspective(NextContour, matrix, (40, 40))
-    # NextContour = imgWarp[pad:imgWarp.shape[0] - pad,pad:imgWarp.shape[1] - pad]  # define<-- pad: removes corner-pixels from h + w
-
-    #-----
-
+    # warped image
     if len(fContours) !=0:
         for obj in fContours2:
             cv.polylines(imgContours2,[obj[2]], True, (0,255,0),2)  # green full lines

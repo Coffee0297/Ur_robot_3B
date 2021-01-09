@@ -100,7 +100,8 @@ class Contours:
             print('Contours: ', contours)
         return contours
 
-
+    defs.Square.getContours(img, show=True)
+    imgContours, fContours = defs.Square.getContours(img, show=True, minArea=50000, filter=4)
 #print('Final Contours is put in descenting order')
     def something(self):
         # loop through contours
