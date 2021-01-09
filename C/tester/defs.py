@@ -1,45 +1,49 @@
 import cv2 as cv
 import numpy as np
 #import vision
-img = cv.imread(r'C:\Users\Carin\Documents\UCL_2019\3.Sem\Python\UR\Vision\image_0.png')
+#img = cv.imread(r'C:\Users\Carin\Documents\UCL_2019\3.Sem\Python\UR\Vision\image_0.png')
 
-# class Capture:
-#
-#     def takePicture(cam):
-#         print('\n------ class Capture -> Function takePicture ------\n')
-#         cv.namedWindow("Camera test")
-#         img_counter = 0
-#         print("Press Escape to close without saving \nPress space to take a picture")
-#         while True:
-#             ret, frame = cam.read()
-#             if not ret:
-#                 print("failed to grab frame")
-#                 break
-#             cv.imshow("Camera test", frame)
-#
-#             k = cv.waitKey(1)
-#             if k % 256 == 27:       # wait for ESC key to exit
-#                 # ESC pressed
-#                 print("Escape hit, closing...")
-#                 break
-#
-#             elif k % 256 == 32:     # wait for SPACE key to exit
-#                 # SPACE pressed
-#                 img_name = "image_{}.png".format(img_counter)
-#                 cv.imwrite(img_name, frame)
-#                 print("{} written!".format(img_name))
-#                 # img_counter += 1   # hvis der skal tages flere billeder
-#
-#         # cam.release()
-#         # cv.destroyAllWindows()
+class Capture:
+
+    def takePicture(cam):
+        print('\n------ class Capture -> Function takePicture ------\n')
+        cv.namedWindow("Camera test")
+        img_counter = 0
+        print("Press Escape to close without saving \nPress space to take a picture")
+        while True:
+            ret, frame = cam.read()
+            if not ret:
+                print("failed to grab frame")
+                break
+            cv.imshow("Camera test", frame)
+
+            k = cv.waitKey(1)
+            if k % 256 == 27:       # wait for ESC key to exit
+                # ESC pressed
+                print("Escape hit, closing...")
+                break
+
+            elif k % 256 == 32:     # wait for SPACE key to exit
+                # SPACE pressed
+                img_name = "image_{}.png".format(img_counter)
+                cv.imwrite(img_name, frame)
+                print("{} written!".format(img_name))
+                # img_counter += 1   # hvis der skal tages flere billeder
+
+
+
+        # cam.release()
+        # cv.destroyAllWindows()
 
 # ===================================================================================
 class Processing:
-    def __init__(self):
+    def img_copy(self,show=False):
         print('__init__')
         print('Processing......')
-        Original = img.copy()
-        cv.imshow("Original", Original)
+        img = self.copy()
+        if show:
+            cv.imshow("Original Image", img)
+        return img
 
     def grayscale(self, show=False):
         print('...Grayscale')
@@ -84,25 +88,23 @@ class Processing:
 
     def erode(self, kernel, show=False):
         print('...Erode')
-        erod = cv.erode(dilated, kernel, iterations=2)  # making thin lines
+        erod = cv.erode(self, kernel, iterations=2)  # making thin lines
         if show:
             cv.imshow("erod", erod)
         return erod
 
-picture = Processing()
-gray = Processing.grayscale(img, show=True)
-blur = Processing.blur(gray, show=True)
-canny = Processing.canny(blur, show=True)
-kernel = Processing.kernel(show=True)
-
-dilated = Processing.dilate(canny, kernel, show=True)
-erod = Processing.erode(dilated, kernel, show=True)
-print('Done processing')
-
-
-
-cv.waitKey(0)
-cv.destroyAllWindows()
+# picture = Processing()
+# gray = Processing.grayscale(img, show=True)
+# blur = Processing.blur(gray, show=True)
+# canny = Processing.canny(blur, show=True)
+# kernel = Processing.kernel(show=False)
+# dilated = Processing.dilate(canny, kernel, show=True)
+# erod = Processing.erode(dilated, kernel, show=True)
+# print('Done processing')
+#
+#
+# cv.waitKey(0)
+# cv.destroyAllWindows()
 
 
 

@@ -10,7 +10,7 @@ import defs
 #img = cv.imread(r'C:\Users\Carin\Documents\UCL_2019\3.Sem\Python\UR\Vision\image_0.png')
 
 # define a video capture object
-cam = cv.VideoCapture(0)
+# cam = cv.VideoCapture(0)
 # cam.set(10,160)     # 10 for brightness - value 160
 # cam.set(3,1920)     # 3 for hight - value 1920
 # cam.set(4,1080)     # 4 for width - value 1080
@@ -20,11 +20,27 @@ wWorkspace = 200 *scale
 hWorkspace = 200 *scale
 
 #defs.Capture.takePicture(cam)
-img = cv.imread('image_0.png')
-picture = img.copy()
+original = cv.imread('image_0.png')
+# picture = img.copy()
 print ('Processing....')
-picture = defs.Processing()
+#-------------------------------------
+#defs.Capture.takePicture(cam)
 
+
+#-------------------------------------
+img = defs.Processing.img_copy(original, show=True)
+gray = defs.Processing.grayscale(img, show=True)
+blur = defs.Processing.blur(gray, show=True)
+canny = defs.Processing.canny(blur, show=True)
+kernel = defs.Processing.kernel(show=False)
+dilated = defs.Processing.dilate(canny, kernel, show=True)
+erod = defs.Processing.erode(dilated, kernel, show=True)
+print('Done processing')
+
+
+cv.waitKey(0)
+cv.destroyAllWindows()
+#-------------------------------------
 
 gray = defs.Processing.grayscale(picture)
 # cv.imshow("Picture", gray)
