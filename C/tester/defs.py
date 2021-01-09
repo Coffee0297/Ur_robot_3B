@@ -30,6 +30,9 @@ class Capture:
                 print("{} written!".format(img_name))
                 # img_counter += 1   # hvis der skal tages flere billeder
 
+        # cam.release()
+        # cv.destroyAllWindows()
+
 # ======================================================================================================================
 
 class Processing:
@@ -68,7 +71,7 @@ class Contours:
             print('Contours: ', contours)
         return contours
 # ----------------------------------------------------------------------------------------------------------------------
-    def find_contour(self, contours,  minArea=2000, filter=0, draw=True):
+    def find_contour(self, contours,  minArea=2000, filter=0, draw=False):
         print('------ Contour -> Function find_contour ------\nFinding Contours.....')
         finalContours = []  # creating list
         # loop through contours
@@ -91,12 +94,13 @@ class Contours:
                 else:
                     print('No contour is added to the list "finalContours"')
 
+        finalContours = sorted(finalContours, key=lambda x: x[1],reverse=True)  # src, len(approx):area, descenting order
+
         # 'draw' contour-points that we get from findCountour-function
         if draw:
-            for j in finalContours:
-                cv.drawContours(self, j[filter], -1, (0, 0, 255), 3)  # dottet red lines, thickness = 3
+            for con in finalContours:
+                cv.drawContours(self, con[4], -1, (0, 0, 255), 3)  # dottet red lines, thickness = 3
 
-        finalContours = sorted(finalContours, key=lambda x: x[1], reverse=False)     # src, len(approx):area, descenting order
         return self, finalContours
 # ----------------------------------------------------------------------------------------------------------------------
     def warpImg(self, points, w, h, pad=20, show=False):

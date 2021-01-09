@@ -40,13 +40,13 @@ if len(fContours) != 0:
     print('imgWarp.size/3: ', imgWarp.size/3,'\n')
 
     #------- Image Processing on warped image ----------------------
-    erod2 = defs.Processing.filters(img, cThr=[175, 75], show=True)
+    erod = defs.Processing.filters(imgWarp, cThr=[150, 60], show=True)
     cv.imshow("imgContours2/Warped", imgWarp)
     # --------------------------------------------------------------
 
-    contours2 = defs.Contours.get_contours(erod2, show=False)
+    contours2 = defs.Contours.get_contours(erod, show=False)
     print('\nFind next contour - minArea=2000')
-    imgContours2,fContours2 = defs.Contours.find_contour(imgWarp, contours, minArea=2000, filter=4, draw=True)
+    imgContours2,fContours2 = defs.Contours.find_contour(imgWarp, contours2, minArea=2000, filter=4, draw=True)
 
     #----------------------------------------------
     if len(fContours) != 0:
@@ -68,13 +68,10 @@ if len(fContours) != 0:
                              (255,0,255), 1)
             cv.putText(imgContours2, '{}mm'.format(nH), (x - 70, y + h // 2), cv.FONT_HERSHEY_COMPLEX_SMALL, 1,
                              (255, 0, 255), 1)
-            print('lllllllllllllllllllllllllllllllllllllllllllllllllllll')
 
             print('\nWidth: ', nW, '\nHight: ', nH )#, '\nHight: ', {self.height})
-#
-#     cv.imshow("Workspace", imgContours2)
-# # cv.imshow("Last saved image", img)
-    cv.imshow("imgContours2/Warped", imgWarp)
+
+cv.imshow("imgContours2/Warped", imgContours2)
 cv.waitKey(0)
 cam.release()
 cv.destroyAllWindows()
