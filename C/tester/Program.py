@@ -4,7 +4,7 @@ import cv2 as cv
 #import argparse
 import numpy as np
 import defs
-#import vision
+import vision
 #import klasser
 
 cam = cv.VideoCapture(0)
@@ -46,7 +46,7 @@ if len(fContours) != 0:
 
     contours2 = defs.Contours.get_contours(erod, show=False)
     print('\nFind next contour - minArea=2000')
-    imgContours2,fContours2 = defs.Contours.find_contour(imgWarp, contours2, minArea=2000, filter=4, draw=True)
+    imgContours2,fContours2 = defs.Contours.find_contour(imgWarp, contours2, minArea=2000, filter=4, draw=False)
 
     #----------------------------------------------
     if len(fContours) != 0:
@@ -60,14 +60,14 @@ if len(fContours) != 0:
             nW = round(defs.Contours.findDis(nPoints[0][0] // scale, nPoints[1][0] // scale), 1)    # find width of obj, (number of pixels divided by scale-value)
             nH = round(defs.Contours.findDis(nPoints[0][0] // scale, nPoints[2][0] // scale), 1)    # find height of obj in millimeters, round to 1 decimal
             cv.arrowedLine(imgContours2, (nPoints[0][0][0], nPoints[0][0][1]), (nPoints[1][0][0], nPoints[1][0][1]),
-                                 (255, 0, 255), 2, 10, 0, 0.08)
+                                                                                        (255, 0, 255), 2, 10, 0, 0.08)
             cv.arrowedLine(imgContours2, (nPoints[0][0][0], nPoints[0][0][1]), (nPoints[2][0][0], nPoints[2][0][1]),
-                                 (255, 0, 255), 2, 10, 0, 0.08)
+                                                                                        (255, 0, 255), 2, 10, 0, 0.08)
             x, y, w, h = obj[3]
-            cv.putText(imgContours2, '{}mm'.format(nW), (x + 30, y - 10), cv.FONT_HERSHEY_COMPLEX_SMALL, 1,
-                             (255,0,255), 1)
-            cv.putText(imgContours2, '{}mm'.format(nH), (x - 70, y + h // 2), cv.FONT_HERSHEY_COMPLEX_SMALL, 1,
-                             (255, 0, 255), 1)
+            cv.putText(imgContours2, '{}mm'.format(nW), (x + 30, y - 10), cv.FONT_HERSHEY_COMPLEX_SMALL, 1,(255,0,255), 1)
+
+            cv.putText(imgContours2, '{}mm'.format(nH), (x - 70, y + h // 2), cv.FONT_HERSHEY_COMPLEX_SMALL, 1,(255, 0, 255), 1)
+
 
             print('\nWidth: ', nW, '\nHight: ', nH )#, '\nHight: ', {self.height})
 
