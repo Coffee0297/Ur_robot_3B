@@ -18,12 +18,9 @@ hWorkspace = 200 *scale
 
 defs.Capture.takePicture(cam)
 img = cv.imread('image_0.png')
-#img = cv.imread(r'C:\Users\Carin\Documents\UCL_2019\3.Sem\Python\UR\Vision\image_0.png')
-
 #frame_HSV = cv.cvtColor(img, cv.COLOR_BGR2HSV)
 
 defs.Square.getContours(img, show=True)
-
 imgContours, fContours = defs.Square.getContours(img, show= True, minArea=50000, filter=4)
 
 # find the biggest objects 4 corners - unsorted
@@ -58,11 +55,7 @@ if len(fContours) != 0:
             print('\nWidth: ', nW, '\nHight: ', nH)
             ContourImg1 = imgContours2.copy()
 
-
     cv.imshow("Workspace", imgContours2)
-#cv.imshow("Workspace Image", worspaceImg)
-
-# cv.imshow("Last saved image", img)
 
 cv.waitKey(0)
 cam.release()

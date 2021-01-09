@@ -37,12 +37,11 @@ print('Done processing')
 #----------------------------------------------------------
 
 # save all contours in the variabel 'contours'
-finalContours = []      # creating list
-Contours = defs.Contours.get_contours(erod, show=False)
 
-defs.Contours.something(img, show=True)
+contours = defs.Contours.get_contours(erod, show=False)
 
-
+imgContours,fContours = defs.Contours.find_contour(img, contours, show=True, minArea=50000, filter=4)
+#imgContours, fContours = defs.Square.getContours(img, show= True, minArea=50000, filter=4)
 
 
 #gray = defs.Processing.grayscale(picture)

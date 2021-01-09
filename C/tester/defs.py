@@ -96,33 +96,32 @@ class Contours:
     def get_contours(self, show=False):
         print('Finding Contours.....')
         contours, hiearchy = cv.findContours(self, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
-        if True:
+        if show:
             print('Contours: ', contours)
         return contours
 
-    defs.Square.getContours(img, show=True)
-    imgContours, fContours = defs.Square.getContours(img, show=True, minArea=50000, filter=4)
 #print('Final Contours is put in descenting order')
-    def something(self):
+    def find_contour(self, contours, show=False, minArea=2000, filter=0):
+        finalContours = []  # creating list
         # loop through contours
         for i in contours:
             # information about current detected object
-            findAngle = True
-            if findAngle:       # get rotational angle of objects in workspace
-                for l in range(len(contours)):
-                    if contours[l].size > 50:
-                        cnt = contours[l]
-                        rect = cv.minAreaRect(cnt)
-
-                        print('contours[l].size: ', contours[l].size)
-                        print('rect: ', rect[-1])
-
-                        cv.putText(img, str(rect[-1]), (10, 60 + (l * 20)), cv.FONT_HERSHEY_COMPLEX_SMALL, 1, (0, 0, 255),1)
-
-                        Box = cv.boxPoints(rect)
-                        Box = np.int0(Box)
-
-                        cv.drawContours(img, [Box], 0, (255, 255, 0), 1)
+            # findAngle = True
+            # if findAngle:       # get rotational angle of objects in workspace
+            #     for l in range(len(contours)):
+            #         if contours[l].size > 50:
+            #             cnt = contours[l]
+            #             rect = cv.minAreaRect(cnt)
+            #
+            #             print('contours[l].size: ', contours[l].size)
+            #             print('rect: ', rect[-1])
+            #
+            #             cv.putText(img, str(rect[-1]), (10, 60 + (l * 20)), cv.FONT_HERSHEY_COMPLEX_SMALL, 1, (0, 0, 255),1)
+            #
+            #             Box = cv.boxPoints(rect)
+            #             Box = np.int0(Box)
+            #
+            #             cv.drawContours(img, [Box], 0, (255, 255, 0), 1)
 
             area = cv.contourArea(i)
             print('area: ', area)
@@ -151,18 +150,18 @@ class Contours:
                 print('cY: ', cY)
 
 
-            # define placement of circle and text on image
-            if showCenterWS:
-                cv.circle(img, (x, y), 5, (0, 0, 0), -1)    # output centerpoint as a dot
-                cv.putText(img, str([cX, cY]), (x - 50, y - 35), cv.FONT_HERSHEY_COMPLEX_SMALL, 1, (0, 0, 0), 1) # outputs koordinates i mm
+            # # define placement of circle and text on image
+            # if showCenterWS:
+            #     cv.circle(img, (x, y), 5, (0, 0, 0), -1)    # output centerpoint as a dot
+            #     cv.putText(img, str([cX, cY]), (x - 50, y - 35), cv.FONT_HERSHEY_COMPLEX_SMALL, 1, (0, 0, 0), 1) # outputs koordinates i mm
 
         finalContours = sorted(finalContours, key=lambda x: x[1], reverse=True)     # src, len(approx):area, descenting order
 
-        # 'draw' contour-points that we get from findCountour-function
-        if draw:
-            for con in finalContours:
-                cv.drawContours(img,con[4],-1,(0,0,255),3) # dottet red lines, thickness = 3
-        return img, finalContours
+        # # 'draw' contour-points that we get from findCountour-function
+        # if draw:
+        #     for con in finalContours:
+        #         cv.drawContours(img,con[4],-1,(0,0,255),3) # dottet red lines, thickness = 3
+        return self, finalContours
 
     #reorder the objects 4 corners - sorted
 
