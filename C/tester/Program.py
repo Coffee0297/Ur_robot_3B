@@ -33,6 +33,7 @@ canny = defs.Processing.canny(blur, show=True)
 kernel = defs.Processing.kernel(show=False)
 dilated = defs.Processing.dilate(canny, kernel, show=True)
 erod = defs.Processing.erode(dilated, kernel, show=True)
+
 print('Done processing')
 #----------------------------------------------------------
 
@@ -40,7 +41,18 @@ print('Done processing')
 
 contours = defs.Contours.get_contours(erod, show=False)
 
-imgContours,fContours = defs.Contours.find_contour(img, contours, show=True, minArea=50000, filter=4)
+imgContours,fContours = defs.Contours.find_contour(img, contours, minArea=50000, filter=4)
+# "Original Image" = imgContours
+
+if len(fContours) != 0:
+    print('Finding biggest contour')
+    biggestContour = fContours[0][2]   # takes 1. and 3. parameter in finalContours-->([len(approx), area, approx, bbox, i])
+    imgWarp = defs.Contours.warpImg(img, biggestContour, wWorkspace, hWorkspace)
+    #imgContours2, fContours2 = defs.Square.getContours(imgWarp, show=True, showCenterWS=True, findAngle=True,
+                                                       #minArea=2000, filter=4, cThr=[60, 60], draw=False)
+    print('Finding biggest contour Done')
+
+# show=True, showCenterWS=True, findAngle=True, minArea=2000, filter=4, cThr=[60, 60], draw=False
 #imgContours, fContours = defs.Square.getContours(img, show= True, minArea=50000, filter=4)
 
 

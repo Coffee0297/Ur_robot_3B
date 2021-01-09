@@ -26,7 +26,6 @@ imgContours, fContours = defs.Square.getContours(img, show= True, minArea=50000,
 # find the biggest objects 4 corners - unsorted
 if len(fContours) != 0:
     biggestContour = fContours[0][2]   # takes 1. and 3. parameter in finalContours-->([len(approx), area, approx, bbox, i])
-    # print (biggest)
     imgWarp = defs.Square.warpImg(img, biggestContour, wWorkspace, hWorkspace)
     #worspaceImg = imgWarp.copy()
     #print(imgWarp.size/3)
@@ -55,8 +54,8 @@ if len(fContours) != 0:
             print('\nWidth: ', nW, '\nHight: ', nH)
             ContourImg1 = imgContours2.copy()
 
-    cv.imshow("Workspace", imgContours2)
-
+    cv.imshow("Workspace2", imgContours2)
+    cv.imshow("Original", imgContours)
 cv.waitKey(0)
 cam.release()
 cv.destroyAllWindows()

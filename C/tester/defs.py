@@ -3,6 +3,7 @@ import numpy as np
 #import vision
 
 # ===================================================================================
+
 class Capture:
     def takePicture(cam):
         print('\n------ class Capture -> Function takePicture ------\n')
@@ -32,7 +33,8 @@ class Capture:
         # cam.release()
         # cv.destroyAllWindows()
 
-# ===================================================================================
+# ======================================================================================================================
+
 class Processing:
     def img_copy(self,show=False):
         print('__init__')
@@ -90,39 +92,21 @@ class Processing:
             cv.imshow("erod", erod)
         return erod
 
+# ======================================================================================================================
 
-#---------
 class Contours:
     def get_contours(self, show=False):
-        print('Finding Contours.....')
+        print('\n------ Contour -> Function find_contour ------\nFinding Contours.....\n')
         contours, hiearchy = cv.findContours(self, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
         if show:
             print('Contours: ', contours)
         return contours
-
-#print('Final Contours is put in descenting order')
-    def find_contour(self, contours, show=False, minArea=2000, filter=0):
+# ----------------------------------------------------------------------------------------------------------------------
+    def find_contour(self, contours,  minArea=2000, filter=0):
+        print('\n------ Contour -> Function find_contour ------\n')
         finalContours = []  # creating list
         # loop through contours
         for i in contours:
-            # information about current detected object
-            # findAngle = True
-            # if findAngle:       # get rotational angle of objects in workspace
-            #     for l in range(len(contours)):
-            #         if contours[l].size > 50:
-            #             cnt = contours[l]
-            #             rect = cv.minAreaRect(cnt)
-            #
-            #             print('contours[l].size: ', contours[l].size)
-            #             print('rect: ', rect[-1])
-            #
-            #             cv.putText(img, str(rect[-1]), (10, 60 + (l * 20)), cv.FONT_HERSHEY_COMPLEX_SMALL, 1, (0, 0, 255),1)
-            #
-            #             Box = cv.boxPoints(rect)
-            #             Box = np.int0(Box)
-            #
-            #             cv.drawContours(img, [Box], 0, (255, 255, 0), 1)
-
             area = cv.contourArea(i)
             print('area: ', area)
             if area > minArea:
@@ -134,74 +118,79 @@ class Contours:
                 if filter > 0:
                     if len(approx) == filter:
                         finalContours.append([len(approx), area, approx, bbox, i])
-                        print('FinalContours')
+                        print('4 cornerpoints detected....')
+                    else:
+                        print('Shape with '"{}".format(filter),'corners, is added to th list "finalContours"')
+                        finalContours.append([len(approx), area, approx, bbox, i])
                 else:
-                    finalContours.append([len(approx), area, approx, bbox, i])
-
-
-                # calculate x,y coordinates of objects centerpoint
-                M = cv.moments(approx)
-                x = int(M["m10"] / M["m00"])    # center in pixels on x-axis
-                cX = round(x // 3 ,0)           # center in millimeter on x-axis - måske?
-                print('cX: ', cX)
-
-                y = int(M["m01"] / M["m00"])    # center in pixels on y-axis
-                cY = round(y // 3 ,0)           # center in millimeter on y-axis - måske?
-                print('cY: ', cY)
-
-
-            # # define placement of circle and text on image
-            # if showCenterWS:
-            #     cv.circle(img, (x, y), 5, (0, 0, 0), -1)    # output centerpoint as a dot
-            #     cv.putText(img, str([cX, cY]), (x - 50, y - 35), cv.FONT_HERSHEY_COMPLEX_SMALL, 1, (0, 0, 0), 1) # outputs koordinates i mm
+                    print('No contour is added to the list "finalContours"')
 
         finalContours = sorted(finalContours, key=lambda x: x[1], reverse=True)     # src, len(approx):area, descenting order
-
-        # # 'draw' contour-points that we get from findCountour-function
-        # if draw:
-        #     for con in finalContours:
-        #         cv.drawContours(img,con[4],-1,(0,0,255),3) # dottet red lines, thickness = 3
         return self, finalContours
+# ----------------------------------------------------------------------------------------------------------------------
+    def warpImg(self, points, w, h, pad=20):
+        print('\n------ Contour -> Function warpImg ------\n')
+        print('Workspace points: \n', points)
+        points = Contours.reorder(points)
+
+        print('Workspace points reordered: \n', points)
+        pts1 = np.float32(points)
+        pts2 = np.float32([[0, 0], [w, 0], [0, h], [w, h]])   # define pattern
+        matrix = cv.getPerspectiveTransform(pts1, pts2)
+        imgWarp = cv.warpPerspective(self, matrix, (w, h))
+        imgWarp = imgWarp[pad:imgWarp.shape[0] - pad, pad:imgWarp.shape[1] - pad]   # define<-- pad: removes corner-pixels from h + w
+        # print('imgWarp: \n',imgWarp)
+        return imgWarp
+# ----------------------------------------------------------------------------------------------------------------------
+    def reorder(myPoints):
+        print('\n------ Contour -> Function reorder ------\n')
+        print(myPoints.shape) # output= (4,1,2), 4 by 1 by 2 (4 values, 1 is redundant, each value has 2 points: x,y
+        myPointsNew = np.zeros_like(myPoints) #Return an array of zeros with the same shape and type as a given array.
+        myPoints = myPoints.reshape((4, 2)) # removes redundant (the 1)
+        add = myPoints.sum(1)   # gets sum of each one of 4 value-sets
+        print('add: ', add)
+        myPointsNew[0] = myPoints[np.argmin(add)]   # first element, get actual points based on minimum-index
+        myPointsNew[3] = myPoints[np.argmax(add)] # firth element, get actual points based on maximum-index
+        diff = np.diff(myPoints, axis=1)
+        myPointsNew[1] = myPoints[np.argmin(diff)]
+        myPointsNew[2] = myPoints[np.argmax(diff)]
+
+        print('myPointsNew[0]: ', myPointsNew[0])
+        print('myPointsNew[1]: ', myPointsNew[1])
+        print('myPointsNew[2]: ', myPointsNew[2])
+        print('myPointsNew[3]: ', myPointsNew[3])
+        return myPointsNew
+# ----------------------------------------------------------------------------------------------------------------------
+
+
+
+    # def draw_contours(self, finalContours, showCenterWS=False):
+    #     for con in finalContours:
+    #         cv.drawContours(self,con[4],-1,(0,0,255),3) # dottet red lines, thickness = 3
+    #
+    #     M = cv.moments(approx)
+    #     x = int(M["m10"] / M["m00"])  # center in pixels on x-axis
+    #     cX = round(x // 3, 0)  # center in millimeter on x-axis - måske?
+    #     print('Centerpoint X: ', cX)
+    #
+    #     y = int(M["m01"] / M["m00"])  # center in pixels on y-axis
+    #     cY = round(y // 3, 0)  # center in millimeter on y-axis - måske?
+    #     print('Centerpoint Y: ', cY)
+    #
+    #     # define placement of circle and text on image
+    #     if showCenterWS:
+    #         cv.circle(self, (x, y), 5, (0, 0, 0), -1)  # output centerpoint as a dot
+    #         cv.putText(self, str([cX, cY]), (x - 50, y - 35), cv.FONT_HERSHEY_COMPLEX_SMALL, 1, (0, 0, 0),
+    #                    1)  # outputs koordinates i mm
+    #     return self
+
 
     #reorder the objects 4 corners - sorted
 
-#---------
-    # def reorder(myPoints):
-    #     print('\n------ class Square -> Function reorder ------\n')
-    #     print(myPoints.shape) # output= (4,1,2), 4 by 1 by 2 (4 values, 1 is redundant, each value has 2 points: x,y
-    #     myPointsNew = np.zeros_like(myPoints) #Return an array of zeros with the same shape and type as a given array.
-    #     myPoints = myPoints.reshape((4, 2)) # removes redundant (the 1)
-    #     add = myPoints.sum(1)   # gets sum of each one of 4 value-sets
-    #     print('add: ', add)
-    #     myPointsNew[0] = myPoints[np.argmin(add)]   # first element, get actual points based on minimum-index
-    #     myPointsNew[3] = myPoints[np.argmax(add)] # firth element, get actual points based on maximum-index
-    #     diff = np.diff(myPoints, axis=1)
-    #     myPointsNew[1] = myPoints[np.argmin(diff)]
-    #     myPointsNew[2] = myPoints[np.argmax(diff)]
-    #
-    #     print('myPointsNew[0]: ', myPointsNew[0])
-    #     print('myPointsNew[1]: ', myPointsNew[1])
-    #     print('myPointsNew[2]: ', myPointsNew[2])
-    #     print('myPointsNew[3]: ', myPointsNew[3])
-    #     return myPointsNew
 
-#---------
 
-    # def warpImg(img, points, w, h, pad=20):
-    #     print('\n------ class Square -> Function warpImg ------\n')
-    #     print('Workspace points: \n', points)
-    #     points = Processing.reorder(points)
-    #
-    #     print('Workspace points reordered: \n', points)
-    #     pts1 = np.float32(points)
-    #     pts2 = np.float32([[0, 0], [w, 0], [0, h], [w, h]])   # define pattern
-    #     matrix = cv.getPerspectiveTransform(pts1, pts2)
-    #     imgWarp = cv.warpPerspective(img, matrix, (w, h))
-    #     imgWarp = imgWarp[pad:imgWarp.shape[0] - pad, pad:imgWarp.shape[1] - pad]   # define<-- pad: removes corner-pixels from h + w
-    #     # print('imgWarp: \n',imgWarp)
-    #     return imgWarp
 
-    # returnerer længden på en side
+
 
 #-------
 
