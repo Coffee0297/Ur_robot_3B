@@ -11,7 +11,8 @@ import cv2 as cv
 cv.namedWindow('Tracking', cv.WINDOW_NORMAL)
 #cap = cv.VideoCapture(0)
 cap = cv.imread("image_0.png")
-
+finalContours = []      # creating list
+print('FC: ', finalContours)
 class Hsv:
     def __init__(self, lh, ls, lv, hh, hs, hv):     # HSV værdier - low/high
         self.lh = lh     # creates atribute called hl and takes in parameter hl
@@ -79,12 +80,13 @@ default = Hsv(0,0,0,0,0,0)
 redDefault = Hsv(0,18,30,16,255,87)
 #greenDefault = Hsv(53,74,66,96,225,185)
 #blueDefault = Hsv(0,0,65,171,234,110)
+yellowDefault = Hsv(0,158,109,31,255,255)
 
-red1 = Color.create(redDefault)
+red1 = Color.create(yellowDefault)
 #green1 = Color.create(greenDefault)
 #blue1 = Color.create(blueDefault)
 #print(Color.print_value(blueDefault))  # debugging
-print(Color.print_value(redDefault))  # debugging
+print(Color.print_value(yellowDefault))  # debugging
 
 #Color.on_trackbar(0)
 

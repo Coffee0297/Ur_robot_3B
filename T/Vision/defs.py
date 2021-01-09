@@ -52,10 +52,10 @@ class Square:
 
         if show:
             # Do some debugging
-            # cv.imshow('Gray 1st processing', gray)
-            # cv.imshow('Blur 2nd processing', blur)
-            # cv.imshow('Edges Canny 3rd processing', edges)
-            # cv.imshow("Dialate 4th processing", dial)
+            cv.imshow('Gray 1st processing', gray)
+            cv.imshow('Blur 2nd processing', blur)
+            cv.imshow('Edges Canny 3rd processing', edges)
+            cv.imshow("Dialate 4th processing", dial)
             cv.imshow("Erode 5th processing", erod)
 
         # save all contours in the variabel 'contours'
@@ -93,6 +93,12 @@ class Square:
                 if filter > 0:
                     if len(approx) == filter:
                         finalContours.append([len(approx), area, approx, bbox, i])
+                        print('Long list in finalContours....')
+                        print('len(approx)',len(approx))
+                        print('Area', area)
+                        print('approx', approx)
+                        print('bbox',bbox)
+                        print('i')
                 else:
                     finalContours.append([len(approx), area, approx, bbox, i])
 
@@ -101,10 +107,12 @@ class Square:
                 M = cv.moments(approx)
                 x = int(M["m10"] / M["m00"])    # center in pixels on x-axis
                 cX = round(x // 3 ,0)           # center in millimeter on x-axis - måske?
+                print('X: ', x)
                 print('cX: ', cX)
 
                 y = int(M["m01"] / M["m00"])    # center in pixels on y-axis
                 cY = round(y // 3 ,0)           # center in millimeter on y-axis - måske?
+                print('Y: ', y)
                 print('cY: ', cY)
 
 
@@ -130,15 +138,16 @@ class Square:
         add = myPoints.sum(1)   # gets sum of each one of 4 value-sets
         print('add: ', add)
         myPointsNew[0] = myPoints[np.argmin(add)]   # first element, get actual points based on minimum-index
-        myPointsNew[3] = myPoints[np.argmax(add)] # firth element, get actual points based on maximum-index
-        diff = np.diff(myPoints, axis=1)
-        myPointsNew[1] = myPoints[np.argmin(diff)]
-        myPointsNew[2] = myPoints[np.argmax(diff)]
+        myPointsNew[3] = myPoints[np.argmax(add)]   # firth element, get actual points based on maximum-index
+        diff = np.diff(myPoints, axis=1)            # trækker x fra y
+        myPointsNew[1] = myPoints[np.argmin(diff)]  # det tal der er mindst efter diff gemmes her
+        myPointsNew[2] = myPoints[np.argmax(diff)]  # det tal der er højst efter diff gemmes her
 
         print('myPointsNew[0]: ', myPointsNew[0])
         print('myPointsNew[1]: ', myPointsNew[1])
         print('myPointsNew[2]: ', myPointsNew[2])
         print('myPointsNew[3]: ', myPointsNew[3])
+        print('myPointsNew Test[3][0][0]: ', myPointsNew[3][0][1])
         return myPointsNew
 
 
