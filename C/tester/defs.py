@@ -36,60 +36,31 @@ class Capture:
 # ======================================================================================================================
 
 class Processing:
-    def img_copy(self,show=False):
+    def filters(self, cThr=[150, 175], show=False):  # default parameters
+        print('\n------ Processing -> Function --> Filters ------\nApplaying masks.....\n')
+        # Do some processing
+        gray = cv.cvtColor(self, cv.COLOR_BGR2GRAY)      # convert image to grayscale
+        blur = cv.GaussianBlur(gray, (5, 5), 1)         # apply some blur, define kernelsize 5 by 5, sigma 1
+        edges = cv.Canny(blur, cThr[0], cThr[1])        # plads 0 og 1 - can be defined by user, otherwise default is 150,175
+        kernel = np.ones((5, 5))        # define kernel - returns new 5 by 5 array of ones
+        dilated = cv.dilate(edges, kernel, iterations=3)   # making thick lines
+        erod = cv.erode(dilated, kernel, iterations=2)     # making thin lines
         print('Processing......')
-        img = self.copy()
-        if show:
-            cv.imshow("Original Image", img)
-        return img
-
-    def grayscale(self, show=False):
         print('...Grayscale')
-        img = cv.cvtColor(self, cv.COLOR_BGR2GRAY)  # convert image to grayscale
-        if show:
-            cv.imshow("Gray", img)
-        return img
-
-    def blur(self, show=False):
         print('...Blur')
-        kSize1 = 5     # define kernelsize - fx 5 by 5
-        kSize2 = 5
-        sigmaX = 1
-        blur = cv.GaussianBlur(self, (kSize1, kSize2), sigmaX)  # applying some blur
-        if show:
-            cv.imshow("Blur", blur)
-        return blur
-
-    def canny(self, a, b, show=False):    # canny edges cThr=[150, 175]
         print('...Canny')
-        # cThr1 = 175               # treshhold 1
-        # cThr2 = 75                # treshhold 2
-        canny = cv.Canny(self, a, b)  # plads 0 og 1 - can be defined by user, otherwise default is 150,175
-        if show:
-            cv.imshow("Canny", canny)
-        return canny
-
-    def kernel(show=False):    ########## vertical, horizontal
         print('...Kernel')
-        kernel = np.ones((5, 5))            # define kernel - returns new 5 by 5 array of ones
-        if show:
-            cv.imshow("Kernel", kernel)
-        return kernel
-
-    def dilate(self, kernel, show=False):
-        print('...Dilate')
-        dilated = cv.dilate(self, kernel, iterations=2)  # making thick lines
-        if show:
-            cv.imshow("dilate", dilated)
-        return dilated
-
-    def erode(self, kernel, show=False):
+        print('...Dilated')
         print('...Erode')
-        erod = cv.erode(self, kernel, iterations=1)  # making thin lines
         if show:
-            cv.imshow("erod", erod)
-        return erod
+            # Do some debugging
+            #cv.imshow('Gray 1st processing', gray)
+            #cv.imshow('Blur 2nd processing', blur)
+            cv.imshow('Edges Canny 3rd processing', edges)
+            cv.imshow("Dialate 4th processing", dilated)
+            cv.imshow("Erode 5th processing", erod)
 
+        return erod
 # ======================================================================================================================
 
 class Contours:
