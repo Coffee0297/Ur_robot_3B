@@ -39,6 +39,7 @@ class Processing:
     def img_copy(self,show=False):
         print('__init__')
         print('Processing......')
+
         img = self.copy()
         if show:
             cv.imshow("Original Image", img)
@@ -61,11 +62,11 @@ class Processing:
             cv.imshow("Blur", blur)
         return blur
 
-    def canny(self, show=False):    # canny edges
+    def canny(self, a, b, show=False):    # canny edges cThr=[150, 175]
         print('...Canny')
-        cThr1 = 175               # treshhold 1
-        cThr2 = 75                # treshhold 2
-        canny = cv.Canny(self, cThr1, cThr2)  # plads 0 og 1 - can be defined by user, otherwise default is 150,175
+        # cThr1 = 175               # treshhold 1
+        # cThr2 = 75                # treshhold 2
+        canny = cv.Canny(self, a, b)  # plads 0 og 1 - can be defined by user, otherwise default is 150,175
         if show:
             cv.imshow("Canny", canny)
         return canny
@@ -102,7 +103,7 @@ class Contours:
             print('Contours: ', contours)
         return contours
 # ----------------------------------------------------------------------------------------------------------------------
-    def find_contour(self, contours,  minArea=2000, filter=0):
+    def find_contour(self, contours,  minArea=2000, filter=0, draw=False):
         print('\n------ Contour -> Function find_contour ------\n')
         finalContours = []  # creating list
         # loop through contours
@@ -125,25 +126,31 @@ class Contours:
                 else:
                     print('No contour is added to the list "finalContours"')
 
+            # 'draw' contour-points that we get from findCountour-function
+        if draw:
+            for j in finalContours:
+                cv.drawContours(self, j[filter], -1, (0, 0, 255), 3)  # dottet red lines, thickness = 3
+
         finalContours = sorted(finalContours, key=lambda x: x[1], reverse=True)     # src, len(approx):area, descenting order
         return self, finalContours
-# ----------------------------------------------------------------------------------------------------------------------
-    def warpImg(self, points, w, h, pad=20):
-        print('\n------ Contour -> Function warpImg ------\n')
-        print('Workspace points: \n', points)
-        points = Contours.reorder(points)
 
-        print('Workspace points reordered: \n', points)
+# ----------------------------------------------------------------------------------------------------------------------
+# +++++++++++++++++++++++++++++++++++++++
+    def warpImg(self, points, w, h, pad=20, show=False):
+        print('\n------ Contour -> Function warpImg ------\n')
         pts1 = np.float32(points)
         pts2 = np.float32([[0, 0], [w, 0], [0, h], [w, h]])   # define pattern
         matrix = cv.getPerspectiveTransform(pts1, pts2)
         imgWarp = cv.warpPerspective(self, matrix, (w, h))
         imgWarp = imgWarp[pad:imgWarp.shape[0] - pad, pad:imgWarp.shape[1] - pad]   # define<-- pad: removes corner-pixels from h + w
         # print('imgWarp: \n',imgWarp)
+        if show:
+            cv.imshow('Workspace Image: \n',imgWarp)
         return imgWarp
 # ----------------------------------------------------------------------------------------------------------------------
     def reorder(myPoints):
         print('\n------ Contour -> Function reorder ------\n')
+        print('Points not ordered: \n',myPoints)
         print(myPoints.shape) # output= (4,1,2), 4 by 1 by 2 (4 values, 1 is redundant, each value has 2 points: x,y
         myPointsNew = np.zeros_like(myPoints) #Return an array of zeros with the same shape and type as a given array.
         myPoints = myPoints.reshape((4, 2)) # removes redundant (the 1)
@@ -154,13 +161,52 @@ class Contours:
         diff = np.diff(myPoints, axis=1)
         myPointsNew[1] = myPoints[np.argmin(diff)]
         myPointsNew[2] = myPoints[np.argmax(diff)]
-
+        print('Points ordered: \n')
         print('myPointsNew[0]: ', myPointsNew[0])
         print('myPointsNew[1]: ', myPointsNew[1])
         print('myPointsNew[2]: ', myPointsNew[2])
         print('myPointsNew[3]: ', myPointsNew[3])
         return myPointsNew
+#+++++++++++++++++++++++++++++++++++++++
 # ----------------------------------------------------------------------------------------------------------------------
+# # ----------------------------------------------------------------------------------------------------------------------
+# # +++++++++++++++++++++++++++++++++++++++
+#     def warpImg(self, points, w, h, pad=20, show=False):
+#         print('\n------ Contour -> Function warpImg ------\n')
+#         print('Workspace points: \n', points)
+#         points = Contours.reorder(points)
+#
+#         print('Points reordered: \n', points)
+#         pts1 = np.float32(points)
+#         pts2 = np.float32([[0, 0], [w, 0], [0, h], [w, h]])   # define pattern
+#         matrix = cv.getPerspectiveTransform(pts1, pts2)
+#         imgWarp = cv.warpPerspective(self, matrix, (w, h))
+#         imgWarp = imgWarp[pad:imgWarp.shape[0] - pad, pad:imgWarp.shape[1] - pad]   # define<-- pad: removes corner-pixels from h + w
+#         # print('imgWarp: \n',imgWarp)
+#         if show:
+#             cv.imshow('Workspace Image: \n',imgWarp)
+#         return imgWarp
+# # ----------------------------------------------------------------------------------------------------------------------
+#     def reorder(myPoints):
+#         print('\n------ Contour -> Function reorder ------\n')
+#         print(myPoints.shape) # output= (4,1,2), 4 by 1 by 2 (4 values, 1 is redundant, each value has 2 points: x,y
+#         myPointsNew = np.zeros_like(myPoints) #Return an array of zeros with the same shape and type as a given array.
+#         myPoints = myPoints.reshape((4, 2)) # removes redundant (the 1)
+#         add = myPoints.sum(1)   # gets sum of each one of 4 value-sets
+#         print('add: ', add)
+#         myPointsNew[0] = myPoints[np.argmin(add)]   # first element, get actual points based on minimum-index
+#         myPointsNew[3] = myPoints[np.argmax(add)] # firth element, get actual points based on maximum-index
+#         diff = np.diff(myPoints, axis=1)
+#         myPointsNew[1] = myPoints[np.argmin(diff)]
+#         myPointsNew[2] = myPoints[np.argmax(diff)]
+#
+#         print('myPointsNew[0]: ', myPointsNew[0])
+#         print('myPointsNew[1]: ', myPointsNew[1])
+#         print('myPointsNew[2]: ', myPointsNew[2])
+#         print('myPointsNew[3]: ', myPointsNew[3])
+#         return myPointsNew
+# #+++++++++++++++++++++++++++++++++++++++
+# # ----------------------------------------------------------------------------------------------------------------------
 
 
 

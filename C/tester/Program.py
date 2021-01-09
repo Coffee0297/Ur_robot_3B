@@ -19,7 +19,6 @@ scale = 3   # scale to make image bigger
 wWorkspace = 200 *scale
 hWorkspace = 200 *scale
 
-
 #-------------------------------------
 defs.Capture.takePicture(cam)
 original = cv.imread('image_0.png')
@@ -29,28 +28,59 @@ original = cv.imread('image_0.png')
 img = defs.Processing.img_copy(original, show=True)
 gray = defs.Processing.grayscale(img, show=True)
 blur = defs.Processing.blur(gray, show=True)
-canny = defs.Processing.canny(blur, show=True)
+canny = defs.Processing.canny(blur,175, 75, show=True)
 kernel = defs.Processing.kernel(show=False)
 dilated = defs.Processing.dilate(canny, kernel, show=True)
 erod = defs.Processing.erode(dilated, kernel, show=True)
 
 print('Done processing')
 #----------------------------------------------------------
-
-# save all contours in the variabel 'contours'
-
 contours = defs.Contours.get_contours(erod, show=False)
-
 imgContours,fContours = defs.Contours.find_contour(img, contours, minArea=50000, filter=4)
-# "Original Image" = imgContours
+#  NOTE: imgContours = Original Image
 
+#++++++++++++++++++++++++++++++++++++++
+# if len(fContours) != 0:
+#     print('Finding biggest contour')
+#     biggestContour = fContours[0][2]   # takes 1. and 3. parameter in finalContours-->([len(approx), area, approx, bbox, i])
+#
+# imgWarp = defs.Contours.warpImg(img, biggestContour, wWorkspace, hWorkspace,show=True)
+#     #imgContours2, fContours2 = defs.Square.getContours(imgWarp, show=True, showCenterWS=True, findAngle=True,
+#                                                        #minArea=2000, filter=4, cThr=[60, 60], draw=False)
+# print('Finding biggest contour Done')
+#+++++++++++++++++++++++++++++++++++++++
 if len(fContours) != 0:
     print('Finding biggest contour')
     biggestContour = fContours[0][2]   # takes 1. and 3. parameter in finalContours-->([len(approx), area, approx, bbox, i])
-    imgWarp = defs.Contours.warpImg(img, biggestContour, wWorkspace, hWorkspace)
-    #imgContours2, fContours2 = defs.Square.getContours(imgWarp, show=True, showCenterWS=True, findAngle=True,
-                                                       #minArea=2000, filter=4, cThr=[60, 60], draw=False)
-    print('Finding biggest contour Done')
+myPoints = defs.Contours.reorder(biggestContour)
+print('go to reorder')
+imgWarp = defs.Contours.warpImg(imgContours, myPoints, wWorkspace, hWorkspace,show=True)
+print('Finding biggest contour Done')
+
+#------ Image Processing ----------------------------------
+img = defs.Processing.img_copy(imgWarp, show=True)
+gray = defs.Processing.grayscale(img, show=True)
+blur = defs.Processing.blur(gray, show=True)
+canny = defs.Processing.canny(blur, 150, 175, show=True)
+kernel = defs.Processing.kernel(show=False)
+dilated = defs.Processing.dilate(canny, kernel, show=True)
+erod = defs.Processing.erode(dilated, kernel, show=True)
+print('Done 2. processing')
+#----------------------------------------------------------
+contours2 = defs.Contours.get_contours(erod, show=True)
+print('contours2 = defs.Contours.get_contours')
+#imgContours2, fContours2 = defs.Contours.get_contours(imgWarp, minArea=2000, filter=4, draw=True)
+
+
+# if len(fContours) != 0:
+#     for obj in fContours2:
+#         cv.polylines(imgContours2, [obj[2]], True, (0, 255, 0), 2)  # green full lines
+#         nPoints = defs.Square.reorder(obj[2])  # reorder points
+#         print('nPoints reordered: \n ', nPoints)
+
+
+
+#----------------------------------------------
 
 # show=True, showCenterWS=True, findAngle=True, minArea=2000, filter=4, cThr=[60, 60], draw=False
 #imgContours, fContours = defs.Square.getContours(img, show= True, minArea=50000, filter=4)
