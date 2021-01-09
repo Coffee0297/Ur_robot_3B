@@ -25,6 +25,7 @@ original = cv.imread('image_0.png')
 #-------------------------------------
 
 #------ Image Processing ----------------------------------
+
 img = defs.Processing.img_copy(original, show=True)
 gray = defs.Processing.grayscale(img, show=True)
 blur = defs.Processing.blur(gray, show=True)                #blur = cv.GaussianBlur(gray, (5, 5), 1)
@@ -36,21 +37,23 @@ erod = defs.Processing.erode(dilated, kernel, show=True)
 print('Done processing')
 #----------------------------------------------------------
 contours = defs.Contours.get_contours(erod, show=False)
+print('\nFinding biggest contour - minArea=50000')
 imgContours,fContours = defs.Contours.find_contour(img, contours, minArea=50000, filter=4)
 #  NOTE: imgContours = Original Image
 
 if len(fContours) != 0:
-    print('Finding biggest contour')
     biggestContour = fContours[0][2]   # takes 1. and 3. parameter in finalContours-->([len(approx), area, approx, bbox, i])
 print('go to reorder')
 myPoints = defs.Contours.reorder(biggestContour)
-
-imgWarp = defs.Contours.warpImg(imgContours, myPoints, wWorkspace, hWorkspace,show=True)
 print('Finding biggest contour Done')
 
+imgWarp = defs.Contours.warpImg(imgContours, myPoints, wWorkspace, hWorkspace,show=True)
+print('imgWarp.size: ', imgWarp.size)
+print('imgWarp.size/3: ', imgWarp.size/3,'\n')
+
 #------ Image Processing ----------------------------------
-img = defs.Processing.img_copy(imgWarp, show=True)
-gray = defs.Processing.grayscale(img, show=True)
+img = defs.Processing.img_copy(img, show=True)
+gray = defs.Processing.grayscale(imgWarp, show=True)
 blur = defs.Processing.blur(gray, show=True)
 canny = defs.Processing.canny(blur, 150, 175, show=True)
 kernel = defs.Processing.kernel(show=False)
@@ -58,9 +61,12 @@ dilated = defs.Processing.dilate(canny, kernel, show=True)
 erod = defs.Processing.erode(dilated, kernel, show=True)
 print('Done 2. processing on Workspace')
 #----------------------------------------------------------
+
 contours2 = defs.Contours.get_contours(erod, show=False)
-print('contours2 = defs.Contours.get_contours')
-#imgContours2, fContours2 = defs.Contours.get_contours(imgWarp, minArea=2000, filter=4, draw=True)
+print('\nFind next contour - minArea=2000')
+imgContours2,fContours2 = defs.Contours.find_contour(imgWarp, contours2, minArea=2000, filter=4, draw=True)
+#  NOTE: imgContours2 = Original, but Warped Image
+print('imgContours2, fContours2 = defs.Contours.find_contours(imgWarp, minArea=2000, filter=4, draw=True')
 
 
 # if len(fContours) != 0:
