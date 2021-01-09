@@ -55,6 +55,7 @@ if len(fContours) != 0:
     # print("FUNDNE KONTURER",fContours2)
     if len(fContours) !=0:
 
+        # Hver klods på billedet gemmes i en klods-variabel
         for obj in fContours2:
             klods1 = fContours2[0][2]
             klods2 = fContours2[1][2]
@@ -63,6 +64,7 @@ if len(fContours) != 0:
             print("KLODS_2: ", klods2)
             print("KLODS_3: ", klods3)
 
+            # Klodserne warpes med warpfunktionen
             ny_imgWarp1 = defs.Square.warpImg(imgWarp_copy, klods1, w_Klods, h_Klods)
             ny_imgWarp2 = defs.Square.warpImg(imgWarp_copy, klods2, w_Klods, h_Klods)
             ny_imgWarp3 = defs.Square.warpImg(imgWarp_copy, klods3, w_Klods, h_Klods)
@@ -71,14 +73,17 @@ if len(fContours) != 0:
             cv.imshow("KLODS2", ny_imgWarp2)
             cv.imshow("KLODS3", ny_imgWarp3)
 
+            # colorchannels puttes i farve
             farve1 = ny_imgWarp1[0][2]
             farve2 = ny_imgWarp2[0][2]
             farve3 = ny_imgWarp3[0][2]
+
 
             print("FARVE KLODS 1 BGR: ", farve1[0])
             print("FARVE KLODS 2 BGR: ", farve2[0])
             print("FARVE KLODS 3 BGR: ", farve3[0])
 
+            # Hver detekteret colorchannel puttes i listen farve_liste
             farve_liste.append(farve1)
             farve_liste.append(farve2)
             farve_liste.append(farve3)
@@ -111,6 +116,7 @@ if len(fContours) != 0:
     print("FARVELISTE LÆNGDE",len(farve_liste))
     print("FARVELISTE", farve_liste)
 
+    # Der tælles op i farvelisten og farven printes
     for f in range(len(farve_liste)//3):
         if max(farve_liste[f]) == farve_liste[f][0]:
 
