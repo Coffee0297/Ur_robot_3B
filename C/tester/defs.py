@@ -78,7 +78,6 @@ class Processing:
 
     def dilate(self, kernel, show=False):
         print('...Dilate')
-        #kernel = np.ones((5, 5))
         dilated = cv.dilate(self, kernel, iterations=2)  # making thick lines
         if show:
             cv.imshow("dilate", dilated)
