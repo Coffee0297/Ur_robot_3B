@@ -27,7 +27,7 @@ original = cv.imread('image_0.png')
 #------ Image Processing ----------------------------------
 img = defs.Processing.img_copy(original, show=True)
 gray = defs.Processing.grayscale(img, show=True)
-blur = defs.Processing.blur(gray, show=True)
+blur = defs.Processing.blur(gray, show=True)                #blur = cv.GaussianBlur(gray, (5, 5), 1)
 canny = defs.Processing.canny(blur,175, 75, show=True)
 kernel = defs.Processing.kernel(show=False)
 dilated = defs.Processing.dilate(canny, kernel, show=True)
@@ -39,21 +39,12 @@ contours = defs.Contours.get_contours(erod, show=False)
 imgContours,fContours = defs.Contours.find_contour(img, contours, minArea=50000, filter=4)
 #  NOTE: imgContours = Original Image
 
-#++++++++++++++++++++++++++++++++++++++
-# if len(fContours) != 0:
-#     print('Finding biggest contour')
-#     biggestContour = fContours[0][2]   # takes 1. and 3. parameter in finalContours-->([len(approx), area, approx, bbox, i])
-#
-# imgWarp = defs.Contours.warpImg(img, biggestContour, wWorkspace, hWorkspace,show=True)
-#     #imgContours2, fContours2 = defs.Square.getContours(imgWarp, show=True, showCenterWS=True, findAngle=True,
-#                                                        #minArea=2000, filter=4, cThr=[60, 60], draw=False)
-# print('Finding biggest contour Done')
-#+++++++++++++++++++++++++++++++++++++++
 if len(fContours) != 0:
     print('Finding biggest contour')
     biggestContour = fContours[0][2]   # takes 1. and 3. parameter in finalContours-->([len(approx), area, approx, bbox, i])
-myPoints = defs.Contours.reorder(biggestContour)
 print('go to reorder')
+myPoints = defs.Contours.reorder(biggestContour)
+
 imgWarp = defs.Contours.warpImg(imgContours, myPoints, wWorkspace, hWorkspace,show=True)
 print('Finding biggest contour Done')
 
@@ -65,9 +56,9 @@ canny = defs.Processing.canny(blur, 150, 175, show=True)
 kernel = defs.Processing.kernel(show=False)
 dilated = defs.Processing.dilate(canny, kernel, show=True)
 erod = defs.Processing.erode(dilated, kernel, show=True)
-print('Done 2. processing')
+print('Done 2. processing on Workspace')
 #----------------------------------------------------------
-contours2 = defs.Contours.get_contours(erod, show=True)
+contours2 = defs.Contours.get_contours(erod, show=False)
 print('contours2 = defs.Contours.get_contours')
 #imgContours2, fContours2 = defs.Contours.get_contours(imgWarp, minArea=2000, filter=4, draw=True)
 

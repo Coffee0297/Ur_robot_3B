@@ -37,7 +37,7 @@ class Capture:
 
 class Processing:
     def img_copy(self,show=False):
-        print('__init__')
+        print('Program Runing......')
         print('Processing......')
 
         img = self.copy()
@@ -97,14 +97,14 @@ class Processing:
 
 class Contours:
     def get_contours(self, show=False):
-        print('\n------ Contour -> Function find_contour ------\nFinding Contours.....\n')
+        print('\n------ Contour -> Function get_contour ------\nGetting Contours.....')
         contours, hiearchy = cv.findContours(self, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
         if show:
             print('Contours: ', contours)
         return contours
 # ----------------------------------------------------------------------------------------------------------------------
     def find_contour(self, contours,  minArea=2000, filter=0, draw=False):
-        print('\n------ Contour -> Function find_contour ------\n')
+        print('\n------ Contour -> Function find_contour ------\nFinding Contours.....')
         finalContours = []  # creating list
         # loop through contours
         for i in contours:
