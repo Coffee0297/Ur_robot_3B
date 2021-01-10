@@ -4,6 +4,11 @@ import numpy as np
 
 # ===================================================================================
 
+def running(running = False):
+    while running:
+        print('stay here ;)')
+
+
 class Capture:
     def takePicture(cam):
         print('\n------ class Capture -> Function takePicture ------')
@@ -135,11 +140,11 @@ class Contours:
             for con in finalContours:
                 cv.drawContours(self, con[4], -1, (0, 0, 255), 3)  # dottet red lines, thickness = 3
 
-        return self, finalContours
+        return self, finalContours, xList, yList
 # ----------------------------------------------------------------------------------------------------------------------
     def find_angle(self, contours2):
         # get rotational angle of objects in workspace
-            Angles = []  # creating list
+            angles = []  # creating list
         #for i in contours2:
             #area = cv.contourArea(i)
             for l in range(len(contours2)):
@@ -148,8 +153,8 @@ class Contours:
                     degrees = cv.minAreaRect(cnt)
                     radians = ((degrees[-1]) * 3.14) / 180
 
-                    Angles.insert(0,[radians])
-                    print(Angles)
+                    angles.insert(0,[radians])
+                    print(angles)
 
                     print('-----------------------------')
 
@@ -162,7 +167,7 @@ class Contours:
                     Box = np.int0(Box)
                     #print('b: ', Box)
                     cv.drawContours(self, [Box], 0, (255, 255, 0), 1)
-            return radians
+            return angles
 # ----------------------------------------------------------------------------------------------------------------------
     def warpImg(self, points, w, h, pad=20, show=False):
         print('\n------ Contour -> Function warpImg ------')
