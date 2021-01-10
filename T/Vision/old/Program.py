@@ -14,7 +14,7 @@ wWorkspace = 200 *scale
 hWorkspace = 200 *scale
 
 defs.Capture.takePicture(cam)
-img = cv.imread('image_0.png')
+img = cv.imread('image_20.png')
 defs.Square.getContours(img, show=True)
 imgContours, fContours = defs.Square.getContours(img, show= True, minArea=50000, filter=4)
 # find the biggest objects 4 corners - unsorted

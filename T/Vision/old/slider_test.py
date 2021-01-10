@@ -6,7 +6,7 @@ import cv2 as cv
 
 alpha_slider_max = 100
 title_window = 'Linear Blend'
-src1 = cv.imread("image_0.png")
+src1 = cv.imread("image_20.png")
 
 def on_trackbar(val):
     print(val)

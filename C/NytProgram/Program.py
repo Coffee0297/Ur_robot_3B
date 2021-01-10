@@ -20,7 +20,7 @@ def blah():
 
     #-------------------------------------
     defs.Capture.takePicture(cam)
-    img = cv.imread('image_0.png')
+    img = cv.imread('image_20.png')
     #-------------------------------------
 
 
