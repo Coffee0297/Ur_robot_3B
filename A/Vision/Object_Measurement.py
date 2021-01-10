@@ -10,7 +10,7 @@ from matplotlib import pyplot as plt
 webcam = True # Tænd og sluk for kameraet - Er kameraet slukket, vil processeringen foregå med billedet i path
 cap = cv.VideoCapture(0, cv.CAP_DSHOW) # Forbind til webcamet - cv.CAP_DSHOW starter kameraet hurtigere
 fsm.Shape.takePicture(cap) # Funktionen tager cap som input og når der trykkes "space", tages der et stillbillede som gemmes i Visionmappen. Trykkes der escape starter processeringen af stillbilledet.
-path = 'c:\\Users\\Pc\\PycharmProjects\\Ur_robot_3B\\A\\Vision\\image_0.png' # Stillbilledet fra webcamet gemmes i path
+path = 'c:\\Users\\Pc\\PycharmProjects\\Ur_robot_3B\\A\\Vision\\image_20.png' # Stillbilledet fra webcamet gemmes i path
 
 # cap.set's første position refererer til et ID på en parameter der kan ændres
 cap.set(10,160) # Position 10 er Lysstyrke (brightness) - TÆNKER IKKE DET ER RELEVANT!!!!??
