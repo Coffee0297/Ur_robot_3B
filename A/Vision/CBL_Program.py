@@ -43,11 +43,13 @@ if len(fContours) != 0:
     print("GAMMELWARP",imgWarp)
     print(imgWarp.size/3)
 
-    imgWarp_copy = imgWarp.copy()
+
 
 
     imgContours2, fContours2 = defs.Square.getContours(imgWarp, show=True, showCenterWS=True, findAngle=True, minArea=2000, filter=4, cThr=[60, 60], draw=False)
 
+
+    imgWarp_copy = imgWarp.copy()
     imgContours3, fContours3 = defs.Square.getContours(imgWarp_copy, show=True, showCenterWS=False, findAngle=False, minArea=2000, filter=4, cThr=[60, 60], draw=True)
 
 
@@ -89,9 +91,9 @@ if len(fContours) != 0:
             farve_liste.append(farve3)
             print("Farveliste før del: ", farve_liste)
 
-            print("FARVELISTE",farve_liste[0])
+            print("FARVELISTE1", farve_liste[0])
             print("FARVELISTE2", farve_liste[1])
-            print("FARVELISTE3",farve_liste[2])
+            print("FARVELISTE3", farve_liste[2])
 
             cv.polylines(imgContours2,[obj[2]], True, (0,255,0),2)  # green full lines
             nPoints = defs.Square.reorder(obj[2])    # reorder points

@@ -61,11 +61,17 @@ class Square(Capture):
     def getContours(img, cThr=[150, 175], show=False, minArea=1000, filter=0, draw=False, findCenter=False, findAngle=False):  # default parameters
         print('\n------ class Square -> Function getContours ------\n')
         # Do some processing
+
         gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)      # convert image to grayscale
+
         blur = cv.GaussianBlur(gray, (5, 5), 1)         # apply some blur, define kernelsize 5 by 5, sigma 1
+
         edges = cv.Canny(blur, cThr[0], cThr[1])        # plads 0 og 1 - can be defined by user, otherwise default is 150,175
+
         kernel = np.ones((5, 5))        # define kernel - returns new 5 by 5 array of ones
+
         dial = cv.dilate(edges, kernel, iterations=3)   # making thick lines
+
         erod = cv.erode(dial, kernel, iterations=2)     # making thin lines
 
         if show:
@@ -90,9 +96,6 @@ class Square(Capture):
                 approx = cv.approxPolyDP(i, 0.02 * perimeter, True) #find corner points
                 bbox = cv.boundingRect(approx)
                 # filter is made if only a certain type of object is wanted, fx a square has 4 cornerpoints
-
-
-
                 if filter > 0:
                     if len(approx) == filter:
                         finalContours.append([len(approx), area, approx, bbox, i])
@@ -107,8 +110,8 @@ class Square(Capture):
                 cX = int(M["m10"] / M["m00"])
                 cY = int(M["m01"] / M["m00"])
                 cv.circle(img, (cX, cY), 5, (0,0,255), -1)
-                cv.putText(img, str([cX, cY]), (cX - 25, cY - 25), cv.FONT_HERSHEY_COMPLEX_SMALL, 1, (0,0,255),
-                           1)
+                # cv.putText(img, str([cX, cY]), (cX - 25, cY - 25), cv.FONT_HERSHEY_COMPLEX_SMALL, 1, (0,0,255),
+                #            1)
 
             if findAngle:
                 for l in range(len(contours)):
@@ -141,10 +144,12 @@ class Square(Capture):
         add = myPoints.sum(1)   # gets sum of each one of 4 value-sets
         print('add: ', add)
         myPointsNew[0] = myPoints[np.argmin(add)]   # first element, get actual points based on minimum-index
+
         myPointsNew[3] = myPoints[np.argmax(add)] # firth element, get actual points based on maximum-index
         diff = np.diff(myPoints, axis=1)
         myPointsNew[1] = myPoints[np.argmin(diff)]
         myPointsNew[2] = myPoints[np.argmax(diff)]
+
         print('myPointsNew[0]: ', myPointsNew[0])
         print('myPointsNew[1]: ', myPointsNew[1])
         print('myPointsNew[2]: ', myPointsNew[2])

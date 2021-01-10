@@ -19,8 +19,6 @@ def getContours(img, cThr=[100, 175], showCanny=False, cannyResize=False, minAre
     finalContours = [] # En tom liste hvor de færdige og ønskede konturer gemmes
     for i in contours: # Der loopes gennem konturerne i contours for at finde og tegne dem
         area = cv.contourArea(i) # contourArea finder arealet i konturerne "i"
-
-
         if area > minArea: # Hvis arealet er større end minArea som standard er 1000 fortsætter processeringen af konturen
             epsilon = cv.arcLength(i,True) # arcLength finder længden på konturen - (selve længden på konturlinjen i pixels) - True betyder at det kun skal være lukkede konturer
             approx = cv.approxPolyDP(i,0.02*epsilon,True) # approxPolyDP tilretter konturlinjen og finder hjørnepunkter - 0.02 er procent ## Skal måske rodes lidt med ##
@@ -53,6 +51,7 @@ def reorder(myPoints):
     # myPointsNew sætter hjørnepunkterne på A4 arket i rigtig rækkefølge
     myPointsNew[0] = myPoints[np.argmin(add)] # Plads 0 i den nye liste af punkter får den mindste sum fra add som bliver 0,0.
     myPointsNew[3] = myPoints[np.argmax(add)] # Plads 3 i den nye liste af punkter får den højeste sum fra add som bliver w,h
+    print("myPointsNew[0][0]",myPointsNew[0][0])
     diff = np.diff(myPoints, axis=1) # diff finder differencen mellem punkterne i listen
     # print("Diff",diff)
     myPointsNew[1] = myPoints[np.argmin(diff)] # Plads 1 i den nye liste af punkter bliver w,0
@@ -63,7 +62,7 @@ def reorder(myPoints):
 def warpImg(img, points, w, h, pad = 30): # Ændre pad for at fjerne overflødige kanter på billedet som forstyrrer beregningen af målene
     points = reorder(points)
     pts1 = np.float32(points) # points gemmes i pts1 som float
-    pts2 = np.float32([[0,0],[w,0],[0,h],[w,h]]) # De strukturede positioner til de nye points
+    pts2 = np.float32([[0,0],[w,0],[0,h],[w,h]]) # De strukturerede positioner til de nye points
     matrix = cv.getPerspectiveTransform(pts1,pts2) # Der laves en matrix af punkterne
     imgWarp = cv.warpPerspective(img, matrix, (w,h)) # warpPerspective laver et nyt "billede" som har A4-arkets hjørner som grænserne (Billedet indeholder kun A4-arket)
     imgWarp = imgWarp[pad:imgWarp.shape[0]-pad, pad:imgWarp.shape[1]-pad] # Fjerner kanterne på billedet som ikke er en del af arbejdsområdet

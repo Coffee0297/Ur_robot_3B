@@ -20,19 +20,22 @@ hWorkspace = 200 *scale
 defs.Capture.takePicture(cam)
 img = cv.imread('image_1.png')
 defs.Square.getContours(img, show=True)
+cv.imshow("Kamera",img)
 
 
 #Find Workspace
-imgContours, fContours = defs.Square.getContours(img, show= True, minArea=50000, filter=4)
+imgContours, fContours = defs.Square.getContours(img, show= True, minArea=50000, filter=4,draw=False)
+
 # find the biggest objects 4 corners - unsorted
 if len(fContours) != 0:
     biggest = fContours[0][2]   # takes 1. and 3. parameter in finalContours-->([len(approx), area, approx, bbox, i])
     # print (biggest)
     imgWarp = defs.Square.warpImg(img, biggest, wWorkspace, hWorkspace)
+    cv.imshow("contours",imgContours)
 
     # Find Objects in workspace
-    imgContours2, fContours2 = defs.Square.getContours(imgWarp, show=True, minArea=2000, filter=4, cThr=[60, 60], draw=False, findCenter=True, findAngle=True)
-
+    imgContours2, fContours2 = defs.Square.getContours(imgWarp, show=True, minArea=2000, filter=4, cThr=[70, 75], draw=True, findAngle=True)
+    cv.imshow("Warped",imgWarp)
     if len(fContours) !=0:
         for obj in fContours2:
             cv.polylines(imgContours2,[obj[2]], True, (0,255,0),2)  # green full lines
@@ -41,14 +44,14 @@ if len(fContours) != 0:
             nW = round(defs.Square.findDis(nPoints[0][0] // scale, nPoints[1][0] // scale), 1)    # find width of obj, (number of pixels divided by scale-value)
             nH = round(defs.Square.findDis(nPoints[0][0] // scale, nPoints[2][0] // scale), 1)    # find height of obj in millimeters, round to 1 decimal
             cv.arrowedLine(imgContours2, (nPoints[0][0][0], nPoints[0][0][1]), (nPoints[1][0][0], nPoints[1][0][1]),
-                                 (255, 0, 255), 2, 10, 0, 0.08)
+                                 (255, 0, 0), 2, 10, 0, 0.08)
             cv.arrowedLine(imgContours2, (nPoints[0][0][0], nPoints[0][0][1]), (nPoints[2][0][0], nPoints[2][0][1]),
-                                 (255, 0, 255), 2, 10, 0, 0.08)
+                                 (255, 0, 0), 2, 10, 0, 0.08)
             x, y, w, h = obj[3]
             cv.putText(imgContours2, '{}mm'.format(nW), (x + 30, y - 10), cv.FONT_HERSHEY_COMPLEX_SMALL, 1,
-                             (255,0,255), 1)
+                             (255,0,0), 1)
             cv.putText(imgContours2, '{}mm'.format(nH), (x - 70, y + h // 2), cv.FONT_HERSHEY_COMPLEX_SMALL, 1,
-                             (255, 0, 255), 1)
+                             (255, 0, 0), 1)
             print('\nWidth: ', nW, '\nHeight: ', nH)
 
     cv.imshow("Workspace", imgContours2)

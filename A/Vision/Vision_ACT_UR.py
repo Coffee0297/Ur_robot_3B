@@ -5,7 +5,7 @@ import time
 import numpy as np
 import urrobot
 
-import RG2_Boilerx2 #Fjern v. simulering!
+# import RG2_Boilerx2 #Fjern v. simulering!
 
 HOST = '192.168.1.10' # The remote host
 PORT = 30002 # The same port as used by the server
