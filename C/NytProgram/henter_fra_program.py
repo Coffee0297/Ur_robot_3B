@@ -5,7 +5,7 @@ x = []
 y = []
 rad = []
 
-rad, x, y = Program.blah()
+rad, x, y = Program.main()
 
 print('Radianer: ',rad)
 print('X Coordinat i centerpunkt: ',x)

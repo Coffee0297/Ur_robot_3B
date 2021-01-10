@@ -1,15 +1,10 @@
-# CBL
-#from __future__ import print_function
+# ACT
 import cv2 as cv
-#import argparse
 import numpy as np
 import defs
-#import henter_fra_program
 import threading
-#import klasser
 
-#thread = threading.Thread(target=henter_fra_program, args=(1,))
-def blah():
+def main():
     cam = cv.VideoCapture(0)
     # cam.set(10,160)     # 10 for brightness - value 160
     # cam.set(3,1920)     # 3 for hight - value 1920
@@ -17,14 +12,13 @@ def blah():
     scale = 3   # scale to make image bigger
     wWorkspace = 200 *scale
     hWorkspace = 200 *scale
-    w_Klods = 200 * scale
-    h_Klods = 600
+    w_Klods = 500
+    h_Klods = 500
 
     #-------------------------------------
     defs.Capture.takePicture(cam)
     img = cv.imread('image_0.png')
     #-------------------------------------
-
 
     #--------- Image Processing ------------------------------------
     erod = defs.Processing.filters(img, cThr=[150, 175], show=True)
@@ -50,10 +44,6 @@ def blah():
 
         erodWarp = defs.Processing.filters(imgWarp_copy, cThr=[150, 60], show=True)
         fContours3 = defs.Contours.get_contours(erodWarp, show=False)
-
-
-
-        # -------------------------------------------------------------------------------
 
         #------- Image Processing on warped image ----------------------
         erod = defs.Processing.filters(imgWarp, cThr=[150, 60], show=True)

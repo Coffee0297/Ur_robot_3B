@@ -2,13 +2,6 @@ import cv2 as cv
 import numpy as np
 #import vision
 
-# ===================================================================================
-
-def running(running = False):
-    while running:
-        print('stay here ;)')
-
-
 class Capture:
     def takePicture(cam):
         print('\n------ class Capture -> Function takePicture ------')
@@ -114,6 +107,8 @@ class Contours:
                 x = int(M["m10"] / M["m00"])    # center in pixels on x-axis
                 cX = round(x / 2.8, 5)          # center in millimeter on x-axis
                 centerXMeters = cX / 1000       # center in meter on x-axis
+
+
                 print('X: ', x)
                 print('cX: ', cX)
                 print('centerXMeters: ', centerXMeters)
@@ -202,45 +197,8 @@ class Contours:
         print('myPointsNew[3]: ', myPointsNew[3])
         return myPointsNew
 # ----------------------------------------------------------------------------------------------------------------------
-#     def draw_contours(self, finalContours, aprox):
-        # for con in finalContours:
-        #     cv.drawContours(self,con[4],-1,(0,0,255),3) # dottet red lines, thickness = 3
-
-        # M = cv.moments(approx)
-        # x = int(M["m10"] / M["m00"])  # center in pixels on x-axis
-        # cX = round(x // 3, 0)  # center in millimeter on x-axis - måske?
-        # print('Centerpoint X: ', cX)
-        #
-        # y = int(M["m01"] / M["m00"])  # center in pixels on y-axis
-        # cY = round(y // 3, 0)  # center in millimeter on y-axis - måske?
-        # print('Centerpoint Y: ', cY)
-        #
-        # #define placement of circle and text on image
-        # if showCenterWS:
-        #     cv.circle(self, (x, y), 5, (0, 0, 0), -1)  # output centerpoint as a dot
-        #     cv.putText(self, str([cX, cY]), (x - 50, y - 35), cv.FONT_HERSHEY_COMPLEX_SMALL, 1, (0, 0, 0),1) #outputs koordinates i mm
-        #
-        # return self
-# ----------------------------------------------------------------------------------------------------------------------
     def findDis(pts1, pts2):
         print('\n------ class Square -> Function finDis ------\n')
         print('pts1, pts2: ', pts1, pts2)
         return ((pts2[0] - pts1[0]) ** 2 + (pts2[1] - pts1[1]) ** 2) ** 0.5 # finder kvadratrod af ((x2-x1)^2 + (y2-y1)^2)
-
-
-
-class Circle():
-    def __init__(self, name, radius):
-        super().__init__(name)
-        self.radius = radius
-        self.name = "circle"
-
-    def circum(self):
-        return 3.14 * (self.radius + self.radius)
-
-    def getArea(self):
-        return 3.14 * self.radius * self.radius
-
-    def printName(self):
-        return self.name
 
