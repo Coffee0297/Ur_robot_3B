@@ -37,10 +37,18 @@ if len(fContours) != 0:
     myPoints = defs.Contours.reorder(biggestContour)
     print('Finding biggest contour Done')
 
-    # ------ Warp image  ------------------------------------------------------------
+    # ------ Warp image to define workspace -----------------------------------------
     imgWarp = defs.Contours.warpImg(img, myPoints, wWorkspace, hWorkspace,show=False)
     print('imgWarp.size: ', imgWarp.size)
     print('imgWarp.size/3: ', imgWarp.size/3,'\n')
+
+    # # ------ Warp image of object -----------------NY -------------------------------
+    # imgWarp_copy = imgWarp.copy()
+    #
+    # imgContours2, fContours2 = defs.Square.getContours(imgWarp, show=True, showCenterWS=True, findAngle=True,
+    #                                                    minArea=2000, filter=4, cThr=[60, 60], draw=False)
+    #
+    # # -------------------------------------------------------------------------------
 
     #------- Image Processing on warped image ----------------------
     erod = defs.Processing.filters(imgWarp, cThr=[150, 60], show=True)

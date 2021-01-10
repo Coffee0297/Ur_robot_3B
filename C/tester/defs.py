@@ -101,13 +101,15 @@ class Contours:
 
                 # calculate x,y coordinates of objects centerpoint
                 M = cv.moments(approx)
-                x = int(M["m10"] / M["m00"])  # center in pixels on x-axis
-                cX = round(x / 2.8, 5)  # center in millimeter on x-axis - måske?
+                x = int(M["m10"] / M["m00"])    # center in pixels on x-axis
+                cX = round(x / 2.8, 5)          # center in millimeter on x-axis
+                centerXMeters = cX / 1000       # center in meter on x-axis
                 print('X: ', x)
                 print('cX: ', cX)
 
-                y = int(M["m01"] / M["m00"])  # center in pixels on y-axis
-                cY = round(y / 2.8, 5)  # center in millimeter on y-axis - måske?
+                y = int(M["m01"] / M["m00"])    # center in pixels on y-axis
+                cY = round(y / 2.8, 5)          # center in millimeter on y-axis
+                centerYMeters = cY / 1000       # center in meter on y-axis
                 print('Y: ', y)
                 print('cY: ', cY)
 
@@ -120,6 +122,25 @@ class Contours:
                 cv.drawContours(self, con[4], -1, (0, 0, 255), 3)  # dottet red lines, thickness = 3
 
         return self, finalContours
+# ----------------------------------------------------------------------------------------------------------------------
+    def find_angle(self, contours2):
+        # get rotational angle of objects in workspace
+        for i in contours2:
+            area = cv.contourArea(i)
+            for l in range(len(contours2)):
+                if contours2[l].size > 50:
+                    cnt = contours2[l]
+                    rect = cv.minAreaRect(cnt)
+
+                    print('contours[l].size: ', contours2[l].size)
+                    print('rect: ', rect[-1])
+
+                    cv.putText(self, str(rect[-1]), (10, 60 + (l * 20)), cv.FONT_HERSHEY_COMPLEX_SMALL, 1, (0, 0, 255),1)
+
+                    Box = cv.boxPoints(rect)
+                    Box = np.int0(Box)
+
+                    cv.drawContours(self, [Box], 0, (255, 255, 0), 1)
 # ----------------------------------------------------------------------------------------------------------------------
     def warpImg(self, points, w, h, pad=20, show=False):
         print('\n------ Contour -> Function warpImg ------')
@@ -178,24 +199,7 @@ class Contours:
         print('pts1, pts2: ', pts1, pts2)
         return ((pts2[0] - pts1[0]) ** 2 + (pts2[1] - pts1[1]) ** 2) ** 0.5 # finder kvadratrod af ((x2-x1)^2 + (y2-y1)^2)
 
-    def find_angle(self, contours2):
-        # get rotational angle of objects in workspace
-        for i in contours2:
-            area = cv.contourArea(i)
-            for l in range(len(contours2)):
-                if contours2[l].size > 50:
-                    cnt = contours2[l]
-                    rect = cv.minAreaRect(cnt)
 
-                    print('contours[l].size: ', contours2[l].size)
-                    print('rect: ', rect[-1])
-
-                    cv.putText(self, str(rect[-1]), (10, 60 + (l * 20)), cv.FONT_HERSHEY_COMPLEX_SMALL, 1, (0, 0, 255),1)
-
-                    Box = cv.boxPoints(rect)
-                    Box = np.int0(Box)
-
-                    cv.drawContours(self, [Box], 0, (255, 255, 0), 1)
 
 class Circle():
     def __init__(self, name, radius):
