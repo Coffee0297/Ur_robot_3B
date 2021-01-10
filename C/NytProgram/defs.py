@@ -79,9 +79,12 @@ class Contours:
     def find_contour(self, contours,  minArea=2000, filter=0, draw=False, showCenterWS=True):
         print('------ Contour -> Function find_contour ------\nFinding Contours.....')
         finalContours = []  # creating list
+        xList = []
+        yList = []
         # loop through contours
         for i in contours:
             area = cv.contourArea(i)
+            #print('contour(i)  ',contours[0] )
             print('Contour found:  Area =', area)
             if area > minArea:
                 perimeter = cv.arcLength(i, True) #The function computes a curve length or a closed contour perimeter.
@@ -91,15 +94,16 @@ class Contours:
                 # filter is made if only a certain type of object is wanted, fx a square has 4 cornerpoints
                 if filter > 0:
                     if len(approx) == filter:
-                        finalContours.append([len(approx), area, approx, bbox, i])
+                        finalContours.insert(0,[len(approx), area, approx, bbox, i])
                         print("{}".format(filter),' cornerpoints detected....')
                     else:
                         print('Shape with '"{}".format(filter),'corners, is added to th list "finalContours"')
-                        finalContours.append([len(approx), area, approx, bbox, i])
+                        finalContours.insert(0,[len(approx), area, approx, bbox, i])
                 else:
                     print('No contour is added to the list "finalContours"')
 
                 # calculate x,y coordinates of objects centerpoint
+
                 M = cv.moments(approx)
                 x = int(M["m10"] / M["m00"])    # center in pixels on x-axis
                 cX = round(x / 2.8, 5)          # center in millimeter on x-axis
@@ -107,6 +111,10 @@ class Contours:
                 print('X: ', x)
                 print('cX: ', cX)
                 print('centerXMeters: ', centerXMeters)
+                xList.insert(0, centerXMeters)
+                print(xList)
+                print('------------------------------')
+
 
                 y = int(M["m01"] / M["m00"])    # center in pixels on y-axis
                 cY = round(y / 2.8, 5)          # center in millimeter on y-axis
@@ -114,10 +122,14 @@ class Contours:
                 print('Y: ', y)
                 print('cY: ', cY)
                 print('centerYMeters: ', centerYMeters)
+                yList.insert(0,centerYMeters)
+                print(yList)
+                print('------------------------------')
+
 
 
         finalContours = sorted(finalContours, key=lambda x: x[1],reverse=True)  # src, len(approx):area, descenting order
-
+        #print('final: ',finalContours)
         # 'draw' contour-points that we get from findCountour-function
         if draw:
             for con in finalContours:
@@ -127,6 +139,7 @@ class Contours:
 # ----------------------------------------------------------------------------------------------------------------------
     def find_angle(self, contours2):
         # get rotational angle of objects in workspace
+            Angles = []  # creating list
         #for i in contours2:
             #area = cv.contourArea(i)
             for l in range(len(contours2)):
@@ -135,6 +148,8 @@ class Contours:
                     degrees = cv.minAreaRect(cnt)
                     radians = ((degrees[-1]) * 3.14) / 180
 
+                    Angles.insert(0,[radians])
+                    print(Angles)
 
                     print('-----------------------------')
 
