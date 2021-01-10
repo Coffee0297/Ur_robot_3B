@@ -47,8 +47,6 @@ if len(fContours) != 0:
 
     imgContours2, fContours2 = defs.Square.getContours(imgWarp, show=True, showCenterWS=True, findAngle=True, minArea=2000, filter=4, cThr=[60, 60], draw=False)
 
-
-
     imgContours3, fContours3 = defs.Square.getContours(imgWarp_copy, show=True, showCenterWS=False, findAngle=False, minArea=2000, filter=4, cThr=[60, 60], draw=False)
 
 

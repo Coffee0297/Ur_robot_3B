@@ -88,6 +88,7 @@ class Contours:
         yList = []
         # loop through contours
         for i in contours:
+
             area = cv.contourArea(i)
             #print('contour(i)  ',contours[0] )
             print('Contour found:  Area =', area)

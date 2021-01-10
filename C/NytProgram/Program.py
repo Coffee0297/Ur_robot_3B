@@ -17,10 +17,12 @@ def blah():
     scale = 3   # scale to make image bigger
     wWorkspace = 200 *scale
     hWorkspace = 200 *scale
+    w_Klods = 200 * scale
+    h_Klods = 600
 
     #-------------------------------------
     defs.Capture.takePicture(cam)
-    img = cv.imread('image_20.png')
+    img = cv.imread('image_0.png')
     #-------------------------------------
 
 
@@ -43,14 +45,15 @@ def blah():
         imgWarp = defs.Contours.warpImg(img, myPoints, wWorkspace, hWorkspace,show=False)
         print('imgWarp.size: ', imgWarp.size)
         print('imgWarp.size/3: ', imgWarp.size/3,'\n')
+        # ------ Warp image of object -----------------NY -------------------------------
+        imgWarp_copy = imgWarp.copy()
 
-        # # ------ Warp image of object -----------------NY -------------------------------
-        # imgWarp_copy = imgWarp.copy()
-        #
-        # imgContours2, fContours2 = defs.Square.getContours(imgWarp, show=True, showCenterWS=True, findAngle=True,
-        #                                                    minArea=2000, filter=4, cThr=[60, 60], draw=False)
-        #
-        # # -------------------------------------------------------------------------------
+        erodWarp = defs.Processing.filters(imgWarp_copy, cThr=[150, 60], show=True)
+        fContours3 = defs.Contours.get_contours(erodWarp, show=False)
+
+
+
+        # -------------------------------------------------------------------------------
 
         #------- Image Processing on warped image ----------------------
         erod = defs.Processing.filters(imgWarp, cThr=[150, 60], show=True)
@@ -60,11 +63,22 @@ def blah():
         contours2 = defs.Contours.get_contours(erod, show=False)
         print('\nFind next contour - minArea=2000')
         imgContours2,fContours2,x,y = defs.Contours.find_contour(imgWarp, contours2, minArea=2000, filter=4, draw=False)
+
+        farve_liste = []
         print('x list. ',x)
         print('y list. ', y)
         #--------- Find width and height --------------------------------
         if len(fContours) != 0:
             for obj in fContours2:
+                klods1 = fContours3[0][2]
+                warpPoints = defs.Contours.reorder(obj[2])  # reorder points
+                print("KLODS_1: ", klods1)
+                imgWarped = defs.Contours.warpImg(imgWarp_copy, warpPoints, w_Klods, h_Klods, show=True)
+
+                farve = imgWarped[0][2]
+                farve_liste.append(farve)
+                print('Farve liste',farve_liste)
+
                 cv.polylines(imgContours2,[obj[2]], True, (0,255,0),2)  # green full lines
                 nPoints = defs.Contours.reorder(obj[2])    # reorder points
                 print('nPoints reordered: \n ', nPoints)
