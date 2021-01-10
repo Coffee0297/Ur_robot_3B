@@ -116,11 +116,6 @@ class Square:
                 print('cY: ', cY)
 
 
-            # define placement of circle and text on image
-            if showCenterWS:
-                cv.circle(img, (x, y), 5, (0, 0, 0), -1)    # output centerpoint as a dot
-                cv.putText(img, str([cX, cY]), (x - 50, y - 35), cv.FONT_HERSHEY_COMPLEX_SMALL, 1, (0, 0, 0), 1) # outputs koordinates i mm
-
         finalContours = sorted(finalContours, key=lambda x: x[1], reverse=True)     # src, len(approx):area, descending order
 
         # 'draw' contour-points that we get from findCountour-function

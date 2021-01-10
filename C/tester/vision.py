@@ -7,19 +7,22 @@ from __future__ import print_function
 import numpy as np
 import cv2 as cv
 #-------------------------------------------------------
-# Vinduesnavn
-cv.namedWindow('Tracking', cv.WINDOW_NORMAL)
-#cap = cv.VideoCapture(0)
-cap = cv.imread("image_0.png")
 # Her defineres tekst størrelse til den skrevet rotation i hjørnet
 font = cv.FONT_HERSHEY_SIMPLEX
 fontScale = .5
 lineType = 1
-# Her defineres tekst størrelse til den røde klods
+# Her defineres tekst størrelse til den røde firkant
 red_font = cv.FONT_HERSHEY_SIMPLEX
 red_fontColor = (0, 0, 255)
 red_fontScale = .5
 red_lineType = 2
+
+
+# Vinduesnavn
+cv.namedWindow('Tracking', cv.WINDOW_NORMAL)
+#cap = cv.VideoCapture(0)
+cap = cv.imread("image_0.png")
+
 
 class Hsv:
     print('Object Created...')
@@ -32,17 +35,17 @@ class Hsv:
         self.hv = hv
 
 
-class Color(Hsv):
+class Trackbar(Hsv):
 
     def create(self):
         print('Creating Trackbar...')
         print('Move trackbar to adjust HSV values...')
-        cv.createTrackbar('Low_H', 'Tracking', self.lh,180, Color.on_trackbar)
-        cv.createTrackbar("Low_S", "Tracking", self.ls, 255, Color.on_trackbar)
-        cv.createTrackbar("Low_V", "Tracking", self.lv, 255, Color.on_trackbar)
-        cv.createTrackbar("High_H", "Tracking", self.hh, 180, Color.on_trackbar)
-        cv.createTrackbar("High_S", "Tracking", self.hs, 255, Color.on_trackbar)
-        cv.createTrackbar("High_V", "Tracking", self.hv, 255, Color.on_trackbar)
+        cv.createTrackbar('Low_H', 'Tracking', self.lh, 180, Trackbar.on_trackbar)
+        cv.createTrackbar("Low_S", "Tracking", self.ls, 255, Trackbar.on_trackbar)
+        cv.createTrackbar("Low_V", "Tracking", self.lv, 255, Trackbar.on_trackbar)
+        cv.createTrackbar("High_H", "Tracking", self.hh, 180, Trackbar.on_trackbar)
+        cv.createTrackbar("High_S", "Tracking", self.hs, 255, Trackbar.on_trackbar)
+        cv.createTrackbar("High_V", "Tracking", self.hv, 255, Trackbar.on_trackbar)
         return self
 
     def on_trackbar(self):
@@ -96,9 +99,9 @@ class Color(Hsv):
 
         for j in range(len(blue_contours)):
             if blue_contours[j].size > 300:
-                pass
+                Color.blue_color(self)
 
-
+class Color:
     def red_color(self):
         print('Color is red')
 
@@ -128,13 +131,13 @@ class Red:
 
 redDefault = Hsv(0,18,30,16,255,87)
 # greenDefault = Hsv(53,74,66,96,225,185)
-# blueDefault = Hsv(89,148,64,166,214,143)
+blueDefault = Hsv(89,148,64,166,214,143)
 # yellowDefault = Hsv(0,158,109,31,255,255)
-#q
+red1 = Trackbar.create(redDefault)
 red1 = Color.red_color(redDefault)
-red1 = Color.create(redDefault)
+
 # green1 = Color.create(greenDefault)
-# blue1 = Color.create(blueDefault)
+blue1 = Trackbar.create(blueDefault)
 # yellow11 = Color.create(yellowDefault)
 
 # default = Hsv(0,0,0,0,0,0)
@@ -157,6 +160,6 @@ while True:
 
         break
 
-print(Color.print_value(redDefault))  # debugging
+print(Trackbar.print_value(redDefault))  # debugging
 
 

@@ -23,6 +23,11 @@ class Capture:
                 print("Escape hit, closing...\n")
                 break
 
+            if k % 256 == 27:       # wait for T key to exit
+                # T pressed
+                print("Use Trackbar to find HSV-values, press return to finish...\n")
+
+
             elif k % 256 == 32:     # wait for SPACE key to exit
                 # SPACE pressed
                 img_name = "image_{}.png".format(img_counter)
@@ -71,7 +76,7 @@ class Contours:
             print('Contours: ', contours)
         return contours
 # ----------------------------------------------------------------------------------------------------------------------
-    def find_contour(self, contours,  minArea=2000, filter=0, draw=False):
+    def find_contour(self, contours,  minArea=2000, filter=0, draw=False, showCenterWS=True):
         print('------ Contour -> Function find_contour ------\nFinding Contours.....')
         finalContours = []  # creating list
         # loop through contours
@@ -93,6 +98,19 @@ class Contours:
                         finalContours.append([len(approx), area, approx, bbox, i])
                 else:
                     print('No contour is added to the list "finalContours"')
+
+                # calculate x,y coordinates of objects centerpoint
+                M = cv.moments(approx)
+                x = int(M["m10"] / M["m00"])  # center in pixels on x-axis
+                cX = round(x / 2.8, 5)  # center in millimeter on x-axis - måske?
+                print('X: ', x)
+                print('cX: ', cX)
+
+                y = int(M["m01"] / M["m00"])  # center in pixels on y-axis
+                cY = round(y / 2.8, 5)  # center in millimeter on y-axis - måske?
+                print('Y: ', y)
+                print('cY: ', cY)
+
 
         finalContours = sorted(finalContours, key=lambda x: x[1],reverse=True)  # src, len(approx):area, descenting order
 
@@ -135,25 +153,25 @@ class Contours:
         print('myPointsNew[3]: ', myPointsNew[3])
         return myPointsNew
 # ----------------------------------------------------------------------------------------------------------------------
-    def draw_contours(self, finalContours, showCenterWS=False):
-        for con in finalContours:
-            cv.drawContours(self,con[4],-1,(0,0,255),3) # dottet red lines, thickness = 3
+#     def draw_contours(self, finalContours, aprox):
+        # for con in finalContours:
+        #     cv.drawContours(self,con[4],-1,(0,0,255),3) # dottet red lines, thickness = 3
 
-        M = cv.moments(approx)
-        x = int(M["m10"] / M["m00"])  # center in pixels on x-axis
-        cX = round(x // 3, 0)  # center in millimeter on x-axis - måske?
-        print('Centerpoint X: ', cX)
-
-        y = int(M["m01"] / M["m00"])  # center in pixels on y-axis
-        cY = round(y // 3, 0)  # center in millimeter on y-axis - måske?
-        print('Centerpoint Y: ', cY)
-
-        #define placement of circle and text on image
-        if showCenterWS:
-            cv.circle(self, (x, y), 5, (0, 0, 0), -1)  # output centerpoint as a dot
-            cv.putText(self, str([cX, cY]), (x - 50, y - 35), cv.FONT_HERSHEY_COMPLEX_SMALL, 1, (0, 0, 0),1) #outputs koordinates i mm
-
-        return self
+        # M = cv.moments(approx)
+        # x = int(M["m10"] / M["m00"])  # center in pixels on x-axis
+        # cX = round(x // 3, 0)  # center in millimeter on x-axis - måske?
+        # print('Centerpoint X: ', cX)
+        #
+        # y = int(M["m01"] / M["m00"])  # center in pixels on y-axis
+        # cY = round(y // 3, 0)  # center in millimeter on y-axis - måske?
+        # print('Centerpoint Y: ', cY)
+        #
+        # #define placement of circle and text on image
+        # if showCenterWS:
+        #     cv.circle(self, (x, y), 5, (0, 0, 0), -1)  # output centerpoint as a dot
+        #     cv.putText(self, str([cX, cY]), (x - 50, y - 35), cv.FONT_HERSHEY_COMPLEX_SMALL, 1, (0, 0, 0),1) #outputs koordinates i mm
+        #
+        # return self
 # ----------------------------------------------------------------------------------------------------------------------
     def findDis(pts1, pts2):
         print('\n------ class Square -> Function finDis ------\n')
