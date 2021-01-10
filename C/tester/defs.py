@@ -106,12 +106,14 @@ class Contours:
                 centerXMeters = cX / 1000       # center in meter on x-axis
                 print('X: ', x)
                 print('cX: ', cX)
+                print('centerXMeters: ', centerXMeters)
 
                 y = int(M["m01"] / M["m00"])    # center in pixels on y-axis
                 cY = round(y / 2.8, 5)          # center in millimeter on y-axis
                 centerYMeters = cY / 1000       # center in meter on y-axis
                 print('Y: ', y)
                 print('cY: ', cY)
+                print('centerYMeters: ', centerYMeters)
 
 
         finalContours = sorted(finalContours, key=lambda x: x[1],reverse=True)  # src, len(approx):area, descenting order
@@ -125,21 +127,25 @@ class Contours:
 # ----------------------------------------------------------------------------------------------------------------------
     def find_angle(self, contours2):
         # get rotational angle of objects in workspace
-        for i in contours2:
-            area = cv.contourArea(i)
+        #for i in contours2:
+            #area = cv.contourArea(i)
             for l in range(len(contours2)):
                 if contours2[l].size > 50:
                     cnt = contours2[l]
-                    rect = cv.minAreaRect(cnt)
+                    degrees = cv.minAreaRect(cnt)
+                    radians = ((degrees[-1]) * 3.14) / 180
 
-                    print('contours[l].size: ', contours2[l].size)
-                    print('rect: ', rect[-1])
 
-                    cv.putText(self, str(rect[-1]), (10, 60 + (l * 20)), cv.FONT_HERSHEY_COMPLEX_SMALL, 1, (0, 0, 255),1)
+                    print('-----------------------------')
 
-                    Box = cv.boxPoints(rect)
+                    print('Degrees: ', degrees[-1])
+                    print('Radians: ', radians)
+
+                    cv.putText(self, str(degrees[-1]), (10, 60 + (l * 20)), cv.FONT_HERSHEY_COMPLEX_SMALL, 1, (0, 0, 255),1)
+
+                    Box = cv.boxPoints(degrees)
                     Box = np.int0(Box)
-
+                    #print('b: ', Box)
                     cv.drawContours(self, [Box], 0, (255, 255, 0), 1)
 # ----------------------------------------------------------------------------------------------------------------------
     def warpImg(self, points, w, h, pad=20, show=False):
