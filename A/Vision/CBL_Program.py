@@ -43,14 +43,13 @@ if len(fContours) != 0:
     print("GAMMELWARP",imgWarp)
     print(imgWarp.size/3)
 
-
-
+    imgWarp_copy = imgWarp.copy()
 
     imgContours2, fContours2 = defs.Square.getContours(imgWarp, show=True, showCenterWS=True, findAngle=True, minArea=2000, filter=4, cThr=[60, 60], draw=False)
 
 
-    imgWarp_copy = imgWarp.copy()
-    imgContours3, fContours3 = defs.Square.getContours(imgWarp_copy, show=True, showCenterWS=False, findAngle=False, minArea=2000, filter=4, cThr=[60, 60], draw=True)
+
+    imgContours3, fContours3 = defs.Square.getContours(imgWarp_copy, show=True, showCenterWS=False, findAngle=False, minArea=2000, filter=4, cThr=[60, 60], draw=False)
 
 
 
@@ -59,9 +58,9 @@ if len(fContours) != 0:
 
         # Hver klods på billedet gemmes i en klods-variabel
         for obj in fContours2:
-            klods1 = fContours2[0][2]
-            klods2 = fContours2[1][2]
-            klods3 = fContours2[2][2]
+            klods1 = fContours3[0][2]
+            klods2 = fContours3[1][2]
+            klods3 = fContours3[2][2]
             print("KLODS_1: ", klods1)
             print("KLODS_2: ", klods2)
             print("KLODS_3: ", klods3)
@@ -81,9 +80,9 @@ if len(fContours) != 0:
             farve3 = ny_imgWarp3[0][2]
 
 
-            print("FARVE KLODS 1 BGR: ", farve1[0])
-            print("FARVE KLODS 2 BGR: ", farve2[0])
-            print("FARVE KLODS 3 BGR: ", farve3[0])
+            print("FARVE KLODS 1 BGR: ", farve1)
+            print("FARVE KLODS 2 BGR: ", farve2)
+            print("FARVE KLODS 3 BGR: ", farve3)
 
             # Hver detekteret colorchannel puttes i listen farve_liste
             farve_liste.append(farve1)
@@ -115,7 +114,7 @@ if len(fContours) != 0:
 
             print('\nWidth: ', nW, '\nHight: ', nH)
 
-    print("FARVELISTE LÆNGDE",len(farve_liste))
+    print("FARVELISTE ANTAL AF FARVER",len(farve_liste)//3)
     print("FARVELISTE", farve_liste)
 
     # Der tælles op i farvelisten og farven printes
