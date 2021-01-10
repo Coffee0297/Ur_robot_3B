@@ -96,7 +96,7 @@ class Contours:
                         finalContours.insert(0,[len(approx), area, approx, bbox, i])
                         print("{}".format(filter),' cornerpoints detected....')
                     else:
-                        print('Shape with '"{}".format(len(approx)),'corners, is added to th list "finalContours"')
+                        print('Shape with '"{}".format(filter),'corners, is added to th list "finalContours"')
                         finalContours.insert(0,[len(approx), area, approx, bbox, i])
                 else:
                     print('No contour is added to the list "finalContours"')

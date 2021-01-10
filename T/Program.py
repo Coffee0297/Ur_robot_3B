@@ -12,11 +12,11 @@ def main():
     scale = 3   # scale to make image bigger
     wWorkspace = 200 *scale
     hWorkspace = 200 *scale
-    w_Klods = 600
-    h_Klods = 600
+    w_Klods = 500
+    h_Klods = 500
 
     #-------------------------------------
-    defs.Capture.takePicture(cam)
+    #defs.Capture.takePicture(cam)
     img = cv.imread('image_0.png')
     #-------------------------------------
 
