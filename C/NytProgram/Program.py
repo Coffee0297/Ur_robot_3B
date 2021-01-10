@@ -81,7 +81,7 @@ def blah():
                 cv.putText(imgContours2, '{}mm'.format(nW), (x_ + 30, y_ - 10), cv.FONT_HERSHEY_COMPLEX_SMALL, 1,(255,0,255), 1)
                 cv.putText(imgContours2, '{}mm'.format(nH), (x_ - 70, y_ + h // 2), cv.FONT_HERSHEY_COMPLEX_SMALL, 1,(255, 0, 255), 1)
 
-
+                cv.imshow("imgContours2/Warped", imgContours2)
                 print('\nWidth: ', nW, '\nHight: ', nH )#, '\nHight: ', {self.height})
 
         # --------- Find Centerpoint -------------------------
@@ -90,11 +90,16 @@ def blah():
         # --------- Find Angle -------------------------
         rad = (defs.Contours.find_angle(imgContours2, contours2))
         print('angle list. ', rad)
+
+    else:
+        rad = []
+        x = []
+        y = []
     # -------------------------------------------
     # lav string til robot... returner sidste element fra listerne istedet for hele listen??
     # b'movej(p[-0.02703978368688221, -0.41162562152534876, 0.3339006287927195, 1.6443410877739137, -2.4824781895547496, 0.8022008840211984])'+ b'\n', # Home
     # -------------------------------------------
-    cv.imshow("imgContours2/Warped", imgContours2)
+
     cv.waitKey(0)
     cam.release()
     cv.destroyAllWindows()

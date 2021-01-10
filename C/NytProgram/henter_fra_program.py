@@ -5,12 +5,17 @@ x = []
 y = []
 rad = []
 
+rad, x, y = Program.blah()
+
+print('Radianer: ',rad)
+print('X Coordinat i centerpunkt: ',x)
+print('Y coordinat i centerpunkt: ',y)
 
 rad, x, y = Program.blah()
 
-print('hurraaaaaaaaaaaaa',rad)
-print('hurraaaaaaaaaaaaa',x)
-print('hurraaaaaaaaaaaaa',y)
+print('Radianer: ',rad)
+print('X Coordinat i centerpunkt: ',x)
+print('Y coordinat i centerpunkt: ',y)
 
 
 
