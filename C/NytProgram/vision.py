@@ -35,9 +35,13 @@ class Trackbar(Hsv):
         cv.createTrackbar("High_H", "Tracking", self.hh, 180, Trackbar.on_trackbar)
         cv.createTrackbar("High_S", "Tracking", self.hs, 255, Trackbar.on_trackbar)
         cv.createTrackbar("High_V", "Tracking", self.hv, 255, Trackbar.on_trackbar)
-        print('Press q to exit')
 
-        cv.waitKey(0)
+        print('Press esc to exit')
+        while True:
+            key = cv.waitKey(30)
+
+            if key == ord('q') or key == 27:
+                break
 
         return self
 
@@ -50,7 +54,7 @@ class Trackbar(Hsv):
         hs = cv.getTrackbarPos("High_S", "Tracking")
         hv = cv.getTrackbarPos("High_V", "Tracking")
 
-        cap = cv.imread("image_100.png")
+        cap = cv.imread("image_0.png")
         #ret, frame = cap.read()
         frame = cap
         frame_HSV = cv.cvtColor(frame, cv.COLOR_BGR2HSV)
@@ -63,9 +67,7 @@ class Trackbar(Hsv):
         frame_threshold = (red_frame_threshold + green_frame_threshold + blue_frame_threshold)
         cv.imshow('Frame Threshhold', frame_threshold)
 
-        print('Press q to exit')
-
-        cv.waitKey(0)
+        print('Press exit exit')
 
         return self, lh, ls, lv, hh, hs, hv
 
@@ -124,16 +126,14 @@ class Red:
 
 # default = Hsv(0, 0, 0, 0, 0, 0)
 #greenDefault = Hsv(53, 74, 66, 96, 225, 185)
-# redDefault = Hsv(0, 18, 30, 16, 255, 87)
-# yellowDefault = Hsv(0, 158, 109, 31, 255, 255)
+redDefault = Hsv(0, 18, 30, 16, 255, 87)
+#yellowDefault = Hsv(0, 158, 109, 31, 255, 255)
 # blueDefault = Hsv(89, 148, 64, 166, 214, 143)
-#track = Trackbar.create(greenDefault)
 
-# while True:
-#     key = cv.waitKey(30)
-#
-#     if key == ord('q') or key == 27:
-#         break
+track = Trackbar.create(redDefault)
 
+cv.waitKey(0)
+#cam.release()
+cv.destroyAllWindows()
 
 
