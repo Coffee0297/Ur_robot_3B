@@ -1,4 +1,4 @@
-import HsvProgram ##########
+import HsvProgram
 import cv2 as cv
 
 def colors(run=False):

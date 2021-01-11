@@ -1,5 +1,4 @@
 import ur
-import cv2 as cv
 import socket
 import Gripper
 import VisionProgram

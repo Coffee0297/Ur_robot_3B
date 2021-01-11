@@ -2,8 +2,6 @@
 # Class names staret med stort
 # methods_like_this (alt er småt)
 # objectsLikeThis (starter med småt)
-from __future__ import print_function
-#import defs
 import numpy as np
 import cv2 as cv
 #---------------------------------------------------------------------------------------------------------------------

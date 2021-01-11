@@ -1,8 +1,6 @@
 # ACT
 import cv2 as cv
-import numpy as np
 import Functions
-import threading
 import ColorDetection
 
 def main():
