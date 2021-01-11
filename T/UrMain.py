@@ -2,7 +2,7 @@ import ur
 import cv2 as cv
 import socket
 import Gripper
-import Program
+import VisionProgram
 import time
 
 # Made by TLM
@@ -19,7 +19,7 @@ def connect():
 
 
 def return_klods():
-    rad, x, y, fave = Program.main()
+    rad, x, y, fave = VisionProgram.main()
     Ys = str(y[-1] + y_workspace_offset)
     Yb = bytes(Ys, encoding='utf8')
 

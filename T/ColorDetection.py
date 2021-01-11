@@ -1,4 +1,4 @@
-import vision ##########
+import HsvProgram ##########
 import cv2 as cv
 
 def colors(run=False):
@@ -7,49 +7,49 @@ def colors(run=False):
     #cv.imshow('Original image Resized', imageFrame)
     hsvFrame = cv.cvtColor(imageFrame, cv.COLOR_BGR2HSV)
 
-    default = vision.Hsv(0, 0, 0, 0, 0, 0)
-    greenDefault = vision.Hsv(53,74,66,96,225,185)
-    redDefault = vision.Hsv(0,18,30,16,255,87)
-    yellowDefault = vision.Hsv(0,158,109,31,255,255)
-    blueDefault = vision.Hsv(89, 148, 64, 166, 214, 143)
+    default = HsvProgram.Hsv(0, 0, 0, 0, 0, 0)
+    greenDefault = HsvProgram.Hsv(53, 74, 66, 96, 225, 185)
+    redDefault = HsvProgram.Hsv(0, 18, 30, 16, 255, 87)
+    yellowDefault = HsvProgram.Hsv(0, 158, 109, 31, 255, 255)
+    blueDefault = HsvProgram.Hsv(89, 148, 64, 166, 214, 143)
 
-    thresh = vision.Colordetect.detect_color(redDefault,hsvFrame)
+    thresh = HsvProgram.Colordetect.detect_color(redDefault, hsvFrame)
     #print('...Default color(hvid)')
     while run:
 
         if thresh[0][2]==0:
             #print('...ikke rød')
-            thresh = vision.Colordetect.detect_color(blueDefault, hsvFrame)
+            thresh = HsvProgram.Colordetect.detect_color(blueDefault, hsvFrame)
         else:
-            col = vision.Color.red_color()
+            col = HsvProgram.Color.red_color()
             break
 #-----------------------------------------------------------------------------------
         if thresh[0][2] == 0:
             #print('...ikke blå')
-            thresh = vision.Colordetect.detect_color(yellowDefault,hsvFrame)
+            thresh = HsvProgram.Colordetect.detect_color(yellowDefault, hsvFrame)
         else:
-            col = vision.Color.blue_color()
+            col = HsvProgram.Color.blue_color()
             break
 # -----------------------------------------------------------------------------------
         if thresh[0][2] == 0:
             #print('...ikke gul')
-            thresh = vision.Colordetect.detect_color(greenDefault, hsvFrame)
+            thresh = HsvProgram.Colordetect.detect_color(greenDefault, hsvFrame)
 
         else:
-            col = vision.Color.yellow_color()
+            col = HsvProgram.Color.yellow_color()
             break
 # -----------------------------------------------------------------------------------
         if thresh[0][2]==0:
             #print('...ikke grøn')
-            thresh = vision.Colordetect.detect_color(yellowDefault,hsvFrame)
+            thresh = HsvProgram.Colordetect.detect_color(yellowDefault, hsvFrame)
         else:
-            col =vision.Color.green_color()
+            col =HsvProgram.Color.green_color()
             break
 # -----------------------------------------------------------------------------------
 
         if thresh[0][2] != 0:
             testingColor = False
-            vision.Color.no_color_detected()
+            HsvProgram.Color.no_color_detected()
     return col
 
 # print('Press q to exit')

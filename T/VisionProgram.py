@@ -1,9 +1,9 @@
 # ACT
 import cv2 as cv
 import numpy as np
-import defs
+import Functions
 import threading
-import color_program
+import ColorDetection
 
 def main():
     cam = cv.VideoCapture(0)
@@ -22,40 +22,40 @@ def main():
     # -------------------------------------
 
     # --------- Image Processing ------------------------------------
-    erod = defs.Processing.filters(img, cThr=[150, 175], show=False)
+    erod = Functions.Processing.filters(img, cThr=[150, 175], show=False)
     # print('Done processing')
     # ---------------------------------------------------------------
 
-    contours = defs.Contours.get_contours(erod, show=False)
+    contours = Functions.Contours.get_contours(erod, show=False)
     # print('\nFinding biggest contour - minArea=50000')
-    imgContours, fContours, x, y = defs.Contours.find_contour(img, contours, minArea=50000, filter=4)
+    imgContours, fContours, x, y = Functions.Contours.find_contour(img, contours, minArea=50000, filter=4)
 
     if len(fContours) != 0:
         biggestContour = fContours[0][
             2]  # takes 1. and 3. parameter in finalContours-->([len(approx), area, approx, bbox, i])
         # print('go to reorder')
-        myPoints = defs.Contours.reorder(biggestContour)
+        myPoints = Functions.Contours.reorder(biggestContour)
         # print('Finding biggest contour Done')
 
         # ------ Warp image to define workspace -----------------------------------------
-        imgWarp = defs.Contours.warpImg(img, myPoints, wWorkspace, hWorkspace, show=False)
+        imgWarp = Functions.Contours.warpImg(img, myPoints, wWorkspace, hWorkspace, show=False)
         # print('imgWarp.size: ', imgWarp.size)
         # print('imgWarp.size/3: ', imgWarp.size/3,'\n')
         # ------ Warp image of object -----------------NY -------------------------------
         imgWarp_copy = imgWarp.copy()
 
-        erodWarp = defs.Processing.filters(imgWarp_copy, cThr=[150, 60], show=False)
-        fContours3 = defs.Contours.get_contours(erodWarp, show=False)
+        erodWarp = Functions.Processing.filters(imgWarp_copy, cThr=[150, 60], show=False)
+        fContours3 = Functions.Contours.get_contours(erodWarp, show=False)
 
         # ------- Image Processing on warped image ----------------------
-        erod = defs.Processing.filters(imgWarp, cThr=[150, 60], show=False)
+        erod = Functions.Processing.filters(imgWarp, cThr=[150, 60], show=False)
         # cv.imshow("imgContours2/Warped", imgWarp)
         # --------------------------------------------------------------
 
-        contours2 = defs.Contours.get_contours(erod, show=False)
+        contours2 = Functions.Contours.get_contours(erod, show=False)
         # print('\nFind next contour - minArea=2000')
-        imgContours2, fContours2, x, y = defs.Contours.find_contour(imgWarp, contours2, minArea=2000, filter=4,
-                                                                    draw=False)
+        imgContours2, fContours2, x, y = Functions.Contours.find_contour(imgWarp, contours2, minArea=2000, filter=4,
+                                                                         draw=False)
 
         farve_liste = []
         # print('x list. ',x)
@@ -64,9 +64,9 @@ def main():
         if len(fContours) != 0:
             for obj in fContours2:
                 klods1 = fContours3[0][2]
-                warpPoints = defs.Contours.reorder(obj[2])  # reorder points
+                warpPoints = Functions.Contours.reorder(obj[2])  # reorder points
                 # print("KLODS_1: ", klods1)
-                imgWarped = defs.Contours.warpImg(imgWarp_copy, warpPoints, w_Klods, h_Klods, show=False)
+                imgWarped = Functions.Contours.warpImg(imgWarp_copy, warpPoints, w_Klods, h_Klods, show=False)
                 cv.imwrite('image_100.png', imgWarped)
 
                 farve = imgWarped[0][2]
@@ -74,13 +74,13 @@ def main():
                 # print('Farve liste',farve_liste)
 
                 cv.polylines(imgContours2, [obj[2]], True, (0, 255, 0), 2)  # green full lines
-                nPoints = defs.Contours.reorder(obj[2])  # reorder points
+                nPoints = Functions.Contours.reorder(obj[2])  # reorder points
                 #  print('nPoints reordered: \n ', nPoints)
 
                 # function call to find distance (hight and width of object)
-                nW = round(defs.Contours.findDis(nPoints[0][0] // scale, nPoints[1][0] // scale),
+                nW = round(Functions.Contours.findDis(nPoints[0][0] // scale, nPoints[1][0] // scale),
                            1)  # find width of obj, (number of pixels divided by scale-value)
-                nH = round(defs.Contours.findDis(nPoints[0][0] // scale, nPoints[2][0] // scale),
+                nH = round(Functions.Contours.findDis(nPoints[0][0] // scale, nPoints[2][0] // scale),
                            1)  # find height of obj in millimeters, round to 1 decimal
 
                 cv.arrowedLine(imgContours2, (nPoints[0][0][0], nPoints[0][0][1]), (nPoints[1][0][0], nPoints[1][0][1]),
@@ -100,7 +100,7 @@ def main():
         #    defs.Contours.draw_contours(imgContours2,contours2, showCenterWS=True)
 
         # --------- Find Angle -------------------------
-        rad = (defs.Contours.find_angle(imgContours2, contours2))
+        rad = (Functions.Contours.find_angle(imgContours2, contours2))
         # print('angle list. ', rad)
 
     else:
@@ -113,7 +113,7 @@ def main():
     # b'movej(p[-0.02703978368688221, -0.41162562152534876, 0.3339006287927195, 1.6443410877739137, -2.4824781895547496, 0.8022008840211984])'+ b'\n', # Home
     # -------------------------------------------
 
-    colorIndex = color_program.colors(run=True)
+    colorIndex = ColorDetection.colors(run=True)
 
     cv.waitKey(0)
     cam.release()
