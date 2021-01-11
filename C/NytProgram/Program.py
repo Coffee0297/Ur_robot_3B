@@ -2,7 +2,7 @@
 import cv2 as cv
 import numpy as np
 import defs
-#import color_program
+import color_program
 
 def main():
     cam = cv.VideoCapture(0)
@@ -64,7 +64,7 @@ def main():
                 warpPoints = defs.Contours.reorder(obj[2])  # reorder points
                 print("KLODS_1: ", klods1)
                 imgWarped = defs.Contours.warpImg(imgWarp_copy, warpPoints, w_Klods, h_Klods, show=True)
-                cv.imwrite(r'C:\Users\Carin\Documents\GitHub\Ur_robot_3B\C\ods\image_13.png',imgWarped)
+                cv.imwrite('image_100.png',imgWarped)
 
 
                 farve = imgWarped[0][2]
@@ -112,9 +112,7 @@ def main():
 
     # gå til robot
     print('program kørt')
-    #
-    # color_program(testingColor=True)
-    #
+
     return rad, x, y
 
 #thread.start()

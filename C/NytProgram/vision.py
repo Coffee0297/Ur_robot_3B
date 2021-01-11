@@ -7,12 +7,11 @@ from __future__ import print_function
 import numpy as np
 import cv2 as cv
 #---------------------------------------------------------------------------------------------------------------------
-cv.namedWindow('Tracking', cv.WINDOW_NORMAL)
+#cv.namedWindow('Tracking', cv.WINDOW_NORMAL)
 #cap = cv.VideoCapture(0)
 #---------------------------------------------------------------------------------------------------------------------
-cap = cv.imread("image_0.png")
+#cap = cv.imread("image_0.png")
 #---------------------------------------------------------------------------------------------------------------------
-kernel = np.ones((5, 5), "uint8")
 
 class Hsv:
     print('Object Created...')
@@ -48,6 +47,7 @@ class Trackbar(Hsv):
         hs = cv.getTrackbarPos("High_S", "Tracking")
         hv = cv.getTrackbarPos("High_V", "Tracking")
 
+
         #ret, frame = cap.read()
         frame = cap
         frame_HSV = cv.cvtColor(frame, cv.COLOR_BGR2HSV)
@@ -60,31 +60,53 @@ class Trackbar(Hsv):
         frame_threshold = (red_frame_threshold + green_frame_threshold + blue_frame_threshold)
         cv.imshow('Frame Threshhold', frame_threshold)
 
+        print('Press q to exit')
+        while True:
+            key = cv.waitKey(30)
+
+            if key == ord('q') or key == 27:
+                break
+
         return self, lh, ls, lv, hh, hs, hv
 
 class Colordetect:
     def detect_color(self, hsvFrame):
         print('Detecting color...')
-
+        kernel = np.ones((5, 5), "uint8")
         threshold = cv.inRange(hsvFrame, (self.lh, self.ls, self.lv), (self.hh, self.hs, self.hv))
         threshold = cv.dilate(threshold, kernel)
 
         cv.imshow('1---mask dilate', threshold)
-
         return threshold
 
 class Color:
-    def red_color(self):
-        print('Color is red')
 
-    def green_color(self):
-        print('Color is green')
+    def red_color():
+        print('*** Color is red ***')
+        col = 1
+        print('print rød fra vision', col,'\n')
+        return col
 
-    def blue_color(self):
-        print('Color is blue')
+    def green_color():
+        print('*** Color is green ***')
+        col = 2
+        print('print rød fra vision', col,'\n')
+        return col
 
-    def yellow_color(self):
-        print('Color is yellow')
+    def blue_color():
+        print('*** Color is blue ***')
+        col = 3
+        print('print blå fra vision',col,'\n')
+        return col
+
+    def yellow_color():
+        print('*** Color is yellow ***')
+        col = 4
+        print('print gul fra vision',col,'\n')
+        return col
+
+
+
 
     def no_color_detected(self):
         print('NO COLOR DETECTED')
@@ -101,14 +123,9 @@ class Color:
 class Red:
     pass
 
-default = Hsv(0,0,0,0,0,0)
-gr = Trackbar.create(default)
-print('Press q to exit')
-while True:
-    key = cv.waitKey(30)
+# default = Hsv(0,0,0,0,0,0)
+# gr = Trackbar.create(default)
 
-    if key == ord('q') or key == 27:
-        break
 
 
 
