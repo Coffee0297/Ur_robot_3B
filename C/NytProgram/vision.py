@@ -24,9 +24,9 @@ class Hsv:
         self.hv = hv
 
 class Trackbar(Hsv):
-    cv.namedWindow('Tracking', cv.WINDOW_NORMAL)
-    def create(self):
 
+    def create(self):
+        cv.namedWindow('Tracking', cv.WINDOW_NORMAL)
         print('Creating Trackbar...')
         print('Move trackbar to adjust HSV values...')
         cv.createTrackbar('Low_H', 'Tracking', self.lh, 180, Trackbar.on_trackbar)
@@ -35,6 +35,9 @@ class Trackbar(Hsv):
         cv.createTrackbar("High_H", "Tracking", self.hh, 180, Trackbar.on_trackbar)
         cv.createTrackbar("High_S", "Tracking", self.hs, 255, Trackbar.on_trackbar)
         cv.createTrackbar("High_V", "Tracking", self.hv, 255, Trackbar.on_trackbar)
+        print('Press q to exit')
+
+        cv.waitKey(0)
 
         return self
 
@@ -47,7 +50,7 @@ class Trackbar(Hsv):
         hs = cv.getTrackbarPos("High_S", "Tracking")
         hv = cv.getTrackbarPos("High_V", "Tracking")
 
-
+        cap = cv.imread("image_100.png")
         #ret, frame = cap.read()
         frame = cap
         frame_HSV = cv.cvtColor(frame, cv.COLOR_BGR2HSV)
@@ -61,11 +64,8 @@ class Trackbar(Hsv):
         cv.imshow('Frame Threshhold', frame_threshold)
 
         print('Press q to exit')
-        while True:
-            key = cv.waitKey(30)
 
-            if key == ord('q') or key == 27:
-                break
+        cv.waitKey(0)
 
         return self, lh, ls, lv, hh, hs, hv
 
@@ -105,11 +105,9 @@ class Color:
         print('print gul fra vision',col,'\n')
         return col
 
-
-
-
     def no_color_detected(self):
         print('NO COLOR DETECTED')
+
 
     def print_value(self):    # til debugging
         print('HSV values')
@@ -123,11 +121,19 @@ class Color:
 class Red:
     pass
 
-# default = Hsv(0,0,0,0,0,0)
-# gr = Trackbar.create(default)
 
+# default = Hsv(0, 0, 0, 0, 0, 0)
+#greenDefault = Hsv(53, 74, 66, 96, 225, 185)
+# redDefault = Hsv(0, 18, 30, 16, 255, 87)
+# yellowDefault = Hsv(0, 158, 109, 31, 255, 255)
+# blueDefault = Hsv(89, 148, 64, 166, 214, 143)
+#track = Trackbar.create(greenDefault)
 
-
+# while True:
+#     key = cv.waitKey(30)
+#
+#     if key == ord('q') or key == 27:
+#         break
 
 
 

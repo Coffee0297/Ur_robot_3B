@@ -8,7 +8,6 @@ rad = []
 rad, x, y = Program.main()
 
 colorIndex = []
-
 colorIndex = color_program.colors(test=True)
 print('Her printes fra robotprogram: ',colorIndex)
 
