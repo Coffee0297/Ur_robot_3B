@@ -7,22 +7,11 @@ from __future__ import print_function
 import numpy as np
 import cv2 as cv
 #-------------------------------------------------------
-# Her defineres tekst størrelse til den skrevet rotation i hjørnet
-font = cv.FONT_HERSHEY_SIMPLEX
-fontScale = .5
-lineType = 1
-# Her defineres tekst størrelse til den røde firkant
-red_font = cv.FONT_HERSHEY_SIMPLEX
-red_fontColor = (0, 0, 255)
-red_fontScale = .5
-red_lineType = 2
-
 
 # Vinduesnavn
 cv.namedWindow('Tracking', cv.WINDOW_NORMAL)
 #cap = cv.VideoCapture(0)
 cap = cv.imread("image_0.png")
-
 
 class Hsv:
     print('Object Created...')
@@ -36,7 +25,6 @@ class Hsv:
 
 
 class Trackbar(Hsv):
-
     def create(self):
         print('Creating Trackbar...')
         print('Move trackbar to adjust HSV values...')
@@ -65,14 +53,6 @@ class Trackbar(Hsv):
         green_frame_threshold = cv.inRange(frame_HSV, (lh, ls, lv),(hh, hs, hv))
         blue_frame_threshold = cv.inRange(frame_HSV, (lh, ls, lv),(hh, hs, hv))
 
-        # # detect color
-        # ret, red_thresh = cv.threshold(red_frame_threshold, 127, 255, 0)
-        # red_contours, red_hierarchy = cv.findContours(red_thresh, 1, 2)
-        #
-        # for i in range(len(red_contours)):
-        #     if red_contours[i].size > 300:
-        #         Color.print_color(self)
-        # #-----
         cv.imshow('Captured Image', frame)
         frame_threshold = (red_frame_threshold + green_frame_threshold + blue_frame_threshold)
         cv.imshow('Frame Threshhold', frame_threshold)
