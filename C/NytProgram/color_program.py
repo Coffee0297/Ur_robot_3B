@@ -30,6 +30,14 @@ while testingColor==True:
         vision.Color.yellow_color(color)
         break
 
+    if color[0][2] != True:
+        testingColor = False
+        vision.Color.no_color_detected(color)
+
+
+
+
+
 
 print('Press q to exit')
 while True:

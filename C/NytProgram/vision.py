@@ -10,7 +10,7 @@ import cv2 as cv
 #cv.namedWindow('Tracking', cv.WINDOW_NORMAL)
 #cap = cv.VideoCapture(0)
 #---------------------------------------------------------------------------------------------------------------------
-img = cv.imread("image_11.png")
+img = cv.imread("image_13.png")
 #---------------------------------------------------------------------------------------------------------------------
 imageFrame = cv.resize(img, None, fx=0.6, fy=0.6, interpolation=cv.INTER_AREA)
 cv.imshow('Original image Resized', imageFrame)
@@ -99,6 +99,9 @@ class Color:
 
     def yellow_color(self):
         print('Color is yellow')
+
+    def no_color_detected(self):
+        print('NO COLOR DETECTED')
 
     def print_value(self):    # til debugging
         print('HSV values')
