@@ -64,6 +64,8 @@ def main():
                 warpPoints = defs.Contours.reorder(obj[2])  # reorder points
                 print("KLODS_1: ", klods1)
                 imgWarped = defs.Contours.warpImg(imgWarp_copy, warpPoints, w_Klods, h_Klods, show=True)
+                cv.imwrite(r'C:\Users\Carin\Documents\GitHub\Ur_robot_3B\C\ods\image_11.png',imgWarped)
+
 
                 farve = imgWarped[0][2]
                 farve_liste.append(farve)
