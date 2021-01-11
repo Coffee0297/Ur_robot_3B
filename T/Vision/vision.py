@@ -10,7 +10,7 @@ import cv2 as cv
 # Vinduesnavn
 cv.namedWindow('Tracking', cv.WINDOW_NORMAL)
 #cap = cv.VideoCapture(0)
-cap = cv.imread("image_1.png")
+cap = cv.imread("image_0.png")
 finalContours = []      # creating list
 print('FC: ', finalContours)
 class Hsv:

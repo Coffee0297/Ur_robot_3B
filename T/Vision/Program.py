@@ -17,7 +17,7 @@ wWorkspace = 200 *scale
 hWorkspace = 200 *scale
 
 defs.Capture.takePicture(cam)
-img = cv.imread('image_1.png')
+img = cv.imread('image_0.png')
 #img = cv.imread(r'C:\Users\Carin\Documents\UCL_2019\3.Sem\Python\UR\Vision\image_20.png')
 
 frame_HSV = cv.cvtColor(img, cv.COLOR_BGR2HSV)
