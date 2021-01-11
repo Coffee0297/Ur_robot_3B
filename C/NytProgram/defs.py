@@ -113,7 +113,7 @@ class Contours:
                 print('cX: ', cX)
                 print('centerXMeters: ', centerXMeters)
                 xList.insert(0, centerXMeters)
-                print(xList)
+                print('xLIST',xList)
                 print('------------------------------')
 
 
@@ -124,7 +124,7 @@ class Contours:
                 print('cY: ', cY)
                 print('centerYMeters: ', centerYMeters)
                 yList.insert(0,centerYMeters)
-                print(yList)
+                print('yLIST',yList)
                 print('------------------------------')
 
 

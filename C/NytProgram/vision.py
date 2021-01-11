@@ -7,14 +7,12 @@ from __future__ import print_function
 import numpy as np
 import cv2 as cv
 #---------------------------------------------------------------------------------------------------------------------
-# cv.namedWindow('Tracking', cv.WINDOW_NORMAL)
+cv.namedWindow('Tracking', cv.WINDOW_NORMAL)
 #cap = cv.VideoCapture(0)
 #---------------------------------------------------------------------------------------------------------------------
-cap = cv.imread("image_13.png")
+cap = cv.imread("image_0.png")
 #---------------------------------------------------------------------------------------------------------------------
-
 kernel = np.ones((5, 5), "uint8")
-
 
 class Hsv:
     print('Object Created...')
@@ -28,8 +26,8 @@ class Hsv:
 
 class Trackbar(Hsv):
     cv.namedWindow('Tracking', cv.WINDOW_NORMAL)
-
     def create(self):
+
         print('Creating Trackbar...')
         print('Move trackbar to adjust HSV values...')
         cv.createTrackbar('Low_H', 'Tracking', self.lh, 180, Trackbar.on_trackbar)
@@ -62,12 +60,6 @@ class Trackbar(Hsv):
         frame_threshold = (red_frame_threshold + green_frame_threshold + blue_frame_threshold)
         cv.imshow('Frame Threshhold', frame_threshold)
 
-        print('Press q to exit')
-        while True:
-            key = cv.waitKey(30)
-
-            if key == ord('q') or key == 27:
-                break
         return self, lh, ls, lv, hh, hs, hv
 
 class Colordetect:
@@ -109,8 +101,14 @@ class Color:
 class Red:
     pass
 
-# default = Hsv(0,0,0,0,0,0)
-# gr = Trackbar.create(default)
+default = Hsv(0,0,0,0,0,0)
+gr = Trackbar.create(default)
+print('Press q to exit')
+while True:
+    key = cv.waitKey(30)
+
+    if key == ord('q') or key == 27:
+        break
 
 
 

@@ -4,7 +4,6 @@ import numpy as np
 import defs
 #import color_program
 
-
 def main():
     cam = cv.VideoCapture(0)
     # cam.set(10,160)     # 10 for brightness - value 160
@@ -18,7 +17,7 @@ def main():
 
     #-------------------------------------
     defs.Capture.takePicture(cam)
-    img = cv.imread('img.png')
+    img = cv.imread('image_0.png')
     #-------------------------------------
 
     #--------- Image Processing ------------------------------------
@@ -53,7 +52,7 @@ def main():
 
         contours2 = defs.Contours.get_contours(erod, show=False)
         print('\nFind next contour - minArea=2000')
-        imgContours2,fContours2,x,y = defs.Contours.find_contour(imgWarp, contours2, minArea=2000, filter=4, draw=False)
+        imgContours2,fContours2,x,y = defs.Contours.find_contour(imgWarp, contours2, minArea=3000, filter=4, draw=False)
 
         farve_liste = []
         print('x list. ',x)
@@ -65,7 +64,7 @@ def main():
                 warpPoints = defs.Contours.reorder(obj[2])  # reorder points
                 print("KLODS_1: ", klods1)
                 imgWarped = defs.Contours.warpImg(imgWarp_copy, warpPoints, w_Klods, h_Klods, show=True)
-                cv.imwrite(r'C:\Users\Carin\Documents\GitHub\Ur_robot_3B\C\ods\image_11.png',imgWarped)
+                cv.imwrite(r'C:\Users\Carin\Documents\GitHub\Ur_robot_3B\C\ods\image_13.png',imgWarped)
 
 
                 farve = imgWarped[0][2]
@@ -116,7 +115,7 @@ def main():
     #
     # color_program(testingColor=True)
     #
-    # return rad, x, y
+    return rad, x, y
 
 #thread.start()
 
