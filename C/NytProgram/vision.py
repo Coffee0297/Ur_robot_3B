@@ -112,42 +112,8 @@ class Color:
 class Red:
     pass
 
-testingColor=True
-greenDefault = Hsv(53,74,66,96,225,185)
-redDefault = Hsv(0,18,30,16,255,87)
-yellowDefault = Hsv(0,158,109,31,255,255)
-blueDefault = Hsv(89, 148, 64, 166, 214, 143)
 
 
-color = Colordetect.detect_color(redDefault)
-while testingColor==True:
-
-    if color[0][2]==0:      #('move on')
-        color = Colordetect.detect_color(yellowDefault)
-    elif color[0][2]==255:
-        Color.yellow_color(color)
-        break
-
-    if color[0][2] == 0:
-        color = Colordetect.detect_color(blueDefault)
-    elif color[0][2] == 255:
-        Color.yellow_color(color)
-        break
-
-    if color[0][2] == 0:
-        color = Colordetect.detect_color(greenDefault)
-    elif color[0][2] == 255:
-        Color.green_color(color)
-        break
-
-print('Press q to exit Trackbar')
-while True:
-    key = cv.waitKey(30)
-
-    # print(Color.print_value(redDefault))  # debugging
-    if key == ord('q') or key == 27:
-
-        break
 
 
 # red1 = Trackbar.create(redDefault)
