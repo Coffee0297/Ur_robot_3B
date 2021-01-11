@@ -2,8 +2,6 @@ import cv2 as cv
 import numpy as np
 #import vision
 
-# ===================================================================================
-
 class Capture:
     def takePicture(cam):
         print('\n------ class Capture -> Function takePicture ------')
@@ -79,9 +77,13 @@ class Contours:
     def find_contour(self, contours,  minArea=2000, filter=0, draw=False, showCenterWS=True):
         print('------ Contour -> Function find_contour ------\nFinding Contours.....')
         finalContours = []  # creating list
+        xList = []
+        yList = []
         # loop through contours
         for i in contours:
+
             area = cv.contourArea(i)
+            #print('contour(i)  ',contours[0] )
             print('Contour found:  Area =', area)
             if area > minArea:
                 perimeter = cv.arcLength(i, True) #The function computes a curve length or a closed contour perimeter.
@@ -91,35 +93,77 @@ class Contours:
                 # filter is made if only a certain type of object is wanted, fx a square has 4 cornerpoints
                 if filter > 0:
                     if len(approx) == filter:
-                        finalContours.append([len(approx), area, approx, bbox, i])
+                        finalContours.insert(0,[len(approx), area, approx, bbox, i])
                         print("{}".format(filter),' cornerpoints detected....')
                     else:
-                        print('Shape with '"{}".format(filter),'corners, is added to th list "finalContours"')
-                        finalContours.append([len(approx), area, approx, bbox, i])
+                        print('Shape with '"{}".format(len(approx)),'corners, is added to th list "finalContours"')
+                        finalContours.insert(0,[len(approx), area, approx, bbox, i])
                 else:
                     print('No contour is added to the list "finalContours"')
 
                 # calculate x,y coordinates of objects centerpoint
+
                 M = cv.moments(approx)
-                x = int(M["m10"] / M["m00"])  # center in pixels on x-axis
-                cX = round(x / 2.8, 5)  # center in millimeter on x-axis - måske?
+                x = int(M["m10"] / M["m00"])    # center in pixels on x-axis
+                cX = round(x / 2.8, 5)          # center in millimeter on x-axis
+                centerXMeters = cX / 1000       # center in meter on x-axis
+
+
                 print('X: ', x)
                 print('cX: ', cX)
+                print('centerXMeters: ', centerXMeters)
+                xList.insert(0, centerXMeters)
+                print(xList)
+                print('------------------------------')
 
-                y = int(M["m01"] / M["m00"])  # center in pixels on y-axis
-                cY = round(y / 2.8, 5)  # center in millimeter on y-axis - måske?
+
+                y = int(M["m01"] / M["m00"])    # center in pixels on y-axis
+                cY = round(y / 2.8, 5)          # center in millimeter on y-axis
+                centerYMeters = cY / 1000       # center in meter on y-axis
                 print('Y: ', y)
                 print('cY: ', cY)
+                print('centerYMeters: ', centerYMeters)
+                yList.insert(0,centerYMeters)
+                print(yList)
+                print('------------------------------')
+
 
 
         finalContours = sorted(finalContours, key=lambda x: x[1],reverse=True)  # src, len(approx):area, descenting order
-
+        #print('final: ',finalContours)
         # 'draw' contour-points that we get from findCountour-function
         if draw:
             for con in finalContours:
                 cv.drawContours(self, con[4], -1, (0, 0, 255), 3)  # dottet red lines, thickness = 3
 
-        return self, finalContours
+        return self, finalContours, xList, yList
+# ----------------------------------------------------------------------------------------------------------------------
+    def find_angle(self, contours2):
+        # get rotational angle of objects in workspace
+            angles = []  # creating list
+        #for i in contours2:
+            #area = cv.contourArea(i)
+            for l in range(len(contours2)):
+                if contours2[l].size > 50:
+                    cnt = contours2[l]
+                    degrees = cv.minAreaRect(cnt)
+                    radians = ((degrees[-1]) * 3.14) / 180
+
+                    angles.insert(0,[radians])
+                    print(angles)
+
+                    print('-----------------------------')
+
+                    print('Degrees: ', degrees[-1])
+                    print('Radians: ', radians)
+
+                    cv.putText(self, str(degrees[-1]), (10, 60 + (l * 20)), cv.FONT_HERSHEY_COMPLEX_SMALL, 1, (0, 0, 255),1)
+
+                    Box = cv.boxPoints(degrees)
+                    Box = np.int0(Box)
+                    #print('b: ', Box)
+                    cv.drawContours(self, [Box], 0, (255, 255, 0), 1)
+            return angles
 # ----------------------------------------------------------------------------------------------------------------------
     def warpImg(self, points, w, h, pad=20, show=False):
         print('\n------ Contour -> Function warpImg ------')
@@ -153,63 +197,17 @@ class Contours:
         print('myPointsNew[3]: ', myPointsNew[3])
         return myPointsNew
 # ----------------------------------------------------------------------------------------------------------------------
-#     def draw_contours(self, finalContours, aprox):
-        # for con in finalContours:
-        #     cv.drawContours(self,con[4],-1,(0,0,255),3) # dottet red lines, thickness = 3
-
-        # M = cv.moments(approx)
-        # x = int(M["m10"] / M["m00"])  # center in pixels on x-axis
-        # cX = round(x // 3, 0)  # center in millimeter on x-axis - måske?
-        # print('Centerpoint X: ', cX)
-        #
-        # y = int(M["m01"] / M["m00"])  # center in pixels on y-axis
-        # cY = round(y // 3, 0)  # center in millimeter on y-axis - måske?
-        # print('Centerpoint Y: ', cY)
-        #
-        # #define placement of circle and text on image
-        # if showCenterWS:
-        #     cv.circle(self, (x, y), 5, (0, 0, 0), -1)  # output centerpoint as a dot
-        #     cv.putText(self, str([cX, cY]), (x - 50, y - 35), cv.FONT_HERSHEY_COMPLEX_SMALL, 1, (0, 0, 0),1) #outputs koordinates i mm
-        #
-        # return self
-# ----------------------------------------------------------------------------------------------------------------------
     def findDis(pts1, pts2):
         print('\n------ class Square -> Function finDis ------\n')
         print('pts1, pts2: ', pts1, pts2)
         return ((pts2[0] - pts1[0]) ** 2 + (pts2[1] - pts1[1]) ** 2) ** 0.5 # finder kvadratrod af ((x2-x1)^2 + (y2-y1)^2)
-
-    def find_angle(self, contours2):
-        # get rotational angle of objects in workspace
-        # for i in contours2:
-        #     area = cv.contourArea(i)
-            for l in range(len(contours2)):
-                if contours2[l].size > 50:
-                    cnt = contours2[l]
-                    rect = cv.minAreaRect(cnt)
-
-                    print('contours[l].size: ', contours2[l].size)
-                    print('rect: ', rect)
-                    print('rect[-1]: ', rect[-1])
-
-                    cv.putText(self, str(rect[-1]), (10, 60 + (l * 20)), cv.FONT_HERSHEY_COMPLEX_SMALL, 1, (0, 0, 255),1)
-
-                    Box = cv.boxPoints(rect)
-                    Box = np.int0(Box)
-
-                    cv.drawContours(self, [Box], 0, (255, 255, 0), 1)
-
-class Circle():
-    def __init__(self, name, radius):
-        super().__init__(name)
-        self.radius = radius
-        self.name = "circle"
-
-    def circum(self):
-        return 3.14 * (self.radius + self.radius)
-
-    def getArea(self):
-        return 3.14 * self.radius * self.radius
-
-    def printName(self):
-        return self.name
-
+# ----------------------------------------------------------------------------------------------------------------------
+#     def findHSV(img, show = False):
+#
+#         hsv_billede = cv.cvtColor(img, cv.COLOR_BGR2HSV)
+#         print("HSV_BLANK",hsv_billede[0][2])
+#         hsv_liste = hsv_billede[0][2]
+#         if show:
+#             cv.imshow("BLANK HSV", hsv_billede)
+#
+#         return hsv_liste[0][2]

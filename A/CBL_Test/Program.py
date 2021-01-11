@@ -17,7 +17,7 @@ hWorkspace = 200 *scale
 
 #-------------------------------------
 defs.Capture.takePicture(cam)
-img = cv.imread('image_0.png')
+img = cv.imread('image_1.png')
 #-------------------------------------
 
 
