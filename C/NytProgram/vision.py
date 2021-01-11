@@ -7,18 +7,14 @@ from __future__ import print_function
 import numpy as np
 import cv2 as cv
 #---------------------------------------------------------------------------------------------------------------------
-#cv.namedWindow('Tracking', cv.WINDOW_NORMAL)
+# cv.namedWindow('Tracking', cv.WINDOW_NORMAL)
 #cap = cv.VideoCapture(0)
 #---------------------------------------------------------------------------------------------------------------------
-img = cv.imread("image_13.png")
+cap = cv.imread("image_13.png")
 #---------------------------------------------------------------------------------------------------------------------
-imageFrame = cv.resize(img, None, fx=0.6, fy=0.6, interpolation=cv.INTER_AREA)
-cv.imshow('Original image Resized', imageFrame)
-hsvFrame = cv.cvtColor(imageFrame, cv.COLOR_BGR2HSV)
-cv.imshow('hsvFrame', hsvFrame)
-#---------------------------------------------------------------------------------------------------------------------
+
 kernel = np.ones((5, 5), "uint8")
-#---------------------------------------------------------------------------------------------------------------------
+
 
 class Hsv:
     print('Object Created...')
@@ -31,6 +27,7 @@ class Hsv:
         self.hv = hv
 
 class Trackbar(Hsv):
+    cv.namedWindow('Tracking', cv.WINDOW_NORMAL)
 
     def create(self):
         print('Creating Trackbar...')
@@ -41,6 +38,7 @@ class Trackbar(Hsv):
         cv.createTrackbar("High_H", "Tracking", self.hh, 180, Trackbar.on_trackbar)
         cv.createTrackbar("High_S", "Tracking", self.hs, 255, Trackbar.on_trackbar)
         cv.createTrackbar("High_V", "Tracking", self.hv, 255, Trackbar.on_trackbar)
+
         return self
 
     def on_trackbar(self):
@@ -60,29 +58,25 @@ class Trackbar(Hsv):
         green_frame_threshold = cv.inRange(frame_HSV, (lh, ls, lv),(hh, hs, hv))
         blue_frame_threshold = cv.inRange(frame_HSV, (lh, ls, lv),(hh, hs, hv))
 
-        # # detect color
-        # ret, red_thresh = cv.threshold(red_frame_threshold, 127, 255, 0)
-        # red_contours, red_hierarchy = cv.findContours(red_thresh, 1, 2)
-        #
-        # for i in range(len(red_contours)):
-        #     if red_contours[i].size > 300:
-        #         Color.print_color(self)
-        # #-----
         cv.imshow('Captured Image', frame)
         frame_threshold = (red_frame_threshold + green_frame_threshold + blue_frame_threshold)
         cv.imshow('Frame Threshhold', frame_threshold)
+
+        print('Press q to exit')
+        while True:
+            key = cv.waitKey(30)
+
+            if key == ord('q') or key == 27:
+                break
         return self, lh, ls, lv, hh, hs, hv
 
 class Colordetect:
-    def detect_color(self):
+    def detect_color(self, hsvFrame):
         print('Detecting color...')
-        imageFrame = cv.resize(img, None, fx=0.6, fy=0.6, interpolation=cv.INTER_AREA)
-        cv.imshow('Original image Resized', imageFrame)
-        hsvFrame = cv.cvtColor(imageFrame, cv.COLOR_BGR2HSV)
 
         threshold = cv.inRange(hsvFrame, (self.lh, self.ls, self.lv), (self.hh, self.hs, self.hv))
-
         threshold = cv.dilate(threshold, kernel)
+
         cv.imshow('1---mask dilate', threshold)
 
         return threshold
@@ -115,30 +109,10 @@ class Color:
 class Red:
     pass
 
-
-
-
-
-# red1 = Trackbar.create(redDefault)
-# red1 = Color.red_color(redDefault)
-
-# green1 = Color.create(greenDefault)
-# blue1 = Trackbar.create(blueDefault)
-# yellow11 = Color.create(yellowDefault)
-
 # default = Hsv(0,0,0,0,0,0)
-# default1 = Color.create(default)
-# print(Color.print_value(default))        # debugging
-
-#print(Color.print_value(redDefault))       # debugging
-#print(Color.print_value(greenDefault))     # debugging
-#print(Color.print_value(blueDefault))      # debugging
-#print(Color.print_value(yellowDefault))    # debugging
-
-#Color.on_trackbar(0)
+# gr = Trackbar.create(default)
 
 
 
-#print(Trackbar.print_value(redDefault))  # debugging
 
 

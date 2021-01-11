@@ -2,7 +2,8 @@
 import cv2 as cv
 import numpy as np
 import defs
-import threading
+#import color_program
+
 
 def main():
     cam = cv.VideoCapture(0)
@@ -17,7 +18,7 @@ def main():
 
     #-------------------------------------
     defs.Capture.takePicture(cam)
-    img = cv.imread('image_0.png')
+    img = cv.imread('img.png')
     #-------------------------------------
 
     #--------- Image Processing ------------------------------------
@@ -112,7 +113,10 @@ def main():
 
     # gå til robot
     print('program kørt')
-    return rad, x, y
+    #
+    # color_program(testingColor=True)
+    #
+    # return rad, x, y
 
 #thread.start()
 
