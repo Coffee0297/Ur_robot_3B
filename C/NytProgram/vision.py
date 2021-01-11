@@ -82,25 +82,25 @@ class Colordetect:
 class Color:
 
     def red_color():
-        print('*** Color is red ***')
+        print('\n*** Color is red ***')
         col = 1
         print('print rød fra vision', col,'\n')
         return col
 
     def green_color():
-        print('*** Color is green ***')
+        print('\n*** Color is green ***')
         col = 2
-        print('print rød fra vision', col,'\n')
+        print('print grøn fra vision', col,'\n')
         return col
 
     def blue_color():
-        print('*** Color is blue ***')
+        print('\n*** Color is blue ***')
         col = 3
         print('print blå fra vision',col,'\n')
         return col
 
     def yellow_color():
-        print('*** Color is yellow ***')
+        print('\n*** Color is yellow ***')
         col = 4
         print('print gul fra vision',col,'\n')
         return col
