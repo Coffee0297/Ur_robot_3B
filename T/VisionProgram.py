@@ -55,9 +55,6 @@ def main():
         imgContours2, fContours2, x, y = Functions.Contours.find_contour(imgWarp, contours2, minArea=2000, filter=4,
                                                                          draw=False)
 
-        farve_liste = []
-        # print('x list. ',x)
-        # print('y list. ', y)
         # --------- Find width and height --------------------------------
         if len(fContours) != 0:
             for obj in fContours2:
@@ -67,8 +64,6 @@ def main():
                 imgWarped = Functions.Contours.warpImg(imgWarp_copy, warpPoints, w_Klods, h_Klods, show=False)
                 cv.imwrite('image_100.png', imgWarped)
 
-                farve = imgWarped[0][2]
-                farve_liste.append(farve)
                 # print('Farve liste',farve_liste)
 
                 cv.polylines(imgContours2, [obj[2]], True, (0, 255, 0), 2)  # green full lines
