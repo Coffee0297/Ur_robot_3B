@@ -118,8 +118,7 @@ class Color:
         print(self.hs)
         print(self.hv)
 
-class Red:
-    pass
+
 
 # default = Hsv(0,0,0,0,0,0)
 # gr = Trackbar.create(default)
