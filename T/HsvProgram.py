@@ -67,7 +67,7 @@ class Trackbar(Hsv):
 
         return self, lh, ls, lv, hh, hs, hv
 
-class Colordetect:
+class Colordetect(Hsv):
     def detect_color(self, hsvFrame):
         #print('Detecting color...')
         kernel = np.ones((5, 5), "uint8")
