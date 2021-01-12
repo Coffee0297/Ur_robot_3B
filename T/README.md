@@ -1,2 +1,2 @@
 # Ur_robot_3B
-This is a repo for 3B project
+This is a repo for 3B robot project.
