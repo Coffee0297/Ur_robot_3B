@@ -4,7 +4,7 @@ import numpy as np
 
 class Capture:
     def takePicture(cam):
-        #print('\n------ class Capture -> Function takePicture ------')
+        print('\n------ class Capture -> Function takePicture ------')
         cv.namedWindow("Camera test")
         img_counter = 0
         #print("\nPress Escape to close without saving \nPress space to take a picture")
@@ -40,7 +40,7 @@ class Capture:
 
 class Processing:
     def filters(self, cThr=[150, 175], show=False):  # default parameters
-       # print('\n------ Processing -> Function --> Filters ------\nApplaying masks.....\n')
+        print('\n------ Processing -> Function --> Filters ------\nApplaying masks.....\n')
         # Do some processing
         gray = cv.cvtColor(self, cv.COLOR_BGR2GRAY)      # convert image to grayscale
         blur = cv.GaussianBlur(gray, (5, 5), 1)         # apply some blur, define kernelsize 5 by 5, sigma 1
@@ -48,13 +48,13 @@ class Processing:
         kernel = np.ones((5, 5))        # define kernel - returns new 5 by 5 array of ones
         dilated = cv.dilate(edges, kernel, iterations=3)   # making thick lines
         erod = cv.erode(dilated, kernel, iterations=2)     # making thin lines
-        # print('Processing......')
-        #  print('...Grayscale')
-        #  print('...Blur')
-        #  print('...Canny')
-        #  print('...Kernel')
-        #  print('...Dilated')
-        #  print('...Erode')
+        print('Processing......')
+        print('...Grayscale')
+        print('...Blur')
+        print('...Canny')
+        print('...Kernel')
+        print('...Dilated')
+        print('...Erode')
         if show:
             # Do some debugging
             #cv.imshow('Gray 1st processing', gray)
@@ -68,14 +68,14 @@ class Processing:
 
 class Contours:
     def get_contours(self, show=False):
-        #print('\n------ Contour -> Function get_contour ------\nGetting Contours.....\n')
+        print('\n------ Contour -> Function get_contour ------\nGetting Contours.....\n')
         contours, hiearchy = cv.findContours(self, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
         if show:
             print('Contours: ') #, contours
         return contours
 # ----------------------------------------------------------------------------------------------------------------------
     def find_contour(self, contours,  minArea=2000, filter=0, draw=False, showCenterWS=True):
-        #print('------ Contour -> Function find_contour ------\nFinding Contours.....')
+        print('------ Contour -> Function find_contour ------\nFinding Contours.....')
         finalContours = []  # creating list
         xList = []
         yList = []
@@ -166,7 +166,7 @@ class Contours:
             return angles
 # ----------------------------------------------------------------------------------------------------------------------
     def warpImg(self, points, w, h, pad=20, show=False):
-        #print('\n------ Contour -> Function warpImg ------')
+        print('\n------ Contour -> Function warpImg ------')
         pts1 = np.float32(points)
         pts2 = np.float32([[0, 0], [w, 0], [0, h], [w, h]])   # define pattern
         matrix = cv.getPerspectiveTransform(pts1, pts2)
@@ -178,7 +178,7 @@ class Contours:
         return imgWarp
 # ----------------------------------------------------------------------------------------------------------------------
     def reorder(myPoints):
-       # print('\n------ Contour -> Function reorder ------')
+        print('\n------ Contour -> Function reorder ------')
         #print('Points not ordered:\n',myPoints)
         #print(myPoints.shape) # output= (4,1,2), 4 by 1 by 2 (4 values, 1 is redundant, each value has 2 points: x,y
         myPointsNew = np.zeros_like(myPoints) #Return an array of zeros with the same shape and type as a given array.
@@ -198,7 +198,7 @@ class Contours:
         return myPointsNew
 # ----------------------------------------------------------------------------------------------------------------------
     def findDis(pts1, pts2):
-        # print('\n------ class Square -> Function finDis ------\n')
+        print('\n------ Contour -> Function finDis ------\n')
         # print('pts1, pts2: ', pts1, pts2)
         return ((pts2[0] - pts1[0]) ** 2 + (pts2[1] - pts1[1]) ** 2) ** 0.5 # finder kvadratrod af ((x2-x1)^2 + (y2-y1)^2)
 

@@ -1,4 +1,4 @@
-gripclose =  """
+gripclose = """
 def openGriber():
   step_count_92352259_ad9a_43ae_be98_13b461d18ca2 = 0
   thread Step_Counter_Thread_e5297bbc_e52c_447c_aeed_8a17c02603ec():

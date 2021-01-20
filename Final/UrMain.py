@@ -35,7 +35,7 @@ def return_klods():
 
 def moves(i):
     switcher = {
-        0: b'movej(p[0.4254, 0.709, 0.750, 1.99, -3.0, -2.351])' + b'\n',  # Home
+        0: b'movej(p[0.4, 0.55, 0.62, 4.2, -1.9, 0.73])' + b'\n',  # Home
         1: b'movej(p[' + klods + b", 0.0778, 2.897, -1.32," + rotation + b')' + b'\n',
         # Go to pos that the vision program says
         2: b'movej(p[' + klods + b", 0.020, 2.897, -1.32," + rotation + b')' + b'\n',
@@ -80,11 +80,13 @@ if k == str("run"):
             wait_till_done()
             klods, rotation, farve = return_klods()
             s.send(moves(1))
+            print(moves(1))
             wait_till_done()
 
             # s.send(moves(11))   # open gripper don't work in sim
             # wait_till_done()
             s.send(moves(2))
+            print(moves(2))
             wait_till_done()
 
             # s.send(moves(12))   # close gripper don't work in sim
